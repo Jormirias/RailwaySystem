@@ -6,6 +6,7 @@
 package dataTypes;
 
 import dataStructures.DoubleList;
+import dataStructures.IllegalArgumentException;
 import dataStructures.Iterator;
 
 /**
@@ -26,9 +27,15 @@ public class Network {
     /**
      * Add new Line to Network
      */
-    public void insertLine(String lineName, DoubleList<String> stationNames) {
-        Line line = new Line(lineName, stationNames);
-        this.lines.addLast(line);
+    public void insertLine(String lineName, DoubleList<String> stationNames) throws IllegalArgumentException {
+        if (findLineWithName(lineName) != null){
+            throw new IllegalArgumentException();
+        }
+
+        else{
+            Line line = new Line(lineName, stationNames);
+            lines.addLast(line);
+        }
     }
 
     /**
@@ -63,16 +70,16 @@ public class Network {
         line.insertSchedule(trainNumber, stationAndTimes);
     }
     
-    // private Line findLineWithName(String lineName) {
-    //     Iterator<Line> it = this.lines.iterator();
-    //     while(it.hasNext()) {
-    //         Line next = it.next();
-    //         if(next.getName().equals(lineName)) {
-    //             return next;
-    //         }
-    //     }
+     private Line findLineWithName(String lineName) {
+         Iterator<Line> it = this.lines.iterator();
+         while(it.hasNext()) {
+             Line next = it.next();
+             if(next.getName().equals(lineName)) {
+                 return next;
+             }
+         }
 
-    //     return null;
-    // }
+         return null;
+     }
 
 }

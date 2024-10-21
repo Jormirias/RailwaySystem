@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.Scanner;
 
+import dataStructures.IllegalArgumentException;
 import dataTypes.*;
 import dataStructures.*;
 
@@ -149,7 +150,8 @@ public class Main {
 
     }
 
-        private static void insertLine(Scanner in, Network network) {
+    private static void insertLine(Scanner in, Network network) {
+        try {
             String lineName = in.nextLine().trim();
 
             DoubleList<String> stationNames = new DoubleList<>();
@@ -160,27 +162,42 @@ public class Main {
             }
 
             network.insertLine(lineName, stationNames);
-        }
 
-        private static void removeLine(Scanner in, Network network) {
+            System.out.println(INSERT_LINE_OK);
+        } catch (IllegalArgumentException e) {
+            System.out.println(INSERT_LINE_ERR);
+        }
+    }
+
+    private static void removeLine(Scanner in, Network network) {
+        try {
             String lineName = in.nextLine().trim();
             network.removeLine(lineName);
+            System.out.println(REMOVE_LINE_OK);
+        } catch (InvalidPositionException e) {
+            System.out.println(LINE_NULL);
         }
+    }
 
-        private static void consultLine(Scanner in, Network network) {
+    private static void consultLine(Scanner in, Network network) {
+        try {
             String lineName = in.nextLine().trim();
             Iterator<String> it = network.getStationNames(lineName);
             while (it.hasNext()) {
                 System.out.println(it.next());
             }
+        } catch (InvalidPositionException e) {
+            System.out.println(LINE_NULL);
         }
+    }
 
-        private static void consultStation(Scanner in, Network network) {
-            // TODO implement in second phase
-            throw new UnsupportedOperationException("Unimplemented method 'consultStation'");
-        }
+    private static void consultStation(Scanner in, Network network) {
+        // TODO implement in second phase
+        throw new UnsupportedOperationException("Unimplemented method 'consultStation'");
+    }
 
-        private static void insertSchedule(Scanner in, Network network) {
+    private static void insertSchedule(Scanner in, Network network) {
+        try {
             String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
 
@@ -193,25 +210,33 @@ public class Main {
             }
 
             network.insertSchedule(lineName, trainNumber, stationsAndTimes);
-        }
 
-        private static void removeSchedule(Scanner in, Network network) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'removeSchedule'");
+            System.out.println(INSERT_TIMETABLE_OK);
+        } catch (NoSuchElementException e) {
+            System.out.println(LINE_NULL);
         }
+        catch (IllegalArgumentException e) {
+            System.out.println(INSERT_TIMETABLE_ERR);
+        }
+    }
 
-        private static void consultSchedules(Scanner in, Network network) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'consultSchedules'");
-        }
+    private static void removeSchedule(Scanner in, Network network) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'removeSchedule'");
+    }
 
-        private static void consultTrains(Scanner in, Network network) {
-            // TODO Auto-generated method stub
-            throw new UnsupportedOperationException("Unimplemented method 'consultTrains'");
-        }
+    private static void consultSchedules(Scanner in, Network network) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'consultSchedules'");
+    }
 
-        private static void bestSchedule(Scanner in, Network network) {
-            // TODO implement in second phase
-            throw new UnsupportedOperationException("Unimplemented method 'bestSchedule'");
-        }
+    private static void consultTrains(Scanner in, Network network) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'consultTrains'");
+    }
+
+    private static void bestSchedule(Scanner in, Network network) {
+        // TODO implement in second phase
+        throw new UnsupportedOperationException("Unimplemented method 'bestSchedule'");
+    }
 }
