@@ -1,7 +1,5 @@
 package dataStructures;
 
-import dataStructures.DoubleList.DoubleListNode;
-
 /**
  * Implementation of Two Way Iterator for DLList 
  * @author AED  Team
