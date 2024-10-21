@@ -5,7 +5,10 @@
  * @version 1.0
  */
 
+import java.io.*;
 import java.util.Scanner;
+
+import dataStructures.*;
 
 public class Main {
 
@@ -26,6 +29,7 @@ public class Main {
     private static final String CONSULT_STATION_TRAINS = "LC"; //FASE 2
     private static final String CONSULT_BEST_TIMETABLE = "MH";
 
+    private static final String EXIT = "TA";
     /**
      * Mensagens do sistema
      */
@@ -35,13 +39,13 @@ public class Main {
     private static final String REMOVE_LINE_OK = "Remoção de linha com sucesso.";
     private static final String INSERT_TIMETABLE_OK = "Criação de horário com sucesso.";
     private static final String INSERT_TIMETABLE_ERR = "Horário inválido.";
-    private static final String INSERT_TIMETABLE_OK = "Remoção de horário com sucesso.";
+    private static final String REMOVE_TIMETABLE_OK = "Remoção de horário com sucesso.";
     private static final String CONSULT_BEST_TIMETABLE_ERR = "Percurso impossível.";
     private static final String EXIT_OK = "Aplicação terminada.";
 
     private static final String LINE_NULL = "Linha inexistente.";
     private static final String STATION_NULL = "Estação inexistente.";
-    private static final String FIRST_STATION_NULL = "Estação de partida inexistente."
+    private static final String FIRST_STATION_NULL = "Estação de partida inexistente.";
     private static final String TIMETABLE_NULL = "Horário inexistente.";
 
     private static final String DATA_FILE = "storednetwork.dat";
@@ -54,14 +58,18 @@ public class Main {
             cmd = in.next().toUpperCase();
             switch (cmd) {
                 case INSERT_LINE :
-                    insertLine(in, queue);
+                    insertLine(in, network);
                 default:
                     break;
             }
 
         } while (!cmd.equals(EXIT));
-        save(queue);
+        save(network);
         }
+
+    /**
+     * Guardar o estado do sistema através de serialização
+     */
 
     private static void save(RailwayNetwork<Integer> network) {
         try {
@@ -78,6 +86,10 @@ public class Main {
         }
     }
 
+    /**
+     * Carregar o estado do sistema através de serialização
+     */
+
     private static RailwayNetwork<Integer> load() {
         try {
             ObjectInputStream file = new ObjectInputStream(
@@ -90,11 +102,20 @@ public class Main {
         } catch (IOException e) {
             //System.out.println
             //("Non existing serialization file: Creating new Object.");
-            return new RailwayNetwork<Integer>();
+            return new RailwayNetworkInList<Integer>();
         } catch (ClassNotFoundException e) {
             //System.out.println
             //("Problems with serialization: Creating new Object.");
-            return new RailwayNetwork<Integer>();
+            return new RailwayNetworkInList<Integer>();
         }
     }
+
+    /**
+     * Inserir nova linha
+     */
+
+    private static void insertLine(Scanner in, RailwayNetwork<Integer> network) {
+
+    }
+
 }
