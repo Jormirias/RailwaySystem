@@ -1,18 +1,15 @@
-
-/**
- * Sistema de Suporte de uma Rede Ferroviária
- * @author Jorge Dias (72360) jmr.dias@alumni.fct.unl.pt
- * @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
- * @version 1.0
- */
-
 import java.io.*;
 import java.util.Scanner;
 
-import dataTypes.DimensionConstants;
-import dataTypes.Network;
+import dataTypes.*;
 import dataStructures.*;
 
+/**
+ * Sistema de Suporte de uma Rede Ferroviária
+ * @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
+ * @author Jorge Dias (72360) jmr.dias@campus.fct.unl.pt
+ * @version 1.0
+ */
 
 /**
  * Class which holds the main function of the program.
@@ -65,7 +62,7 @@ public class Main {
         Scanner in = new Scanner(System.in);
         String cmd = "";
         // Delimiter is whitespace by default
-        
+
         do {
             cmd = in.next().toUpperCase();
             switch (cmd) {
@@ -102,18 +99,17 @@ public class Main {
                 default:
                     System.out.println(COMMAND_NULL);
                     break;
-
-            } while (!option.equals(EXIT));
+            }
+        } while (!cmd.equals(EXIT));
 
         save(network);
-        }
-
+    }
 
     /**
      * Guardar o estado do sistema através de serialização
      */
 
-    private static void save(RailwayNetwork<Integer> network) {
+    private static void save(Network network) {
         try {
             ObjectOutputStream file = new ObjectOutputStream(
                     new FileOutputStream(DATA_FILE));
@@ -132,25 +128,26 @@ public class Main {
      * Carregar o estado do sistema através de serialização
      */
 
-    private static RailwayNetwork<Integer> load() {
+    private static Network load() {
         try {
             ObjectInputStream file = new ObjectInputStream(
                     new FileInputStream(DATA_FILE));
             //System.out.println
             //("Serialization file loaded.");
-            RailwayNetwork<Integer> network = (RailwayNetwork<Integer>) file.readObject();
+            Network network = (Network) file.readObject();
             file.close();
             return network;
         } catch (IOException e) {
             //System.out.println
             //("Non existing serialization file: Creating new Object.");
-            return new RailwayNetworkInList<Integer>();
+            return new Network();
         } catch (ClassNotFoundException e) {
             //System.out.println
             //("Problems with serialization: Creating new Object.");
-            return new RailwayNetworkInList<Integer>();
+            return new Network();
         }
 
+    }
 
         private static void insertLine(Scanner in, Network network) {
             String lineName = in.nextLine().trim();
