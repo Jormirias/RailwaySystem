@@ -10,12 +10,12 @@ package dataTypes;
  * Class which implements a Train Station
  */
 public class Station {
-    private String name;
+    private final String name;
 
     /**
      * All the stops at this station.
      */
-    private StationStop[] stops;
+    private final StationStop[] stops;
     private int stopsCount = 0;
 
     public Station(String name) {

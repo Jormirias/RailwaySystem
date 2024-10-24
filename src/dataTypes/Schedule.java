@@ -5,22 +5,21 @@
 
 package dataTypes;
 
-import dataStructures.DoubleList;
-import dataStructures.Iterator;
+import dataStructures.*;
 
 /**
  * Class which implements a Train Schedule
  */
 public class Schedule  {
-    int train;
+    int trainNumber;
     /**
      * ALl the stops in this schedule.
      */
-    DoubleList<ScheduleStop> stops;
+    private final Queue<ScheduleStop> stops;
 
     public Schedule(int train) {
-        this.train = train;
-        this.stops = new DoubleList<ScheduleStop>();
+        trainNumber = train;
+        stops = new DoubleList<ScheduleStop>();
     }
 
     /**

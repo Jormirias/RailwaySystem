@@ -5,79 +5,77 @@
 
 package dataTypes;
 
-import dataStructures.DoubleList;
-import dataStructures.Iterator;
+import dataStructures.*;
+import dataStructures.IllegalArgumentException;
+
+import java.io.Serializable;
 
 /**
  * Class which implements a Rail Line
  */
-public class Line {
+public class Line implements Serializable {
     /* Unique identifier for a Line */
-    private String name;
+    private final String name;
 
-    private DoubleList<Station> stations;
+    private final Queue<Station> stations;
 
     // private OrderedList<Schedule> schedulesFromBeginTerminal;
     // private OrderedList<Schedule> schedulesFromEndTerminal;
 
     // replace with above.
     // should be ordered by departure time.
-    private DoubleList<Schedule> schedules;
+    private OrderedDoubleList<Integer, Schedule> schedulesNormal;
+    private OrderedDoubleList<Integer, Schedule> schedulesInverted;
 
-    public Line(String lineName, DoubleList<String> stationNames) {
-        this.name = lineName;
-
-        this.stations = new DoubleList<Station>();
-        Iterator<String> it = stationNames.iterator();
-        while (it.hasNext()) {
-            this.stations.addLast(new Station(it.next()));
-        }
-    }
-
-    public Line(String lineName) {
-        this.name = lineName;
-
-        this.stations = new DoubleList<Station>();
+    public Line(String lineName, Queue<Station> newStations) {
+        name = lineName;
+        stations = newStations;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public Iterator<Station> getStations() {
-        return this.stations.iterator();
+    public Queue<Station> getStations() {
+        return stations;
     }
 
     /* Currently only supports one way */
-    public void insertSchedule(String trainNumber, DoubleList<String> stationAndTimes) {
-        int train = Integer.parseInt(trainNumber);
-        Iterator<String> stationAndTimesIt = stationAndTimes.iterator();
-        Iterator<Station> stationIt = stations.iterator();
+    public void insertSchedule(String trainNumber, QueueInArray<EntryClass<Station,Time>> stationAndTimes) throws IllegalArgumentException {
 
-        stationAndTimes.getFirst();
+        if(!scheduleCheck(stationAndTimes))
+            throw new IllegalArgumentException();
 
-        Schedule schedule = new Schedule(train);
+        else {
+            int train = Integer.parseInt(trainNumber);
+            Iterator<String> stationAndTimesIt = stationAndTimes.iterator();
+            Iterator<Station> stationIt = stations.iterator();
 
-        while (stationAndTimesIt.hasNext()) {
-            String[] stationAndTime = stationAndTimesIt.next().split(" ");
-            String stationName = stationAndTime[0];
-            String timeAsString = stationAndTime[1];
+            stationAndTimes.getFirst();
 
-            while (stationIt.hasNext()) {
-                Station station = stationIt.next();
-                if(station.getName().equals(stationName)) {
-                    Time time = new Time(timeAsString);
-                    station.addStop(train, time);
-                    schedule.addStop(station, time);
-                } else {
-                    Time time = null;
-                    station.addStop(train, time);
-                    schedule.addStop(station, time);
+            Schedule schedule = new Schedule(train);
+
+            while (stationAndTimesIt.hasNext()) {
+                String[] stationAndTime = stationAndTimesIt.next().split(" ");
+                String stationName = stationAndTime[0];
+                String timeAsString = stationAndTime[1];
+
+                while (stationIt.hasNext()) {
+                    Station station = stationIt.next();
+                    if (station.getName().equals(stationName)) {
+                        Time time = new Time(timeAsString);
+                        station.addStop(train, time);
+                        schedule.addStop(station, time);
+                    } else {
+                        Time time = null;
+                        station.addStop(train, time);
+                        schedule.addStop(station, time);
+                    }
                 }
             }
-        }
 
-        schedules.addLast(schedule);
+            schedules.addLast(schedule);
+        }
     }
 
     @Override
@@ -95,6 +93,14 @@ public class Line {
             return false;
         }
 
+        return true;
+    }
+
+    private boolean scheduleCheck (QueueInArray<EntryClass<Station,Time>> stationAndTimes) {
+        //TODO
+        //se a primeira estção não é uma das duas terminais, return false
+        //se a sequencia de estaçoes não segue as da linha, return false
+        //se a sequencia de horários não for cronologica, return false
         return true;
     }
 }

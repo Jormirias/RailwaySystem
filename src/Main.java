@@ -135,6 +135,7 @@ public class Main {
                     new FileInputStream(DATA_FILE));
             //System.out.println
             //("Serialization file loaded.");
+
             Network network = (Network) file.readObject();
             file.close();
             return network;
@@ -154,14 +155,15 @@ public class Main {
         try {
             String lineName = in.nextLine().trim();
 
-            DoubleList<String> stationNames = new DoubleList<>();
+            //Array é mais eficiente que List aqui
+            QueueInArray<Station> newStations = new QueueInArray<>();
             String stationName = in.nextLine();
-            while (!stationName.equals("")) {
-                stationNames.addLast(new String(stationName));
+            while (!stationName.isEmpty()) {
+                //Criar logo aqui os objetos Station poupa-nos uma iteração O(n) mais tarde
+                newStations.enqueue(new Station(stationName));
                 stationName = in.nextLine();
             }
-
-            network.insertLine(lineName, stationNames);
+            network.insertLine(lineName, newStations);
 
             System.out.println(INSERT_LINE_OK);
         } catch (IllegalArgumentException e) {
@@ -174,7 +176,7 @@ public class Main {
             String lineName = in.nextLine().trim();
             network.removeLine(lineName);
             System.out.println(REMOVE_LINE_OK);
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
     }
@@ -182,11 +184,11 @@ public class Main {
     private static void consultLine(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim();
-            Iterator<String> it = network.getStationNames(lineName);
-            while (it.hasNext()) {
-                System.out.println(it.next());
+            Queue<Station> stations = network.getStationNames(lineName);
+            while (!stations.isEmpty()) {
+                System.out.println(stations.dequeue());
             }
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
     }
@@ -201,21 +203,22 @@ public class Main {
             String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
 
-            String stationAndTime = in.nextLine();
-            DoubleList<String> stationsAndTimes = new DoubleList<>();
+            QueueInArray<EntryClass<Station,Time>> stationsAndTimes = new QueueInArray<>();
+            EntryClass<Station,Time> stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
 
-            while (!stationAndTime.equals("")) {
-                stationsAndTimes.addLast(new String(stationAndTime));
-                stationAndTime = in.next();
+            while (stationAndTime.getKey() != null && stationAndTime.getValue() != null ) {
+                stationsAndTimes.enqueue(stationAndTime);
+                stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
             }
 
             network.insertSchedule(lineName, trainNumber, stationsAndTimes);
 
             System.out.println(INSERT_TIMETABLE_OK);
-        } catch (NoSuchElementException e) {
+        }
+        catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
-        catch (IllegalArgumentException e) {
+        catch (IllegalArgumentException | NullPointerException e) {
             System.out.println(INSERT_TIMETABLE_ERR);
         }
     }

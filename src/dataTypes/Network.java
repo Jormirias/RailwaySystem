@@ -5,72 +5,73 @@
 
 package dataTypes;
 
-import dataStructures.DoubleList;
+import dataStructures.*;
 import dataStructures.IllegalArgumentException;
-import dataStructures.Iterator;
+
+import java.io.Serializable;
 
 /**
  * Class which implements a Rail Network
  */
-public class Network {
+public class Network implements Serializable {
     /*Should this be Dictionaries as their identifier is only their name?*/
-    private DoubleList<Line> lines;
+    private final DoubleList<Line> lines;
 
     // maybe not worth it yet as we do not have all the tools available
     // private Station[] stations;
 
     public Network()
     {
-        this.lines = new DoubleList<Line>();
+        lines = new DoubleList<>();
     }
 
     /**
      * Add new Line to Network
      */
-    public void insertLine(String lineName, DoubleList<String> stationNames) throws IllegalArgumentException {
+    public void insertLine(String lineName, Queue<Station> newStations) throws IllegalArgumentException {
         if (findLineWithName(lineName) != null){
             throw new IllegalArgumentException();
         }
 
         else{
-            Line line = new Line(lineName, stationNames);
-            lines.addLast(line);
+            lines.addLast(new Line(lineName, newStations));
         }
     }
 
     /**
      * Remove Line from Network
      */
-    public void removeLine(String lineName) {
-        Line line = new Line(lineName);
-        int pos = this.lines.find(line);
-        this.lines.remove(pos);
-    }
-
-    public Iterator<String> getStationNames(String lineName) {
-        Line line = new Line(lineName);
-        int pos = this.lines.find(line);
-        Iterator<Station> it = this.lines.get(pos).getStations();
-        DoubleList<String> stationNames = new DoubleList<>();
-        
-        while(it.hasNext()) {
-            stationNames.addLast(it.next().getName());
+    public void removeLine(String lineName) throws NoSuchElementException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
         }
-
-        return stationNames.iterator();
+        else
+            lines.remove(line);
     }
 
-    
+    public Queue<Station> getStationNames(String lineName) throws NoSuchElementException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
+        }
+        else
+            return line.getStations();
+    }
+
     /**
      * Add new Schedule to Line
      */
-    public void insertSchedule(String lineName, String trainNumber, DoubleList<String> stationAndTimes) {
-        int pos = this.lines.find(new Line(lineName));
-        Line line = this.lines.get(pos);
-        line.insertSchedule(trainNumber, stationAndTimes);
+    public void insertSchedule(String lineName, String trainNumber, QueueInArray<EntryClass<Station,Time>> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
+        }
+        else
+            line.insertSchedule(trainNumber, stationAndTimes);
     }
     
-     private Line findLineWithName(String lineName) {
+    private Line findLineWithName(String lineName) throws NoSuchElementException {
          Iterator<Line> it = this.lines.iterator();
          while(it.hasNext()) {
              Line next = it.next();
