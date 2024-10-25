@@ -40,7 +40,7 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
             resize();
         }
 
-        
+        return value;
     }
 
     @Override
@@ -78,7 +78,7 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
      * Copies all elements to a new array of new capacity = old capacity * 2.
 	 */
     private void resize() {
-        capacity * 2;
+        capacity *= 2;
     }
 
     // As the vector is ordered, we can do a binary search.

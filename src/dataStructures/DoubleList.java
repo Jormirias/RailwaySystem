@@ -305,8 +305,12 @@ public class DoubleList<E> implements List<E>
      */
     protected DoubleListNode<E> findNode( E element )
     {
-    	//TODO: Left as an exercise.
-    	return null;
+        DoubleListNode<E> node = head;
+        while ( node != null && !node.getElement().equals(element) )
+        {
+            node = node.getNext();
+        }
+        return node;
     }
 
 

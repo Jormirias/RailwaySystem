@@ -117,11 +117,11 @@ public class Main {
             file.writeObject(network);
             file.flush();
             file.close();
-            //System.out.println
-            //("Serialization file saved.");
+            System.out.println
+            ("Serialization file saved.");
         } catch (IOException e) {
-            //System.out.println
-            //("Problem saving?");
+            System.out.println
+            ("Problem saving?");
         }
     }
 
@@ -133,18 +133,19 @@ public class Main {
         try {
             ObjectInputStream file = new ObjectInputStream(
                     new FileInputStream(DATA_FILE));
-            //System.out.println
-            //("Serialization file loaded.");
+            System.out.println
+            ("Serialization file loaded.");
+
             Network network = (Network) file.readObject();
             file.close();
             return network;
         } catch (IOException e) {
-            //System.out.println
-            //("Non existing serialization file: Creating new Object.");
+            System.out.println
+            ("Non existing serialization file: Creating new Object.");
             return new Network();
         } catch (ClassNotFoundException e) {
-            //System.out.println
-            //("Problems with serialization: Creating new Object.");
+            System.out.println
+            ("Problems with serialization: Creating new Object.");
             return new Network();
         }
 
@@ -154,14 +155,15 @@ public class Main {
         try {
             String lineName = in.nextLine().trim();
 
-            DoubleList<String> stationNames = new DoubleList<>();
+            //Array é mais eficiente que List aqui
+            ListInArray<Station> newStations = new ListInArray<>();
             String stationName = in.nextLine();
-            while (!stationName.equals("")) {
-                stationNames.addLast(new String(stationName));
+            while (!stationName.isEmpty()) {
+                //Criar logo aqui os objetos Station poupa-nos uma iteração O(n) mais tarde
+                newStations.addLast(new Station(stationName));
                 stationName = in.nextLine();
             }
-
-            network.insertLine(lineName, stationNames);
+            network.insertLine(lineName, newStations);
 
             System.out.println(INSERT_LINE_OK);
         } catch (IllegalArgumentException e) {
@@ -174,7 +176,7 @@ public class Main {
             String lineName = in.nextLine().trim();
             network.removeLine(lineName);
             System.out.println(REMOVE_LINE_OK);
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
     }
@@ -182,11 +184,12 @@ public class Main {
     private static void consultLine(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim();
-            Iterator<String> it = network.getStationNames(lineName);
-            while (it.hasNext()) {
-                System.out.println(it.next());
+            ListInArray<Station> stations = network.getStationNames(lineName);
+            Iterator<Station> it = stations.iterator();
+            while(it.hasNext()) {
+                System.out.println(it.next().getName());
             }
-        } catch (InvalidPositionException e) {
+        } catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
     }
@@ -201,21 +204,22 @@ public class Main {
             String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
 
-            String stationAndTime = in.nextLine();
-            DoubleList<String> stationsAndTimes = new DoubleList<>();
+            ListInArray<EntryClass<Station,Time>> stationsAndTimes = new ListInArray<>();
+            EntryClass<Station,Time> stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
 
-            while (!stationAndTime.equals("")) {
-                stationsAndTimes.addLast(new String(stationAndTime));
-                stationAndTime = in.next();
+            while (stationAndTime.getKey() != null && stationAndTime.getValue() != null ) {
+                stationsAndTimes.addLast(stationAndTime);
+                stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
             }
 
             network.insertSchedule(lineName, trainNumber, stationsAndTimes);
 
             System.out.println(INSERT_TIMETABLE_OK);
-        } catch (NoSuchElementException e) {
+        }
+        catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
-        catch (IllegalArgumentException e) {
+        catch (IllegalArgumentException | NullPointerException e) {
             System.out.println(INSERT_TIMETABLE_ERR);
         }
     }

@@ -1,6 +1,6 @@
 package dataTypes;
 
-public class Time {
+public class Time implements Comparable<Time> {
     public static final int MIN_HOURS = 0;
     public static final int MAX_HOURS = 23;
     public static final int MIN_MINUTES = 0;
@@ -39,5 +39,12 @@ public class Time {
 
     public int minutes() {
         return this.minutes;
+    }
+
+    @Override
+    public int compareTo(Time o) {
+
+        //TODO
+        return 0;
     }
 }

@@ -1,4 +1,9 @@
-package dataStructures;
+package oldDataTypes;
+
+import dataStructures.Entry;
+import dataStructures.EntryClass;
+import dataStructures.Iterator;
+import dataStructures.OrderedDictionary;
 
 import java.lang.Comparable;
 import java.io.Serializable;
