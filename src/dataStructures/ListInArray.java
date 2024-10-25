@@ -2,12 +2,18 @@ package dataStructures;
 
 public class ListInArray<E> implements List<E> {
 
-    public static final int DEFAULT_CAPACITY = 100;
-
+    /**
+     * Serial Version UID of the Class
+     */
+    private static final long serialVersionUID = 0L;
+    /**
+     *  Default capacity of the stack.
+     */
+    public static final int DEFAULT_CAPACITY = 1000;
     /**
      * Array which will hold the elements of the List.
      */
-    private E[] array;
+    protected E[] array;
 
     /**
      * How many elements the array actually holds.
@@ -24,11 +30,10 @@ public class ListInArray<E> implements List<E> {
         size = 0;
         array = (E[]) new Object[capacity];
     }
-    
     /**
      * Default constructor.
      */
-    public ListInArray() 
+    public ListInArray()
     {
         this(DEFAULT_CAPACITY);
     }
@@ -45,8 +50,7 @@ public class ListInArray<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'iterator'");
+        return new ListInArrayIterator<>(array, size);
     }
 
     @Override
@@ -65,9 +69,15 @@ public class ListInArray<E> implements List<E> {
     }
 
     @Override
-    public int find(E element) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'find'");
+    public int find(E element) throws NoSuchElementException{
+        Iterator<E> it = iterator();
+        int index = 0;
+        E currElement = getFirst();
+        while (it.hasNext() && !element.equals(currElement)) {
+            currElement = it.next();
+            index++;
+        }
+        return index;
     }
 
     @Override
