@@ -6,10 +6,12 @@
 package dataTypes;
 
 
+import java.io.Serializable;
+
 /**
  * Class which implements a Train Station
  */
-public class Station {
+public class Station  implements Serializable {
     private final String name;
 
     /**

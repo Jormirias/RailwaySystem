@@ -28,7 +28,7 @@ public class Network implements Serializable {
     /**
      * Add new Line to Network
      */
-    public void insertLine(String lineName, Queue<Station> newStations) throws IllegalArgumentException {
+    public void insertLine(String lineName, ListInArray<Station> newStations) throws IllegalArgumentException {
         if (findLineWithName(lineName) != null){
             throw new IllegalArgumentException();
         }
@@ -50,7 +50,7 @@ public class Network implements Serializable {
             lines.remove(line);
     }
 
-    public Queue<Station> getStationNames(String lineName) throws NoSuchElementException {
+    public ListInArray<Station> getStationNames(String lineName) throws NoSuchElementException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -62,7 +62,7 @@ public class Network implements Serializable {
     /**
      * Add new Schedule to Line
      */
-    public void insertSchedule(String lineName, String trainNumber, QueueInArray<EntryClass<Station,Time>> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
+    public void insertSchedule(String lineName, String trainNumber, ListInArray<EntryClass<Station,Time>> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -71,14 +71,14 @@ public class Network implements Serializable {
             line.insertSchedule(trainNumber, stationAndTimes);
     }
     
-    private Line findLineWithName(String lineName) throws NoSuchElementException {
-         Iterator<Line> it = this.lines.iterator();
-         while(it.hasNext()) {
-             Line next = it.next();
-             if(next.getName().equals(lineName)) {
+    private Line findLineWithName(String lineName) {
+        Iterator<Line> it = lines.iterator();
+        while(it.hasNext()) {
+            Line next = it.next();
+            if(next.getName().equals(lineName)) {
                  return next;
-             }
-         }
+            }
+        }
 
          return null;
      }

@@ -117,11 +117,11 @@ public class Main {
             file.writeObject(network);
             file.flush();
             file.close();
-            //System.out.println
-            //("Serialization file saved.");
+            System.out.println
+            ("Serialization file saved.");
         } catch (IOException e) {
-            //System.out.println
-            //("Problem saving?");
+            System.out.println
+            ("Problem saving?");
         }
     }
 
@@ -133,19 +133,19 @@ public class Main {
         try {
             ObjectInputStream file = new ObjectInputStream(
                     new FileInputStream(DATA_FILE));
-            //System.out.println
-            //("Serialization file loaded.");
+            System.out.println
+            ("Serialization file loaded.");
 
             Network network = (Network) file.readObject();
             file.close();
             return network;
         } catch (IOException e) {
-            //System.out.println
-            //("Non existing serialization file: Creating new Object.");
+            System.out.println
+            ("Non existing serialization file: Creating new Object.");
             return new Network();
         } catch (ClassNotFoundException e) {
-            //System.out.println
-            //("Problems with serialization: Creating new Object.");
+            System.out.println
+            ("Problems with serialization: Creating new Object.");
             return new Network();
         }
 
@@ -156,11 +156,11 @@ public class Main {
             String lineName = in.nextLine().trim();
 
             //Array é mais eficiente que List aqui
-            QueueInArray<Station> newStations = new QueueInArray<>();
+            ListInArray<Station> newStations = new ListInArray<>();
             String stationName = in.nextLine();
             while (!stationName.isEmpty()) {
                 //Criar logo aqui os objetos Station poupa-nos uma iteração O(n) mais tarde
-                newStations.enqueue(new Station(stationName));
+                newStations.addLast(new Station(stationName));
                 stationName = in.nextLine();
             }
             network.insertLine(lineName, newStations);
@@ -184,9 +184,10 @@ public class Main {
     private static void consultLine(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim();
-            Queue<Station> stations = network.getStationNames(lineName);
-            while (!stations.isEmpty()) {
-                System.out.println(stations.dequeue());
+            ListInArray<Station> stations = network.getStationNames(lineName);
+            Iterator<Station> it = stations.iterator();
+            while(it.hasNext()) {
+                System.out.println(it.next().getName());
             }
         } catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
@@ -203,11 +204,11 @@ public class Main {
             String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
 
-            QueueInArray<EntryClass<Station,Time>> stationsAndTimes = new QueueInArray<>();
+            ListInArray<EntryClass<Station,Time>> stationsAndTimes = new ListInArray<>();
             EntryClass<Station,Time> stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
 
             while (stationAndTime.getKey() != null && stationAndTime.getValue() != null ) {
-                stationsAndTimes.enqueue(stationAndTime);
+                stationsAndTimes.addLast(stationAndTime);
                 stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
             }
 

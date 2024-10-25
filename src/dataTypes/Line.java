@@ -17,17 +17,17 @@ public class Line implements Serializable {
     /* Unique identifier for a Line */
     private final String name;
 
-    private final Queue<Station> stations;
+    private final ListInArray<Station> stations;
 
     // private OrderedList<Schedule> schedulesFromBeginTerminal;
     // private OrderedList<Schedule> schedulesFromEndTerminal;
 
     // replace with above.
     // should be ordered by departure time.
-    private OrderedDoubleList<Integer, Schedule> schedulesNormal;
-    private OrderedDoubleList<Integer, Schedule> schedulesInverted;
+    private OrderedDoubleList<Time, Schedule> schedulesNormal;
+    private OrderedDoubleList<Time, Schedule> schedulesInverted;
 
-    public Line(String lineName, Queue<Station> newStations) {
+    public Line(String lineName, ListInArray<Station> newStations) {
         name = lineName;
         stations = newStations;
     }
@@ -36,45 +36,25 @@ public class Line implements Serializable {
         return this.name;
     }
 
-    public Queue<Station> getStations() {
+    public ListInArray<Station> getStations() {
         return stations;
     }
 
     /* Currently only supports one way */
-    public void insertSchedule(String trainNumber, QueueInArray<EntryClass<Station,Time>> stationAndTimes) throws IllegalArgumentException {
+    public void insertSchedule(String trainNumber, ListInArray<EntryClass<Station,Time>> stationAndTimes) throws IllegalArgumentException {
 
         if(!scheduleCheck(stationAndTimes))
             throw new IllegalArgumentException();
 
         else {
             int train = Integer.parseInt(trainNumber);
-            Iterator<String> stationAndTimesIt = stationAndTimes.iterator();
-            Iterator<Station> stationIt = stations.iterator();
 
-            stationAndTimes.getFirst();
-
-            Schedule schedule = new Schedule(train);
-
-            while (stationAndTimesIt.hasNext()) {
-                String[] stationAndTime = stationAndTimesIt.next().split(" ");
-                String stationName = stationAndTime[0];
-                String timeAsString = stationAndTime[1];
-
-                while (stationIt.hasNext()) {
-                    Station station = stationIt.next();
-                    if (station.getName().equals(stationName)) {
-                        Time time = new Time(timeAsString);
-                        station.addStop(train, time);
-                        schedule.addStop(station, time);
-                    } else {
-                        Time time = null;
-                        station.addStop(train, time);
-                        schedule.addStop(station, time);
-                    }
-                }
-            }
-
-            schedules.addLast(schedule);
+            Schedule schedule = new Schedule(train, stationAndTimes);
+            EntryClass<Station,Time> firstStation = stationAndTimes.getFirst();
+            if(firstStation.getKey() == stations.getFirst())
+                schedulesNormal.insert(firstStation.getValue(), schedule);
+            else if(firstStation.getKey() == stations.getLast())
+                schedulesInverted.insert(firstStation.getValue(), schedule);
         }
     }
 
@@ -96,7 +76,24 @@ public class Line implements Serializable {
         return true;
     }
 
-    private boolean scheduleCheck (QueueInArray<EntryClass<Station,Time>> stationAndTimes) {
+    private boolean scheduleCheck (ListInArray<EntryClass<Station,Time>> stationAndTimes) {
+
+        Iterator<EntryClass<Station,Time>> stationAndTimesIt = stationAndTimes.iterator();
+        Iterator<Station> stationIt = stations.iterator();
+
+        /**
+        while (stationAndTimesIt.hasNext()) {
+            EntryClass<Station,Time> stationAndTime = stationAndTimesIt.next();
+            String stationName = stationAndTime.getKey().getName();
+            Time timeAsString = stationAndTime.getValue();
+
+            while (stationIt.hasNext()) {
+                Station station = stationIt.next();
+                if (!station.getName().equals(stationName)) {
+                   return false;
+                }
+            }
+        }**/
         //TODO
         //se a primeira estção não é uma das duas terminais, return false
         //se a sequencia de estaçoes não segue as da linha, return false

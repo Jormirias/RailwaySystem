@@ -15,11 +15,11 @@ public class Schedule  {
     /**
      * ALl the stops in this schedule.
      */
-    private final Queue<ScheduleStop> stops;
+    private final ListInArray<EntryClass<Station,Time>> stops;
 
-    public Schedule(int train) {
+    public Schedule(int train, ListInArray<EntryClass<Station,Time>> newSchedule) {
         trainNumber = train;
-        stops = new DoubleList<ScheduleStop>();
+        stops = newSchedule;
     }
 
     /**
@@ -27,14 +27,14 @@ public class Schedule  {
      */
     public void addStop(Station station, Time time) {
         ScheduleStop stop = new ScheduleStop(station, time);
-        stops.addLast(stop);
+        //stops.addLast(stop);
     }
 
-    public Iterator<ScheduleStop> getStops() {
+    public Iterator<EntryClass<Station, Time>> getStops() {
         return this.stops.iterator();
     }
 
-    public Station getDepartureStation() {
-        return stops.getFirst().getStation();
+    public Station getOriginStation() {
+        return stops.getFirst().getKey();
     }
 }
