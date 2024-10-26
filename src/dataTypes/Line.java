@@ -6,7 +6,6 @@
 package dataTypes;
 
 import dataStructures.*;
-import dataStructures.IllegalArgumentException;
 
 import java.io.Serializable;
 
@@ -18,12 +17,8 @@ public class Line implements Serializable {
     private final String name;
 
     private final ListInArray<Station> stations;
-
-    // private OrderedList<Schedule> schedulesFromBeginTerminal;
-    // private OrderedList<Schedule> schedulesFromEndTerminal;
-
-    // replace with above.
-    // should be ordered by departure time.
+    
+    // Ordered by departure time.
     private OrderedDoubleList<Time, Schedule> schedulesNormal;
     private OrderedDoubleList<Time, Schedule> schedulesInverted;
 
@@ -41,20 +36,24 @@ public class Line implements Serializable {
     }
 
     /* Currently only supports one way */
-    public void insertSchedule(String trainNumber, ListInArray<EntryClass<Station,Time>> stationAndTimes) throws IllegalArgumentException {
+    public void insertSchedule(String trainNumber, ListInArray<ScheduleStop> stationAndTimes) throws dataStructures.IllegalArgumentException {
+        int train = Integer.parseInt(trainNumber);
+        ScheduleStop firstStop = stationAndTimes.getFirst();
 
-        if(!scheduleCheck(stationAndTimes))
-            throw new IllegalArgumentException();
+        if(firstStop.getStation() != stations.getFirst() && firstStop.getStation() != stations.getLast()) {
+            throw new dataStructures.IllegalArgumentException();
+        }
+        
+        if(!scheduleCheck(train, stationAndTimes)) {
+            throw new dataStructures.IllegalArgumentException();
+        }
 
-        else {
-            int train = Integer.parseInt(trainNumber);
-
-            Schedule schedule = new Schedule(train, stationAndTimes);
-            EntryClass<Station,Time> firstStation = stationAndTimes.getFirst();
-            if(firstStation.getKey() == stations.getFirst())
-                schedulesNormal.insert(firstStation.getValue(), schedule);
-            else if(firstStation.getKey() == stations.getLast())
-                schedulesInverted.insert(firstStation.getValue(), schedule);
+        Schedule schedule = new Schedule(train, stationAndTimes);
+        if(firstStop.getStation() == stations.getFirst()) {
+            schedulesNormal.insert(firstStop.getTime(), schedule);
+        }
+        else if(firstStop.getStation() == stations.getLast()) {
+            schedulesInverted.insert(firstStop.getTime(), schedule);
         }
     }
 
@@ -76,28 +75,33 @@ public class Line implements Serializable {
         return true;
     }
 
-    private boolean scheduleCheck (ListInArray<EntryClass<Station,Time>> stationAndTimes) {
+    private boolean scheduleCheck (int train, ListInArray<ScheduleStop> stationAndTimes) {
 
-        Iterator<EntryClass<Station,Time>> stationAndTimesIt = stationAndTimes.iterator();
+        Iterator<ScheduleStop> stationAndTimesIt = stationAndTimes.iterator();
         Iterator<Station> stationIt = stations.iterator();
 
-        /**
-        while (stationAndTimesIt.hasNext()) {
-            EntryClass<Station,Time> stationAndTime = stationAndTimesIt.next();
-            String stationName = stationAndTime.getKey().getName();
-            Time timeAsString = stationAndTime.getValue();
+        Time lastTime = null;
+        while (stationAndTimesIt.hasNext() && stationIt.hasNext()) {
+            ScheduleStop stationAndTime = stationAndTimesIt.next();
+            String stationName = stationAndTime.getStation().getName();
+            Time time = stationAndTime.getTime();
+
+            //se a sequencia de horários não for cronologica, return false
+            if(lastTime != null && time.compareTo(lastTime) < 0) {
+                return false;
+            }
 
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
-                if (!station.getName().equals(stationName)) {
-                   return false;
+                if (station.getName().equals(stationName)) {
+                   station.addStop(train, time);
                 }
             }
-        }**/
-        //TODO
-        //se a primeira estção não é uma das duas terminais, return false
+
+            lastTime = time;
+        }
+        
         //se a sequencia de estaçoes não segue as da linha, return false
-        //se a sequencia de horários não for cronologica, return false
-        return true;
+        return !stationAndTimesIt.hasNext();
     }
 }

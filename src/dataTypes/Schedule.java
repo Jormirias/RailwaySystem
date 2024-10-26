@@ -13,28 +13,20 @@ import dataStructures.*;
 public class Schedule  {
     int trainNumber;
     /**
-     * ALl the stops in this schedule.
+     * All the stops in this schedule.
      */
-    private final ListInArray<EntryClass<Station,Time>> stops;
+    private final ListInArray<ScheduleStop> stops;
 
-    public Schedule(int train, ListInArray<EntryClass<Station,Time>> newSchedule) {
+    public Schedule(int train, ListInArray<ScheduleStop> newSchedule) {
         trainNumber = train;
         stops = newSchedule;
     }
 
-    /**
-     * Only to be used while building the schedule.
-     */
-    public void addStop(Station station, Time time) {
-        ScheduleStop stop = new ScheduleStop(station, time);
-        //stops.addLast(stop);
-    }
-
-    public Iterator<EntryClass<Station, Time>> getStops() {
+    public Iterator<ScheduleStop> getStops() {
         return this.stops.iterator();
     }
 
     public Station getOriginStation() {
-        return stops.getFirst().getKey();
+        return stops.getFirst().getStation();
     }
 }

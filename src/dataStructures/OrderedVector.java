@@ -11,6 +11,7 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
      * Avoids implementing two different methods which are variations of findPosition,
      * allows for a search to always return a valid result and
      * gives meaning to what position was reached.
+     * For internal use only!
      */
     class SearchResult {
         public static final boolean FOUND = true;
