@@ -4,9 +4,14 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
     private int capacity;
     private int size;
 
-    // private Vector<Entry<K, V>> entries;
+    // Entry<K, V>[]
     private Object[] entries;
 
+    /**
+     * Avoids implementing two different methods which are variations of findPosition,
+     * allows for a search to always return a valid result and
+     * gives meaning to what position was reached.
+     */
     class SearchResult {
         public static final boolean FOUND = true;
         public static final boolean NOT_FOUND = false;
@@ -62,27 +67,17 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
             resize();
         }
 
-        SearchResult result = findPosition(key);
-        if (result.wasFound()) {
-            // update current value
-            getEntry(result.getPosition()).setValue(value);
-        } else {
-            int entryPosition = result.getPosition();
-            Entry<K, V> entry = getEntry(entryPosition);
-
-            if (key.compareTo(entry.getKey()) < 0) {
-                shiftFrom(entryPosition);
-            } else if (key.compareTo(entry.getKey()) > 0) {
-                entryPosition += 1;
-                shiftFrom(entryPosition);
-            } else {
-                // blow up, as this should be made impossible by the external if condition
-            }
-
-            setEntry(entryPosition, new EntryClass<K, V>(key, value));
+        if (size == 0) {
+            setEntry(0, new EntryClass<K, V>(key, value));
             size += 1;
+            return value;
+        } else if (key.compareTo(getEntry(0).getKey()) < 0) {
+            insertBeginning(key, value);
+        } else if (key.compareTo(getEntry(size - 1).getKey()) > 0) {
+            insertEnd(key, value);
+        } else {
+            insertMiddle(key, value);
         }
-
 
         return value;
     }
@@ -95,10 +90,9 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
         if (result.wasFound()) {
             int position = result.getPosition();
             value = getEntry(position).getValue();
-            shiftTo(position);
+            shiftInto(position);
             size -= 1;
         }
-
 
         return value;
     }
@@ -135,10 +129,10 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
      */
     private void resize() {
         capacity *= 2;
-        
+
         Object[] newArray = new Object[capacity];
 
-        for(int i = 0; i < size; ++i) {
+        for (int i = 0; i < size; ++i) {
             newArray[i] = entries[i];
         }
 
@@ -148,13 +142,14 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
     // As the vector is ordered, we can do a binary search.
     private SearchResult findPosition(K key) {
         int first = 0;
-        int last = size;
-        while (first != last) {
-            int middle = (first + last) / 2;
+        int last = size - 1;
+        int middle = first;
+        while (first <= last) {
+            middle = (first + last) / 2;
             Entry<K, V> entry = getEntry(middle);
             K currentKey = entry.getKey();
 
-            int comparsionResult = currentKey.compareTo(key);
+            int comparsionResult = key.compareTo(currentKey);
             if (comparsionResult < 0) {
                 last = middle - 1;
             } else if (comparsionResult > 0) {
@@ -164,17 +159,51 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
             }
         }
 
-        return new SearchResult(0, SearchResult.NOT_FOUND);
+        return new SearchResult(middle, SearchResult.NOT_FOUND);
+    }
+
+    private void insertBeginning(K key, V value) {
+        shiftFrom(0);
+        setEntry(0, new EntryClass<K, V>(key, value));
+        size += 1;
+    }
+
+    private void insertEnd(K key, V value) {
+        setEntry(size, new EntryClass<K, V>(key, value));
+        size += 1;
+    }
+
+    private void insertMiddle(K key, V value) {
+        SearchResult result = findPosition(key);
+        if (result.wasFound()) {
+            // update current value
+            getEntry(result.getPosition()).setValue(value);
+        } else {
+            int entryPosition = result.getPosition();
+            Entry<K, V> entry = getEntry(entryPosition);
+
+            if (key.compareTo(entry.getKey()) < 0) {
+                shiftFrom(entryPosition);
+            } else if (key.compareTo(entry.getKey()) > 0) {
+                entryPosition += 1;
+                shiftFrom(entryPosition);
+            } else {
+                // blow up, as this should be made impossible by the external if condition
+            }
+
+            setEntry(entryPosition, new EntryClass<K, V>(key, value));
+            size += 1;
+        }
     }
 
     private void shiftFrom(int position) {
-        for(int i = size; i > position; --i) {
+        for (int i = size; i > position; --i) {
             entries[i] = entries[i - 1];
         }
     }
 
-    private void shiftTo(int position) {
-        for(int i = position; i < size; ++i) {
+    private void shiftInto(int position) {
+        for (int i = position; i < size; ++i) {
             entries[i] = entries[i + 1];
         }
     }
