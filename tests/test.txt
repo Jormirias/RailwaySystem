@@ -1,0 +1,27 @@
+il fruit
+banana
+apple
+tomato
+orange
+grape
+melon
+pumpkin
+lemon
+
+cl fruit
+
+ih fruit
+123
+banana 12:00
+apple 12:05
+tomato 12:10
+orange 12:15
+grape 12:20
+melon 12:25
+pumpkin 12:30
+lemon 12:35
+
+ch fruit
+banana
+
+ta
