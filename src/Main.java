@@ -221,16 +221,17 @@ public class Main {
         try {
             String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
-
+            
+            String stationAndTime = in.nextLine();
             ListInArray<ScheduleStop> stops = new ListInArray<>();
-            ScheduleStop stop = new ScheduleStop(new Station (in.next()), new Time (in.next()));
-
-            while (stop.getStation() != null && stop.getTime() != null ) {
+            while (!stationAndTime.isEmpty()) {
+                String[] splitStationAndTime = stationAndTime.split(" ");
+                ScheduleStop stop = new ScheduleStop(new Station(splitStationAndTime[0]), new Time(splitStationAndTime[1]));
                 stops.addLast(stop);
-                stop = new ScheduleStop(new Station (in.next()), new Time (in.next()));
+                stationAndTime = in.nextLine();
             }
 
-            network.insertSchedule(lineName, trainNumber, stationsAndTimes);
+            network.insertSchedule(lineName, trainNumber, stops);
 
             System.out.println(INSERT_TIMETABLE_OK);
         }
@@ -243,22 +244,35 @@ public class Main {
     }
 
     private static void removeSchedule(Scanner in, Network network) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeSchedule'");
+        String lineName = in.nextLine().trim();
+        String departureStationName = in.nextLine();
     }
 
     private static void consultSchedules(Scanner in, Network network) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'consultSchedules'");
+        String lineName = in.nextLine().trim();
+        String departureStationName = in.nextLine();
+
+        Iterator<Entry<Time, Schedule>> schedulesIt = network.getLineSchedules(lineName, departureStationName);
+        while(schedulesIt.hasNext()) {
+            Schedule schedule = schedulesIt.next().getValue();
+            System.out.println(schedule.getTrainNumber());
+
+            Iterator<ScheduleStop> stopsIt = schedule.getStops();
+            while(stopsIt.hasNext()) {
+                ScheduleStop stop = stopsIt.next();
+                System.out.println(stop);
+            }
+        }
+
     }
 
     private static void consultTrains(Scanner in, Network network) {
-        // TODO Auto-generated method stub
+        // TODO implement in second phase
         throw new UnsupportedOperationException("Unimplemented method 'consultTrains'");
     }
-
+    
     private static void bestSchedule(Scanner in, Network network) {
-        // TODO implement in second phase
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'bestSchedule'");
     }
 }

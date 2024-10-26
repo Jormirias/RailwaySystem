@@ -22,6 +22,10 @@ public class Schedule  {
         stops = newSchedule;
     }
 
+    public int getTrainNumber() {
+        return trainNumber;
+    }
+
     public Iterator<ScheduleStop> getStops() {
         return this.stops.iterator();
     }

@@ -70,6 +70,16 @@ public class Network implements Serializable {
             line.insertSchedule(trainNumber, stationAndTimes);
         }
     }
+
+    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
+        }
+        else {
+            return line.getSchedules(departureStationName);
+        }
+    }
     
     private Line findLineWithName(String lineName) {
         Iterator<Line> it = lines.iterator();

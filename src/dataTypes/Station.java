@@ -35,5 +35,24 @@ public class Station  implements Serializable {
         stopsByTime.insert(time, train);
         stopsByTrain.insert(train, time);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!other.getClass().equals(this.getClass())) {
+            return false;
+        }
+
+        Station otherStation = (Station) other;
+        if(this.name.equals(otherStation.getName())) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
     
 }

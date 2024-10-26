@@ -25,6 +25,9 @@ public class Line implements Serializable {
     public Line(String lineName, ListInArray<Station> newStations) {
         name = lineName;
         stations = newStations;
+
+        schedulesNormal = new OrderedDoubleList<>();
+        schedulesInverted = new OrderedDoubleList<>();
     }
 
     public String getName() {
@@ -40,7 +43,7 @@ public class Line implements Serializable {
         int train = Integer.parseInt(trainNumber);
         ScheduleStop firstStop = stationAndTimes.getFirst();
 
-        if(firstStop.getStation() != stations.getFirst() && firstStop.getStation() != stations.getLast()) {
+        if(!firstStop.getStation().equals(stations.getFirst()) && !firstStop.getStation().equals(stations.getLast())) {
             throw new dataStructures.IllegalArgumentException();
         }
         
@@ -49,12 +52,23 @@ public class Line implements Serializable {
         }
 
         Schedule schedule = new Schedule(train, stationAndTimes);
-        if(firstStop.getStation() == stations.getFirst()) {
+        if(firstStop.getStation().equals(stations.getFirst())) {
             schedulesNormal.insert(firstStop.getTime(), schedule);
         }
-        else if(firstStop.getStation() == stations.getLast()) {
+        else if(firstStop.getStation().equals(stations.getLast())) {
             schedulesInverted.insert(firstStop.getTime(), schedule);
         }
+    }
+
+    public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) {
+        if(departureStationName.equals(stations.getFirst().getName())) {
+            return schedulesNormal.iterator();
+        }
+        else if(departureStationName.equals(stations.getLast().getName())) {
+            return schedulesInverted.iterator();
+        }
+
+        return null;
     }
 
     @Override
@@ -95,6 +109,7 @@ public class Line implements Serializable {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
                    station.addStop(train, time);
+                   break;
                 }
             }
 

@@ -58,4 +58,11 @@ public class Time implements Comparable<Time> {
         }
         return 0;
     }
+
+    @Override
+    public String toString() {
+        String hours = String.format("%02d", this.hours);
+        String minutes = String.format("%02d", this.minutes);
+        return hours + ":" + minutes;
+    }
 }
