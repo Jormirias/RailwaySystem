@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
 
-import dataStructures.IllegalArgumentException;
 import dataTypes.*;
 import dataStructures.*;
 
@@ -58,9 +57,26 @@ public class Main {
 
     private static final String DATA_FILE = "storednetwork.dat";
 
+    private static final boolean CONSOLE_INPUT = false;
+    private static final boolean PERSISTANT = false;
+
     public static void main(String[] args) throws Exception {
-        Network network = load();
-        Scanner in = new Scanner(System.in);
+
+        Network network;
+        if(PERSISTANT) {
+            network = load();
+        } else {
+            network = new Network();
+        }
+
+        Scanner in;
+        if(CONSOLE_INPUT) {
+            in = new Scanner(System.in);
+        } else {
+            File file = new File("./tests/test.txt");
+            in = new Scanner(file);
+        }
+
         String cmd = "";
         // Delimiter is whitespace by default
 
@@ -103,7 +119,9 @@ public class Main {
             }
         } while (!cmd.equals(EXIT));
 
-        save(network);
+        if(PERSISTANT) {
+            save(network);
+        }
     }
 
     /**
@@ -166,7 +184,7 @@ public class Main {
             network.insertLine(lineName, newStations);
 
             System.out.println(INSERT_LINE_OK);
-        } catch (IllegalArgumentException e) {
+        } catch (dataStructures.IllegalArgumentException e) {
             System.out.println(INSERT_LINE_ERR);
         }
     }
@@ -204,12 +222,12 @@ public class Main {
             String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
 
-            ListInArray<EntryClass<Station,Time>> stationsAndTimes = new ListInArray<>();
-            EntryClass<Station,Time> stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
+            ListInArray<ScheduleStop> stops = new ListInArray<>();
+            ScheduleStop stop = new ScheduleStop(new Station (in.next()), new Time (in.next()));
 
-            while (stationAndTime.getKey() != null && stationAndTime.getValue() != null ) {
-                stationsAndTimes.addLast(stationAndTime);
-                stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
+            while (stop.getStation() != null && stop.getTime() != null ) {
+                stops.addLast(stop);
+                stop = new ScheduleStop(new Station (in.next()), new Time (in.next()));
             }
 
             network.insertSchedule(lineName, trainNumber, stationsAndTimes);
@@ -219,7 +237,7 @@ public class Main {
         catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
-        catch (IllegalArgumentException | NullPointerException e) {
+        catch (dataStructures.IllegalArgumentException | NullPointerException e) {
             System.out.println(INSERT_TIMETABLE_ERR);
         }
     }
