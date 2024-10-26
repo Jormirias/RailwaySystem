@@ -18,13 +18,13 @@ public class Station  implements Serializable {
     /**
      * All the stops at this station.
      */
-    private OrderedVector<Time, Integer> stopsByTime;
     private OrderedVector<Integer, Time> stopsByTrain;
+    private OrderedVector<Time, Integer> stopsByTime;
 
     public Station(String name) {
         this.name = name;
-        this.stopsByTime = new OrderedVector<Time, Integer>(100);
         this.stopsByTrain = new OrderedVector<Integer, Time>(100);
+        this.stopsByTime = new OrderedVector<Time, Integer>(100);
     }
 
     public String getName() {
@@ -32,8 +32,13 @@ public class Station  implements Serializable {
     }
 
     public void addStop(int train, Time time) {
-        stopsByTime.insert(time, train);
         stopsByTrain.insert(train, time);
+        stopsByTime.insert(time, train);
+    }
+
+    public void removeStop(int train, Time time) {
+        stopsByTrain.remove(train);
+        stopsByTime.remove(time);
     }
 
     @Override
@@ -43,11 +48,11 @@ public class Station  implements Serializable {
         }
 
         Station otherStation = (Station) other;
-        if(this.name.equals(otherStation.getName())) {
-            return true;
+        if(!this.name.equals(otherStation.getName())) {
+            return false;
         }
 
-        return false;
+        return true;
     }
 
     @Override

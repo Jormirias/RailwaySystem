@@ -57,8 +57,10 @@ public class Main {
 
     private static final String DATA_FILE = "storednetwork.dat";
 
-    private static final boolean CONSOLE_INPUT = false;
-    private static final boolean PERSISTANT = false;
+    // Testing purposes
+    private static final boolean CONSOLE_INPUT = true;
+    private static final boolean PERSISTANT = true;
+    private static final String TEST_FILE = "./tests/test.txt";
 
     public static void main(String[] args) throws Exception {
 
@@ -73,7 +75,7 @@ public class Main {
         if(CONSOLE_INPUT) {
             in = new Scanner(System.in);
         } else {
-            File file = new File("./tests/test.txt");
+            File file = new File(TEST_FILE);
             in = new Scanner(file);
         }
 
@@ -205,7 +207,7 @@ public class Main {
             ListInArray<Station> stations = network.getStationNames(lineName);
             Iterator<Station> it = stations.iterator();
             while(it.hasNext()) {
-                System.out.println(it.next().getName());
+                System.out.println(it.next());
             }
         } catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
@@ -245,7 +247,13 @@ public class Main {
 
     private static void removeSchedule(Scanner in, Network network) {
         String lineName = in.nextLine().trim();
-        String departureStationName = in.nextLine();
+        String departureStationName = in.next();
+        String timeAsString = in.next();
+        in.nextLine(); // ignore next line;
+
+        network.removeSchedule(lineName, departureStationName, timeAsString);
+
+        System.out.println(REMOVE_TIMETABLE_OK);
     }
 
     private static void consultSchedules(Scanner in, Network network) {
@@ -259,8 +267,7 @@ public class Main {
 
             Iterator<ScheduleStop> stopsIt = schedule.getStops();
             while(stopsIt.hasNext()) {
-                ScheduleStop stop = stopsIt.next();
-                System.out.println(stop);
+                System.out.println(stopsIt.next());
             }
         }
 

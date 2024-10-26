@@ -71,6 +71,16 @@ public class Network implements Serializable {
         }
     }
 
+    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
+        }
+        else {
+            line.removeSchedule(departureStationName, timeAsString);
+        }
+    }
+
     public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException {
         Line line = findLineWithName(lineName);
         if (line == null){

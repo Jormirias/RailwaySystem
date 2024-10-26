@@ -60,12 +60,43 @@ public class Line implements Serializable {
         }
     }
 
+    public void removeSchedule(String departureStationName, String timeAsString) {
+        Schedule schedule = null;
+        Time time = new Time(timeAsString);
+
+        if(departureStationName.equals(stations.getFirst().getName())) {
+            schedule = schedulesNormal.remove(time);
+        }
+        else if(departureStationName.equals(stations.getLast().getName())) {
+            schedule = schedulesInverted.remove(time);
+        } else {
+            // throw
+        }
+
+        int trainNumber = schedule.getTrainNumber();
+        Iterator<ScheduleStop> stopsIt = schedule.getStops();
+        Iterator<Station> stationIt = stations.iterator();
+        while(stopsIt.hasNext()) {
+            ScheduleStop stop = stopsIt.next();
+
+            while (stationIt.hasNext()) {
+                Station station = stationIt.next();
+                if (station.equals(stop.getStation())) {
+                   station.removeStop(trainNumber, stop.getTime());
+                   break;
+                }
+            }
+        }
+    }
+
     public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) {
         if(departureStationName.equals(stations.getFirst().getName())) {
             return schedulesNormal.iterator();
         }
         else if(departureStationName.equals(stations.getLast().getName())) {
             return schedulesInverted.iterator();
+        } else {
+            // throw
         }
 
         return null;
