@@ -12,4 +12,13 @@ public class ScheduleStop {
     public Station getStation() {
         return this.station;
     }
+
+    public Time getTime() { 
+        return this.time;
+    }
+
+    @Override
+    public String toString() {
+        return station + " " + time;
+    }
 }

@@ -7,6 +7,7 @@ package dataTypes;
 
 
 import java.io.Serializable;
+import dataStructures.OrderedVector;
 
 /**
  * Class which implements a Train Station
@@ -17,12 +18,13 @@ public class Station  implements Serializable {
     /**
      * All the stops at this station.
      */
-    private final StationStop[] stops;
-    private int stopsCount = 0;
+    private OrderedVector<Integer, Time> stopsByTrain;
+    private OrderedVector<Time, Integer> stopsByTime;
 
     public Station(String name) {
         this.name = name;
-        this.stops = new StationStop[36];
+        this.stopsByTrain = new OrderedVector<Integer, Time>(100);
+        this.stopsByTime = new OrderedVector<Time, Integer>(100);
     }
 
     public String getName() {
@@ -30,8 +32,32 @@ public class Station  implements Serializable {
     }
 
     public void addStop(int train, Time time) {
-        StationStop stop = new StationStop(train, time);
-        stops[stopsCount++] = stop;
+        stopsByTrain.insert(train, time);
+        stopsByTime.insert(time, train);
+    }
+
+    public void removeStop(int train, Time time) {
+        stopsByTrain.remove(train);
+        stopsByTime.remove(time);
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if(!other.getClass().equals(this.getClass())) {
+            return false;
+        }
+
+        Station otherStation = (Station) other;
+        if(!this.name.equals(otherStation.getName())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
     
 }

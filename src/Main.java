@@ -1,7 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
 
-import dataStructures.IllegalArgumentException;
 import dataTypes.*;
 import dataStructures.*;
 
@@ -58,9 +57,28 @@ public class Main {
 
     private static final String DATA_FILE = "storednetwork.dat";
 
+    // Testing purposes
+    private static final boolean CONSOLE_INPUT = true;
+    private static final boolean PERSISTANT = true;
+    private static final String TEST_FILE = "./tests/test.txt";
+
     public static void main(String[] args) throws Exception {
-        Network network = load();
-        Scanner in = new Scanner(System.in);
+
+        Network network;
+        if(PERSISTANT) {
+            network = load();
+        } else {
+            network = new Network();
+        }
+
+        Scanner in;
+        if(CONSOLE_INPUT) {
+            in = new Scanner(System.in);
+        } else {
+            File file = new File(TEST_FILE);
+            in = new Scanner(file);
+        }
+
         String cmd = "";
         // Delimiter is whitespace by default
 
@@ -103,7 +121,9 @@ public class Main {
             }
         } while (!cmd.equals(EXIT));
 
-        save(network);
+        if(PERSISTANT) {
+            save(network);
+        }
     }
 
     /**
@@ -166,7 +186,7 @@ public class Main {
             network.insertLine(lineName, newStations);
 
             System.out.println(INSERT_LINE_OK);
-        } catch (IllegalArgumentException e) {
+        } catch (dataStructures.IllegalArgumentException e) {
             System.out.println(INSERT_LINE_ERR);
         }
     }
@@ -187,7 +207,7 @@ public class Main {
             ListInArray<Station> stations = network.getStationNames(lineName);
             Iterator<Station> it = stations.iterator();
             while(it.hasNext()) {
-                System.out.println(it.next().getName());
+                System.out.println(it.next());
             }
         } catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
@@ -203,44 +223,63 @@ public class Main {
         try {
             String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
-
-            ListInArray<EntryClass<Station,Time>> stationsAndTimes = new ListInArray<>();
-            EntryClass<Station,Time> stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
-
-            while (stationAndTime.getKey() != null && stationAndTime.getValue() != null ) {
-                stationsAndTimes.addLast(stationAndTime);
-                stationAndTime = new EntryClass<>(new Station (in.next()), new Time (in.next()));
+            
+            String stationAndTime = in.nextLine();
+            ListInArray<ScheduleStop> stops = new ListInArray<>();
+            while (!stationAndTime.isEmpty()) {
+                String[] splitStationAndTime = stationAndTime.split(" ");
+                ScheduleStop stop = new ScheduleStop(new Station(splitStationAndTime[0]), new Time(splitStationAndTime[1]));
+                stops.addLast(stop);
+                stationAndTime = in.nextLine();
             }
 
-            network.insertSchedule(lineName, trainNumber, stationsAndTimes);
+            network.insertSchedule(lineName, trainNumber, stops);
 
             System.out.println(INSERT_TIMETABLE_OK);
         }
         catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
-        catch (IllegalArgumentException | NullPointerException e) {
+        catch (dataStructures.IllegalArgumentException | NullPointerException e) {
             System.out.println(INSERT_TIMETABLE_ERR);
         }
     }
 
     private static void removeSchedule(Scanner in, Network network) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'removeSchedule'");
+        String lineName = in.nextLine().trim();
+        String departureStationName = in.next();
+        String timeAsString = in.next();
+        in.nextLine(); // ignore next line;
+
+        network.removeSchedule(lineName, departureStationName, timeAsString);
+
+        System.out.println(REMOVE_TIMETABLE_OK);
     }
 
     private static void consultSchedules(Scanner in, Network network) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'consultSchedules'");
+        String lineName = in.nextLine().trim();
+        String departureStationName = in.nextLine();
+
+        Iterator<Entry<Time, Schedule>> schedulesIt = network.getLineSchedules(lineName, departureStationName);
+        while(schedulesIt.hasNext()) {
+            Schedule schedule = schedulesIt.next().getValue();
+            System.out.println(schedule.getTrainNumber());
+
+            Iterator<ScheduleStop> stopsIt = schedule.getStops();
+            while(stopsIt.hasNext()) {
+                System.out.println(stopsIt.next());
+            }
+        }
+
     }
 
     private static void consultTrains(Scanner in, Network network) {
-        // TODO Auto-generated method stub
+        // TODO implement in second phase
         throw new UnsupportedOperationException("Unimplemented method 'consultTrains'");
     }
-
+    
     private static void bestSchedule(Scanner in, Network network) {
-        // TODO implement in second phase
+        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'bestSchedule'");
     }
 }

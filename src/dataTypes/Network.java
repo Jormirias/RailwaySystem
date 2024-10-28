@@ -6,7 +6,6 @@
 package dataTypes;
 
 import dataStructures.*;
-import dataStructures.IllegalArgumentException;
 
 import java.io.Serializable;
 
@@ -28,9 +27,9 @@ public class Network implements Serializable {
     /**
      * Add new Line to Network
      */
-    public void insertLine(String lineName, ListInArray<Station> newStations) throws IllegalArgumentException {
+    public void insertLine(String lineName, ListInArray<Station> newStations) throws dataStructures.IllegalArgumentException {
         if (findLineWithName(lineName) != null){
-            throw new IllegalArgumentException();
+            throw new dataStructures.IllegalArgumentException();
         }
 
         else{
@@ -62,13 +61,34 @@ public class Network implements Serializable {
     /**
      * Add new Schedule to Line
      */
-    public void insertSchedule(String lineName, String trainNumber, ListInArray<EntryClass<Station,Time>> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
+    public void insertSchedule(String lineName, String trainNumber, ListInArray<ScheduleStop> stationAndTimes) throws NoSuchElementException, dataStructures.IllegalArgumentException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
         }
-        else
+        else {
             line.insertSchedule(trainNumber, stationAndTimes);
+        }
+    }
+
+    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
+        }
+        else {
+            line.removeSchedule(departureStationName, timeAsString);
+        }
+    }
+
+    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
+        }
+        else {
+            return line.getSchedules(departureStationName);
+        }
     }
     
     private Line findLineWithName(String lineName) {

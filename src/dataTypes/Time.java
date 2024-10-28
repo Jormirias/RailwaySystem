@@ -33,18 +33,36 @@ public class Time implements Comparable<Time> {
         }
     }
 
-    public int hours() {
+    public int getHours() {
         return this.hours;
     }
 
-    public int minutes() {
+    public int getMinutes() {
         return this.minutes;
     }
 
     @Override
-    public int compareTo(Time o) {
-
-        //TODO
+    public int compareTo(Time other) {
+        if(this.hours < other.hours) {
+            return -1;
+        }
+        else if(this.hours > other.hours) {
+            return 1;
+        } else {
+            if(this.minutes < other.minutes) {
+                return -1;
+            }
+            else if(this.minutes > other.minutes) {
+                return 1;
+            }
+        }
         return 0;
+    }
+
+    @Override
+    public String toString() {
+        String hours = String.format("%02d", this.hours);
+        String minutes = String.format("%02d", this.minutes);
+        return hours + ":" + minutes;
     }
 }
