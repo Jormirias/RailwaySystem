@@ -13,15 +13,38 @@ import java.io.Serializable;
  * Class which implements a Rail Line
  */
 public class Line implements Serializable {
-    /* Unique identifier for a Line */
+
+    /**
+     * String Line name
+     * Unique identifier for a Line
+     *
+     */
     private final String name;
 
+    /**
+     * Station Collection
+     * STRUCT_CHOICE: We chose to have this be a ListInArray for spatial concerns; it's meant to be an immutable collection, so an array will suffice for its purposes.
+     * Some consultation operations will need to iterate over it, but for those purposes it's indifferent for it to be a LinkedList or a ListInArray
+     *
+     */
     private final ListInArray<Station> stations;
-    
-    // Ordered by departure time.
-    private OrderedDoubleList<Time, Schedule> schedulesNormal;
-    private OrderedDoubleList<Time, Schedule> schedulesInverted;
 
+    /**
+     * Schedule Collections
+     * STRUCT_CHOICE: We chose to have these be OrderedDoubleLists, ordered by departure time, since the MH command will need to iterate over them and it's convenient to have them ordered.
+     * 2 different collections since the schedule may contain the Stations by order or by reversed order
+     *
+     */
+    // Ordered by departure time.
+    private final OrderedDoubleList<Time, Schedule> schedulesNormal;
+    private final OrderedDoubleList<Time, Schedule> schedulesInverted;
+
+
+    /**
+     * Line Constructor
+     * Receives the lineName and the Station collection, allocates them, and initializes two Schedule Collections, one normal and the other for the inverted line direction
+     *
+     */
     public Line(String lineName, ListInArray<Station> newStations) {
         name = lineName;
         stations = newStations;
@@ -30,10 +53,20 @@ public class Line implements Serializable {
         schedulesInverted = new OrderedDoubleList<>();
     }
 
+    /**
+     * Returns the name of the Line
+     * @return the String holding the name of this Line.
+     *
+     */
     public String getName() {
         return this.name;
     }
 
+    /**
+     * Returns the Station collection of the Line
+     * @return the Collection of Stations in this Line
+     *
+     */
     public ListInArray<Station> getStations() {
         return stations;
     }

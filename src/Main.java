@@ -9,9 +9,7 @@ import dataStructures.*;
  * @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
  * @author Jorge Dias (72360) jmr.dias@campus.fct.unl.pt
  * @version 1.0
- */
-
-/**
+ *
  * Class which holds the main function of the program.
  * Responsible for handling input/output as Strings
  */
@@ -20,7 +18,6 @@ public class Main {
     /**
      * Comandos do sistema (Fase 1)
      */
-
     private static final String INSERT_LINE = "IL";
     private static final String REMOVE_LINE = "RL";
 
@@ -35,10 +32,10 @@ public class Main {
     private static final String CONSULT_BEST_TIMETABLE = "MH";
 
     private static final String EXIT = "TA";
+
     /**
      * Mensagens do sistema
      */
-
     private static final String INSERT_LINE_OK = "Inserção de linha com sucesso.";
     private static final String INSERT_LINE_ERR = "Linha existente.";
     private static final String REMOVE_LINE_OK = "Remoção de linha com sucesso.";
@@ -55,17 +52,28 @@ public class Main {
 
     private static final String COMMAND_NULL = "Comando inexistente.";
 
+    /**
+     * Serialização
+     */
     private static final String DATA_FILE = "storednetwork.dat";
 
-    // Testing purposes
+    /**
+     * Testing purposes!
+     * CONSOLE_INPUT: if true, console accepts command line inputs; if false, will load TEST_FILE
+     * PERSISTENT: if true, loads saved file; if false, will create a new network
+     *
+     */
     private static final boolean CONSOLE_INPUT = true;
-    private static final boolean PERSISTANT = true;
+    private static final boolean PERSISTENT = true;
     private static final String TEST_FILE = "./tests/test.txt";
 
+    /**
+     * MAIN
+     */
     public static void main(String[] args) throws Exception {
 
         Network network;
-        if(PERSISTANT) {
+        if(PERSISTENT) {
             network = load();
         } else {
             network = new Network();
@@ -121,7 +129,7 @@ public class Main {
             }
         } while (!cmd.equals(EXIT));
 
-        if(PERSISTANT) {
+        if(PERSISTENT) {
             save(network);
         }
     }
@@ -129,7 +137,6 @@ public class Main {
     /**
      * Guardar o estado do sistema através de serialização
      */
-
     private static void save(Network network) {
         try {
             ObjectOutputStream file = new ObjectOutputStream(
@@ -148,16 +155,14 @@ public class Main {
     /**
      * Carregar o estado do sistema através de serialização
      */
-
     private static Network load() {
         try {
             ObjectInputStream file = new ObjectInputStream(
                     new FileInputStream(DATA_FILE));
-            System.out.println
-            ("Serialization file loaded.");
 
             Network network = (Network) file.readObject();
             file.close();
+            System.out.println("Serialization file loaded.");
             return network;
         } catch (IOException e) {
             System.out.println
@@ -171,29 +176,53 @@ public class Main {
 
     }
 
+    /**
+     * Lida com o comando IL + line_name + station_names
+     * Se o nome da linha não existir, cria uma nova linha com esse nome e com as restantes estações inseridas com o comando (assume-se que são sempre inseridas pelo menos 2 estações)
+     * Caso o nome da linha seja repetido, imprime a mensagem de erro correspondente
+     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma iteração da DoubleList de Lines para procurar o lineName;
+     * Melhor caso: Complexidade temporal O(1), o primeiro elemento da DoubleList é a linha inserida e o output final é a mensagem de erro.
+     * Pior caso: Complexidade temporal O(n), a DoubleList é iterada sem encontrar a linha e então a linha é inserida na DoubleList.
+     * Caso esperado: Complexidade temporal O(n), a DoubleList será percorrida até metade em média, o que continua a ser O(n), como o pior caso.
+     * GERAÇÃO DE OUTPUT: Complexidade temporal O(1)
+     *
+     */
     private static void insertLine(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim();
+            String lineName = in.nextLine().trim().toUpperCase();
 
-            //Array é mais eficiente que List aqui
+            //criar logo aqui uma coleção das stations a ser inseridas na line, à medida que elas são lidas do input, poupa uma iteração mais tarde
             ListInArray<Station> newStations = new ListInArray<>();
-            String stationName = in.nextLine();
+            String stationName = in.nextLine().toUpperCase();
             while (!stationName.isEmpty()) {
-                //Criar logo aqui os objetos Station poupa-nos uma iteração O(n) mais tarde
                 newStations.addLast(new Station(stationName));
-                stationName = in.nextLine();
+                stationName = in.nextLine().toUpperCase();
             }
+
             network.insertLine(lineName, newStations);
 
             System.out.println(INSERT_LINE_OK);
         } catch (dataStructures.IllegalArgumentException e) {
+            //caso uma linha já exista com este nome
             System.out.println(INSERT_LINE_ERR);
         }
     }
 
+
+    /**
+     * Lida com o comando RL + line_name
+     * Se o nome da linha existe, a linha é removida do sistema
+     * Se o nome da linha não existir, é apresentada uma mensagem de erro
+     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma iteração da DoubleList de Lines para procurar o lineName;
+     * Melhor caso: Complexidade temporal O(1), o primeiro elemento da DoubleList é a linha inserida e a linha é removida.
+     * Pior caso: Complexidade temporal O(n), a DoubleList é iterada sem encontrar a linha e o output final é a mensagem de erro.
+     * Caso esperado: Complexidade temporal O(n), a DoubleList será percorrida até metade em média, o que continua a ser O(n), como o pior caso.
+     * GERAÇÃO DE OUTPUT: Complexidade temporal O(1)
+     *
+     */
     private static void removeLine(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim();
+            String lineName = in.nextLine().trim().toUpperCase();
             network.removeLine(lineName);
             System.out.println(REMOVE_LINE_OK);
         } catch (NoSuchElementException e) {
@@ -201,9 +230,20 @@ public class Main {
         }
     }
 
+    /**
+     * Lida com o comando CL + line_name
+     * Se o nome da linha existe, a coleção de Stations da Linha é apresentada no output
+     * Se o nome da linha não existir, é apresentada uma mensagem de erro
+     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma iteração da DoubleList de Lines para procurar o lineName;
+     * Melhor caso: Complexidade temporal O(1), o primeiro elemento da DoubleList é a linha inserida e a linha é apresentada no outpu.
+     * Pior caso: Complexidade temporal O(n), a DoubleList é iterada sem encontrar a linha e o output final é a mensagem de erro.
+     * Caso esperado: Complexidade temporal O(n), a DoubleList será percorrida até metade em média, o que continua a ser O(n), como o pior caso.
+     * GERAÇÃO DE OUTPUT: Complexidade temporal O(n), sendo que é preciso iterar para apresentar no output todas as Stations
+     *
+     */
     private static void consultLine(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim();
+            String lineName = in.nextLine().trim().toUpperCase();
             ListInArray<Station> stations = network.getStationNames(lineName);
             Iterator<Station> it = stations.iterator();
             while(it.hasNext()) {
@@ -221,16 +261,16 @@ public class Main {
 
     private static void insertSchedule(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim();
-            String trainNumber = in.nextLine();
+            String lineName = in.nextLine().trim().toUpperCase();
+            String trainNumber = in.nextLine().toUpperCase();
             
-            String stationAndTime = in.nextLine();
+            String stationAndTime = in.nextLine().toUpperCase();
             ListInArray<ScheduleStop> stops = new ListInArray<>();
             while (!stationAndTime.isEmpty()) {
                 String[] splitStationAndTime = stationAndTime.split(" ");
                 ScheduleStop stop = new ScheduleStop(new Station(splitStationAndTime[0]), new Time(splitStationAndTime[1]));
                 stops.addLast(stop);
-                stationAndTime = in.nextLine();
+                stationAndTime = in.nextLine().toUpperCase();
             }
 
             network.insertSchedule(lineName, trainNumber, stops);
@@ -246,9 +286,9 @@ public class Main {
     }
 
     private static void removeSchedule(Scanner in, Network network) {
-        String lineName = in.nextLine().trim();
-        String departureStationName = in.next();
-        String timeAsString = in.next();
+        String lineName = in.nextLine().trim().toUpperCase();
+        String departureStationName = in.next().toUpperCase();
+        String timeAsString = in.next().toUpperCase();
         in.nextLine(); // ignore next line;
 
         network.removeSchedule(lineName, departureStationName, timeAsString);
@@ -257,8 +297,8 @@ public class Main {
     }
 
     private static void consultSchedules(Scanner in, Network network) {
-        String lineName = in.nextLine().trim();
-        String departureStationName = in.nextLine();
+        String lineName = in.nextLine().trim().toUpperCase();;
+        String departureStationName = in.nextLine().toUpperCase();;
 
         Iterator<Entry<Time, Schedule>> schedulesIt = network.getLineSchedules(lineName, departureStationName);
         while(schedulesIt.hasNext()) {
