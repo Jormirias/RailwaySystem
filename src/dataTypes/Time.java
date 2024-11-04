@@ -41,6 +41,7 @@ public class Time implements Comparable<Time> {
         return this.minutes;
     }
 
+    //returns
     @Override
     public int compareTo(Time other) {
         if(this.hours < other.hours) {

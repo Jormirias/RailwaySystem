@@ -9,3 +9,6 @@ Adendas
 
 Dúvidas
 -É preciso usar interfaces para Stations, lines, network, timetables?
+
+TODOS
+-Comentar Data Structs !!

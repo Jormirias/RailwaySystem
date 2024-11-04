@@ -6,6 +6,7 @@
 package dataTypes;
 
 import dataStructures.*;
+import dataStructures.IllegalArgumentException;
 
 import java.io.Serializable;
 
@@ -83,9 +84,14 @@ public class Network implements Serializable {
     }
 
     /**
-     * Add new Schedule to Line
+     * Insert a new Schedule in a Line
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @param trainNumber indicates the train number associated with the new Schedule
+     * @param stationAndTimes is the collections of stops to be associated with the new Schedule
+     *
      */
-    public void insertSchedule(String lineName, String trainNumber, ListInArray<ScheduleStop> stationAndTimes) throws NoSuchElementException, dataStructures.IllegalArgumentException {
+    public void insertSchedule(String lineName, String trainNumber, ListInArray<Stop<Station, Time>> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -95,7 +101,15 @@ public class Network implements Serializable {
         }
     }
 
-    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException {
+    /**
+     * Remove a new from a Line
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @param departureStationName indicates the name of the first station of the Schedule
+     * @param timeAsString is the time corresponding to the first time of the schedule
+     *
+     */
+    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException, NullPointerException, EmptyListException, InvalidPositionException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();

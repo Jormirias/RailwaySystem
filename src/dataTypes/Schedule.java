@@ -13,11 +13,20 @@ import dataStructures.*;
 public class Schedule  {
     int trainNumber;
     /**
-     * All the stops in this schedule.
+     * Stop Collection
+     * STRUCT_CHOICE: We chose to have these in a ListInArray, ordered by station, since they're a static entity and shouldn't be changed.
+     * Some consultation operations will need to iterate over it, but for those purposes it's indifferent for it to be a LinkedList or a ListInArray. Array takes precedence for spatial complexity considerations.
+     *
      */
-    private final ListInArray<ScheduleStop> stops;
+    private final ListInArray<Stop<Station, Time>> stops;
 
-    public Schedule(int train, ListInArray<ScheduleStop> newSchedule) {
+    /**
+     * Constructor
+     * @param train Defines the trainer number, unique
+     * @param newSchedule ListInArray of stops
+     *
+     */
+    public Schedule(int train, ListInArray<Stop<Station, Time>> newSchedule) {
         trainNumber = train;
         stops = newSchedule;
     }
@@ -26,11 +35,11 @@ public class Schedule  {
         return trainNumber;
     }
 
-    public Iterator<ScheduleStop> getStops() {
+    public Iterator<Stop<Station, Time>> getStops() {
         return this.stops.iterator();
     }
 
     public Station getOriginStation() {
-        return stops.getFirst().getStation();
+        return stops.getFirst().getKey();
     }
 }

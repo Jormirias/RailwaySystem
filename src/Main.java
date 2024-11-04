@@ -1,6 +1,7 @@
 import java.io.*;
 import java.util.Scanner;
 
+import dataStructures.IllegalArgumentException;
 import dataTypes.*;
 import dataStructures.*;
 
@@ -63,8 +64,8 @@ public class Main {
      * PERSISTENT: if true, loads saved file; if false, will create a new network
      *
      */
-    private static final boolean CONSOLE_INPUT = true;
-    private static final boolean PERSISTENT = true;
+    private static final boolean CONSOLE_INPUT = false;
+    private static final boolean PERSISTENT = false;
     private static final String TEST_FILE = "./tests/test.txt";
 
     /**
@@ -177,7 +178,7 @@ public class Main {
     }
 
     /**
-     * Lida com o comando IL + line_name + station_names
+     * Lida com o comando IL + line_name + station_names[]
      * Se o nome da linha não existir, cria uma nova linha com esse nome e com as restantes estações inseridas com o comando (assume-se que são sempre inseridas pelo menos 2 estações)
      * Caso o nome da linha seja repetido, imprime a mensagem de erro correspondente
      * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma iteração da DoubleList de Lines para procurar o lineName;
@@ -254,21 +255,40 @@ public class Main {
         }
     }
 
+    /**
+     * SEGUNDA FASE
+     *
+     */
     private static void consultStation(Scanner in, Network network) {
         // TODO implement in second phase
         throw new UnsupportedOperationException("Unimplemented method 'consultStation'");
     }
 
+    /**
+     * Lida com o comando IH + line_name + train_number + schedules[]
+     * Se o nome da linha existe e o schedule é válido, cria um novo Schedule com o train number e com as restantes Stops inseridas com o comando (assume-se que train_number dado é sempre único e os Schedules do mesmo dia)
+     * Se o nome da linha não existir, é apresentada uma mensagem de erro. (Prioritário sobre Schedule inválido)
+     * Se o schedule for inválido é apresentada uma mensagem de erro. (Um horário é inválido se a 1ª estação não for uma das duas terminais; Se tiver estações fora da ordem da Linha; Se não tiver os Times ordenados estritamente crescentes)
+     * ANÁLISE TEMPORAL DO ALGORITMO:
+     * Melhor caso:
+     * Pior caso:
+     * Caso esperado:
+     * GERAÇÃO DE OUTPUT: Complexidade temporal O(1)
+     *
+     */
     private static void insertSchedule(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim().toUpperCase();
             String trainNumber = in.nextLine().toUpperCase();
-            
+
+            //criar logo aqui uma coleção das stops a ser inseridas no Schedule, à medida que elas são lidas do input, poupa uma iteração mais tarde
             String stationAndTime = in.nextLine().toUpperCase();
-            ListInArray<ScheduleStop> stops = new ListInArray<>();
+            ListInArray<Stop<Station, Time>> stops = new ListInArray<>();
             while (!stationAndTime.isEmpty()) {
-                String[] splitStationAndTime = stationAndTime.split(" ");
-                ScheduleStop stop = new ScheduleStop(new Station(splitStationAndTime[0]), new Time(splitStationAndTime[1]));
+                int whiteSpaceIndex = stationAndTime.lastIndexOf(' ');
+                String splitStation = stationAndTime.substring(0, whiteSpaceIndex);
+                String splitTime = stationAndTime.substring(whiteSpaceIndex + 1);
+                Stop<Station, Time> stop = new Stop<>(new Station(splitStation), new Time(splitTime));
                 stops.addLast(stop);
                 stationAndTime = in.nextLine().toUpperCase();
             }
@@ -285,27 +305,66 @@ public class Main {
         }
     }
 
+    /**
+     * Lida com o comando RH + line_name + origin_terminal + time
+     * Se o nome da linha existe, a estação de origem existe e um Schedule com a hora de partida dada existe, remove esse Schedule
+     * Se o nome da linha não existir, é apresentada uma mensagem de erro. (Prioritário sobre Schedule inexistente)
+     * (notar que não existir estação dá erro em branco)
+     * Se o schedule não existir é apresentada uma outra mensagem de erro.
+     * ANÁLISE TEMPORAL DO ALGORITMO:
+     * Melhor caso:
+     * Pior caso:
+     * Caso esperado:
+     * GERAÇÃO DE OUTPUT: Complexidade temporal O(1)
+     *
+     */
     private static void removeSchedule(Scanner in, Network network) {
-        String lineName = in.nextLine().trim().toUpperCase();
-        String departureStationName = in.next().toUpperCase();
-        String timeAsString = in.next().toUpperCase();
-        in.nextLine(); // ignore next line;
+        try {
+            String lineName = in.nextLine().trim().toUpperCase();
+            String departureStationName = in.next().toUpperCase();
+            String timeAsString = in.next().toUpperCase();
+            in.nextLine(); // ignore next line;
 
-        network.removeSchedule(lineName, departureStationName, timeAsString);
+            network.removeSchedule(lineName, departureStationName, timeAsString);
 
-        System.out.println(REMOVE_TIMETABLE_OK);
+            System.out.println(REMOVE_TIMETABLE_OK);
+            }
+        catch (NoSuchElementException e) {
+            System.out.println(LINE_NULL);
+        }
+
+        //não devia ser illegalargument aqui..
+        catch (NullPointerException e ) {
+            System.out.println();
+        }
+        catch (InvalidPositionException | EmptyListException e) {
+            System.out.println(TIMETABLE_NULL);
+        }
     }
 
+
+    /**
+     * Lida com o comando CH + line_name + origin_terminal
+     * Se o nome da linha existe e a estação de origem existe, o output será uma listagem de vários Schedules
+     * Se o nome da linha não existir, é apresentada uma mensagem de erro. (Prioritário sobre Station inexistente)
+     * Se a Station não existir ou não for terminal da linha, é apresentada uma outra mensagem de erro.
+     * ANÁLISE TEMPORAL DO ALGORITMO:
+     * Melhor caso:
+     * Pior caso:
+     * Caso esperado:
+     * GERAÇÃO DE OUTPUT:
+     *
+     */
     private static void consultSchedules(Scanner in, Network network) {
-        String lineName = in.nextLine().trim().toUpperCase();;
-        String departureStationName = in.nextLine().toUpperCase();;
+        String lineName = in.nextLine().trim().toUpperCase();
+        String departureStationName = in.nextLine().toUpperCase();
 
         Iterator<Entry<Time, Schedule>> schedulesIt = network.getLineSchedules(lineName, departureStationName);
         while(schedulesIt.hasNext()) {
             Schedule schedule = schedulesIt.next().getValue();
             System.out.println(schedule.getTrainNumber());
 
-            Iterator<ScheduleStop> stopsIt = schedule.getStops();
+            Iterator<Stop<Station,Time>> stopsIt = schedule.getStops();
             while(stopsIt.hasNext()) {
                 System.out.println(stopsIt.next());
             }
@@ -313,11 +372,16 @@ public class Main {
 
     }
 
+    /**
+     * SEGUNDA FASE
+     *
+     */
     private static void consultTrains(Scanner in, Network network) {
         // TODO implement in second phase
         throw new UnsupportedOperationException("Unimplemented method 'consultTrains'");
     }
-    
+
+
     private static void bestSchedule(Scanner in, Network network) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'bestSchedule'");

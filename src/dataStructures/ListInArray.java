@@ -5,7 +5,7 @@ public class ListInArray<E> implements List<E> {
     /**
      * Serial Version UID of the Class
      */
-    private static final long serialVersionUID = 0L;
+    static final long serialVersionUID = 0L;
     /**
      *  Default capacity of the stack.
      */
@@ -20,6 +20,8 @@ public class ListInArray<E> implements List<E> {
      */
     private int size;
 
+    private boolean isInverted;
+
     /**
      * Constructor with capacity.
      * @param capacity - initial holding capacity of Array
@@ -29,6 +31,7 @@ public class ListInArray<E> implements List<E> {
     {
         size = 0;
         array = (E[]) new Object[capacity];
+        isInverted = false;
     }
     /**
      * Default constructor.
@@ -50,22 +53,33 @@ public class ListInArray<E> implements List<E> {
 
     @Override
     public Iterator<E> iterator() {
-        return new ListInArrayIterator<>(array, size);
+        ListInArrayIterator<E> newIterator = new ListInArrayIterator<>(array, size);
+        if(isInverted) newIterator.invert();
+        return newIterator;
     }
 
     @Override
     public E getFirst() throws EmptyListException {
-        return array[0];
+        if (!isInverted)
+            return array[0];
+        else
+            return array[size - 1];
     }
 
     @Override
     public E getLast() throws EmptyListException {
-        return array[size - 1];
+        if (!isInverted)
+            return array[size - 1];
+        else
+            return array[0];
     }
 
     @Override
     public E get(int position) throws InvalidPositionException {
-        return array[position];
+        if (!isInverted)
+            return array[position];
+        else
+            return array[size-position-1];
     }
 
     @Override
@@ -121,6 +135,13 @@ public class ListInArray<E> implements List<E> {
     public boolean remove(E element) {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'remove'");
+    }
+
+    /**
+     * Invert the order of the array (artificially)
+     */
+    public void invert() {
+        isInverted = !isInverted;
     }
     
 }
