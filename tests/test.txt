@@ -1,3 +1,35 @@
+IL line 1
+station 1
+STATION 2
+sTaTiOn 3
+
+IL LINE 2
+STATION 1
+station 2
+StAtIoN 3
+
+ih line 1
+1
+station 1 00:05
+station 3 00:30
+
+ih line 2
+2
+station 3 01:00
+station 2 02:00
+station 1 02:01
+
+ch line 2
+station 3
+
+ch line 1
+station 1
+
+cl line 2
+
+cl line 1
+
+
 il fruit
 banana
 apple
@@ -31,6 +63,12 @@ grape 13:20
 melon 13:25
 pumpkin 13:30
 lemon 13:35
+
+ih fruit
+1234
+lemon 16:35
+melon 17:25
+orange 18:15
 
 ch fruit
 banana

@@ -13,7 +13,7 @@ public class OrderedVector<K extends Comparable<K>, V> implements OrderedDiction
      * gives meaning to what position was reached.
      * For internal use only!
      */
-    class SearchResult {
+    static class SearchResult {
         public static final boolean FOUND = true;
         public static final boolean NOT_FOUND = false;
 

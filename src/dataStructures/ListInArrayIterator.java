@@ -25,42 +25,58 @@ class ListInArrayIterator<E> implements TwoWayIterator<E>
 
     protected int size;
 
+    protected boolean isInverted = false;
+
     /**
      * ListArrayIterator constructor
      */
-    public ListInArrayIterator( E[] listArray, int currSize )
+    public ListInArrayIterator( E[] listArray, int currSize)
     {
         array = listArray;
         currIndex=0;
         size=currSize;
     }      
 
+    public void invert() {
+        isInverted = !isInverted;
+    }
 
     @Override
     public void rewind( )
     {
-        currIndex=0;
+        if (!isInverted)
+            currIndex=0;
+        else
+            currIndex=size;
     }
 
 
     @Override
-    public void fullForward( )
-    {
-        currIndex=size;
+    public void fullForward( )    {
+        if (!isInverted)
+            currIndex=size;
+        else
+            currIndex=0;
     }
 
 
     @Override
     public boolean hasNext( )
     {
-        return currIndex < size;
+        if (!isInverted)
+            return currIndex < size;
+        else
+            return currIndex > 0;
     }
 
 
     @Override
     public boolean hasPrevious( )
     {
-        return currIndex > 0;
+        if (!isInverted)
+            return currIndex > 0;
+        else
+            return currIndex < size;
     }
 
 
@@ -70,7 +86,11 @@ class ListInArrayIterator<E> implements TwoWayIterator<E>
         if ( !this.hasNext() )
             throw new NoSuchElementException();
 
-        return array[currIndex++];
+        if (!isInverted)
+            return array[currIndex++];
+        else
+            return array[--currIndex];
+
     }
 
 
@@ -80,7 +100,10 @@ class ListInArrayIterator<E> implements TwoWayIterator<E>
         if ( !this.hasPrevious() )
             throw new NoSuchElementException();
 
-        return array[--currIndex];
+        if (!isInverted)
+            return array[--currIndex];
+        else
+            return array[currIndex++];
     }
 
 

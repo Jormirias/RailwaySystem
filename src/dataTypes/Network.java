@@ -6,6 +6,7 @@
 package dataTypes;
 
 import dataStructures.*;
+import dataStructures.IllegalArgumentException;
 
 import java.io.Serializable;
 
@@ -13,7 +14,13 @@ import java.io.Serializable;
  * Class which implements a Rail Network
  */
 public class Network implements Serializable {
-    /*Should this be Dictionaries as their identifier is only their name?*/
+
+    /**
+     * Line Collection
+     * STRUCT_CHOICE: We chose to have this be a DoubleList due to the ease of iteration on a DoubleList which is O(n), and the ease of adding or removing elements, which is O(1)
+     *
+     */
+    /*Should this be Dictionaries as their identifier is only their name? It would be more efficient for searching operations*/
     private final DoubleList<Line> lines;
 
     // maybe not worth it yet as we do not have all the tools available
@@ -26,6 +33,9 @@ public class Network implements Serializable {
 
     /**
      * Add new Line to Network
+     * @param lineName receives the line name, which must be unique. The method iterates over the collection of lines to find out if it already exists, and if it does, it throws an error
+     * @param newStations element with collection of station for the new Line element
+     *
      */
     public void insertLine(String lineName, ListInArray<Station> newStations) throws dataStructures.IllegalArgumentException {
         if (findLineWithName(lineName) != null){
@@ -39,16 +49,31 @@ public class Network implements Serializable {
 
     /**
      * Remove Line from Network
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, and if it does, it removes it.
+     * If it doesn't exist, it throws an error upstream
+     * This method doesn't use the findLineWithName method to prevent iterating twice over the same collection. Instead, it automatically removes the line while iterating.
+     *
      */
     public void removeLine(String lineName) throws NoSuchElementException {
-        Line line = findLineWithName(lineName);
-        if (line == null){
-            throw new NoSuchElementException();
+        Iterator<Line> it = lines.iterator();
+        while(it.hasNext()) {
+            Line next = it.next();
+            if(next.getName().equals(lineName)) {
+                lines.remove(next);
+                return;
+            }
         }
-        else
-            lines.remove(line);
+
+        throw new NoSuchElementException();
     }
 
+    /**
+     * Consult Line Stations
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @return If the Line exists, the method returns a collection of its Stations
+     *
+     */
     public ListInArray<Station> getStationNames(String lineName) throws NoSuchElementException {
         Line line = findLineWithName(lineName);
         if (line == null){
@@ -59,9 +84,14 @@ public class Network implements Serializable {
     }
 
     /**
-     * Add new Schedule to Line
+     * Insert a new Schedule in a Line
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @param trainNumber indicates the train number associated with the new Schedule
+     * @param stationAndTimes is the collections of stops to be associated with the new Schedule
+     *
      */
-    public void insertSchedule(String lineName, String trainNumber, ListInArray<ScheduleStop> stationAndTimes) throws NoSuchElementException, dataStructures.IllegalArgumentException {
+    public void insertSchedule(String lineName, String trainNumber, ListInArray<Stop<Station, Time>> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -71,7 +101,15 @@ public class Network implements Serializable {
         }
     }
 
-    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException {
+    /**
+     * Remove a new from a Line
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @param departureStationName indicates the name of the first station of the Schedule
+     * @param timeAsString is the time corresponding to the first time of the schedule
+     *
+     */
+    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException, NullPointerException, EmptyListException, InvalidPositionException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -90,7 +128,13 @@ public class Network implements Serializable {
             return line.getSchedules(departureStationName);
         }
     }
-    
+
+    /**
+     * Helper method
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists
+     * @return If the Line exists, the method returns it. Otherwise, it returns null.
+     *
+     */
     private Line findLineWithName(String lineName) {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {

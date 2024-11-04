@@ -1,4 +1,6 @@
-package dataStructures;  
+package dataStructures;
+
+import java.io.Serializable;
 
 /**
  * Ordered Dictionary interface
@@ -9,8 +11,8 @@ package dataStructures;
  * @param <K> Generic type Key, must extend comparable
  * @param <V> Generic type Value 
  */
-public interface OrderedDictionary<K extends Comparable<K>, V> 
-    extends Dictionary<K,V>
+public interface OrderedDictionary<K extends Comparable<K>, V>
+    extends Dictionary<K,V>, Serializable
 {                                                                   
 
     /**
