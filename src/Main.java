@@ -66,7 +66,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = false;
     private static final boolean PERSISTENT = false;
-    private static final String TEST_FILE = "./tests/test.txt";
+    private static final String TEST_FILE = "./tests/test_phase_1.txt";
 
     /**
      * MAIN
@@ -190,14 +190,14 @@ public class Main {
      */
     private static void insertLine(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim().toUpperCase();
+            String lineName = in.nextLine().trim();
 
             //criar logo aqui uma coleção das stations a ser inseridas na line, à medida que elas são lidas do input, poupa uma iteração mais tarde
             ListInArray<Station> newStations = new ListInArray<>();
-            String stationName = in.nextLine().toUpperCase();
+            String stationName = in.nextLine();
             while (!stationName.isEmpty()) {
                 newStations.addLast(new Station(stationName));
-                stationName = in.nextLine().toUpperCase();
+                stationName = in.nextLine();
             }
 
             network.insertLine(lineName, newStations);
@@ -279,7 +279,7 @@ public class Main {
     private static void insertSchedule(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim().toUpperCase();
-            String trainNumber = in.nextLine().toUpperCase();
+            String trainNumber = in.nextLine();
 
             //criar logo aqui uma coleção das stops a ser inseridas no Schedule, à medida que elas são lidas do input, poupa uma iteração mais tarde
             String stationAndTime = in.nextLine().toUpperCase();
@@ -321,9 +321,10 @@ public class Main {
     private static void removeSchedule(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim().toUpperCase();
-            String departureStationName = in.next().toUpperCase();
-            String timeAsString = in.next().toUpperCase();
-            in.nextLine(); // ignore next line;
+            String stationAndTime = in.nextLine().toUpperCase();
+            int whiteSpaceIndex = stationAndTime.lastIndexOf(' ');
+            String departureStationName = stationAndTime.substring(0, whiteSpaceIndex);
+            String timeAsString = stationAndTime.substring(whiteSpaceIndex + 1);
 
             network.removeSchedule(lineName, departureStationName, timeAsString);
 
@@ -332,12 +333,7 @@ public class Main {
         catch (NoSuchElementException e) {
             System.out.println(LINE_NULL);
         }
-
-        //não devia ser illegalargument aqui..
-        catch (NullPointerException e ) {
-            System.out.println();
-        }
-        catch (InvalidPositionException | EmptyListException e) {
+        catch (InvalidPositionException e) {
             System.out.println(TIMETABLE_NULL);
         }
     }
@@ -356,20 +352,27 @@ public class Main {
      *
      */
     private static void consultSchedules(Scanner in, Network network) {
-        String lineName = in.nextLine().trim().toUpperCase();
-        String departureStationName = in.nextLine().toUpperCase();
+        try {
+            String lineName = in.nextLine().trim().toUpperCase();
+            String departureStationName = in.nextLine().toUpperCase();
 
-        Iterator<Entry<Time, Schedule>> schedulesIt = network.getLineSchedules(lineName, departureStationName);
-        while(schedulesIt.hasNext()) {
-            Schedule schedule = schedulesIt.next().getValue();
-            System.out.println(schedule.getTrainNumber());
+            Iterator<Entry<Time, Schedule>> schedulesIt = network.getLineSchedules(lineName, departureStationName);
+            while(schedulesIt.hasNext()) {
+                Schedule schedule = schedulesIt.next().getValue();
+                System.out.println(schedule.getTrainNumber());
 
-            Iterator<Stop<Station,Time>> stopsIt = schedule.getStops();
-            while(stopsIt.hasNext()) {
-                System.out.println(stopsIt.next());
-            }
+                Iterator<Stop<Station,Time>> stopsIt = schedule.getStops();
+                while(stopsIt.hasNext()) {
+                    System.out.println(stopsIt.next());
+                }
+           }
         }
-
+        catch (NoSuchElementException e) {
+            System.out.println(LINE_NULL);
+        }
+        catch (NullPointerException e) {
+            System.out.println(FIRST_STATION_NULL);
+        }
     }
 
     /**
