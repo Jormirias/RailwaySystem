@@ -129,10 +129,10 @@ public class Line implements Serializable {
 
         //Compares the input station to both collections' first element's station. If they match, procedes to iterate the collection
         // for a given Time key, and if it is found, it's removed. Otherwise, errors in the .remove() will results in output error messages.
-        if(departureStationName.equals(stations.getFirst().getName())) {
+        if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
             schedule = schedulesNormal.remove(time);
         }
-        else if(departureStationName.equals(stations.getLast().getName())) {
+        else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
             schedule = schedulesInverted.remove(time);
         } else {
             // should not be hit.
@@ -161,10 +161,10 @@ public class Line implements Serializable {
     }
 
     public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NullPointerException {
-        if(departureStationName.equals(stations.getFirst().getName())) {
+        if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
             return schedulesNormal.iterator();
         }
-        else if(departureStationName.equals(stations.getLast().getName())) {
+        else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
             return schedulesInverted.iterator();
         } else {
             throw new NullPointerException();

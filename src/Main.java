@@ -223,7 +223,7 @@ public class Main {
      */
     private static void removeLine(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim().toUpperCase();
+            String lineName = in.nextLine().trim();
             network.removeLine(lineName);
             System.out.println(REMOVE_LINE_OK);
         } catch (NoSuchElementException e) {
@@ -244,7 +244,7 @@ public class Main {
      */
     private static void consultLine(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim().toUpperCase();
+            String lineName = in.nextLine().trim();
             ListInArray<Station> stations = network.getStationNames(lineName);
             Iterator<Station> it = stations.iterator();
             while(it.hasNext()) {
@@ -278,19 +278,20 @@ public class Main {
      */
     private static void insertSchedule(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim().toUpperCase();
+            String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
 
             //criar logo aqui uma coleção das stops a ser inseridas no Schedule, à medida que elas são lidas do input, poupa uma iteração mais tarde
-            String stationAndTime = in.nextLine().toUpperCase();
+            String stationAndTime = in.nextLine();
             ListInArray<Stop<Station, Time>> stops = new ListInArray<>();
             while (!stationAndTime.isEmpty()) {
                 int whiteSpaceIndex = stationAndTime.lastIndexOf(' ');
                 String splitStation = stationAndTime.substring(0, whiteSpaceIndex);
                 String splitTime = stationAndTime.substring(whiteSpaceIndex + 1);
+                //criar método em network para verificar o nome na primeira ocorrencia em coleção de Stations da Network
                 Stop<Station, Time> stop = new Stop<>(new Station(splitStation), new Time(splitTime));
                 stops.addLast(stop);
-                stationAndTime = in.nextLine().toUpperCase();
+                stationAndTime = in.nextLine();
             }
 
             network.insertSchedule(lineName, trainNumber, stops);
@@ -320,12 +321,12 @@ public class Main {
      */
     private static void removeSchedule(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim().toUpperCase();
-            String stationAndTime = in.nextLine().toUpperCase();
+            String lineName = in.nextLine().trim();
+            String stationAndTime = in.nextLine();
             int whiteSpaceIndex = stationAndTime.lastIndexOf(' ');
             String departureStationName = stationAndTime.substring(0, whiteSpaceIndex);
             String timeAsString = stationAndTime.substring(whiteSpaceIndex + 1);
-
+            
             network.removeSchedule(lineName, departureStationName, timeAsString);
 
             System.out.println(REMOVE_TIMETABLE_OK);
@@ -353,8 +354,8 @@ public class Main {
      */
     private static void consultSchedules(Scanner in, Network network) {
         try {
-            String lineName = in.nextLine().trim().toUpperCase();
-            String departureStationName = in.nextLine().toUpperCase();
+            String lineName = in.nextLine().trim();
+            String departureStationName = in.nextLine();
 
             Iterator<Entry<Time, Schedule>> schedulesIt = network.getLineSchedules(lineName, departureStationName);
             while(schedulesIt.hasNext()) {
@@ -390,7 +391,7 @@ public class Main {
         //Basicamente:
         //ERRO1-Ver se linha existe
         //ERRO2-Ver se Station de partida existe em Stations
-        //ERRO3-Ver se Station de chegada existe em Stations && se passa na Station de partida && se essa station tem Schedules com time <= à hora pedida ( esta 3ª condião vai gaurdando o Time mais próximo
+        //ERRO3-Ver se Station de chegada existe em Stations (Ver sentidO!) && se passa na Station de partida && se essa station tem Schedules com time <= à hora pedida ( esta 3ª condião vai gaurdando o Time mais próximo
         //Se não há erros, apresentar o melhor Schdule guardado na ultima verificação
         throw new UnsupportedOperationException("Unimplemented method 'bestSchedule'");
     }

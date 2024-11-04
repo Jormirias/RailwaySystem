@@ -58,7 +58,7 @@ public class Network implements Serializable {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
-            if(next.getName().equals(lineName)) {
+            if(next.getName().toUpperCase().equals(lineName.toUpperCase())) {
                 lines.remove(next);
                 return;
             }
@@ -139,7 +139,7 @@ public class Network implements Serializable {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
-            if(next.getName().equals(lineName)) {
+            if(next.getName().toUpperCase().equals(lineName.toUpperCase())) {
                  return next;
             }
         }
