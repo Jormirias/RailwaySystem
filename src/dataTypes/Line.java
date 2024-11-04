@@ -85,7 +85,7 @@ public class Line implements Serializable {
         Stop<Station,Time> firstStop = stationAndTimes.getFirst();
 
         //Validity Check
-        if(!scheduleCheck(train, stationAndTimes, firstStop)) {
+        if(!scheduleCheck(stationAndTimes, firstStop)) {
             throw new IllegalArgumentException();
         }
 
@@ -196,7 +196,7 @@ public class Line implements Serializable {
      *         If are checks are passed, it returns TRUE
      *
      */
-    private boolean scheduleCheck (int train, ListInArray<Stop<Station,Time>> stationAndTimes, Stop<Station,Time> firstStop) {
+    private boolean scheduleCheck (ListInArray<Stop<Station,Time>> stationAndTimes, Stop<Station,Time> firstStop) {
 
         boolean inverted;
 

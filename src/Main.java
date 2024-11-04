@@ -384,6 +384,11 @@ public class Main {
 
     private static void bestSchedule(Scanner in, Network network) {
         // TODO Auto-generated method stub
+        //Basicamente:
+        //ERRO1-Ver se linha existe
+        //ERRO2-Ver se Station de partida existe em Stations
+        //ERRO3-Ver se Station de chegada existe em Stations && se passa na Station de partida && se essa station tem Schedules com time <= à hora pedida ( esta 3ª condião vai gaurdando o Time mais próximo
+        //Se não há erros, apresentar o melhor Schdule guardado na ultima verificação
         throw new UnsupportedOperationException("Unimplemented method 'bestSchedule'");
     }
 }
