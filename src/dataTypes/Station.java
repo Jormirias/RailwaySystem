@@ -50,7 +50,7 @@ public class Station  implements Serializable {
         }
 
         Station otherStation = (Station) other;
-        if(!this.name.equals(otherStation.getName())) {
+        if(!this.name.toUpperCase().equals(otherStation.getName().toUpperCase())) {
             return false;
         }
 

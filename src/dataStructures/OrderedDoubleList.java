@@ -165,10 +165,10 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     }
 
 
-    public V removeFirst( ) throws EmptyListException
+    public V removeFirst( )
     {
         if ( this.isEmpty() )
-            throw new EmptyListException();
+            return null;
         Entry<K, V> element = head.getElement();
         this.removeFirstNode();
         return element.getValue();
@@ -186,10 +186,10 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     }
 
 
-    public V removeLast( ) throws EmptyListException
+    public V removeLast( )
     {
         if ( this.isEmpty() )
-            throw new EmptyListException();
+            return null;
         Entry<K, V> element = tail.getElement();
         this.removeLastNode();
         return element.getValue();
@@ -208,23 +208,23 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
 
     }
 
-    public V removeMiddle( K key  ) throws EmptyListException
+    public V removeMiddle( K key  )
     {
         if ( this.isEmpty() )
-            throw new EmptyListException();
+            return null;
         DoubleListNode<Entry<K, V>> node = findNode(key);
         this.removeMiddleNode(node);
         return node.getElement().getValue();
     }
 
     @Override
-    public V remove(K key) throws EmptyListException, InvalidPositionException {
+    public V remove(K key) {
         if ( isEmpty() )
-            throw new EmptyDictionaryException();
+            return null;
         else if (key.compareTo(head.getElement().getKey()) < 0)
-            throw new InvalidPositionException();
+            return null;
         else if (key.compareTo(tail.getElement().getKey()) > 0)
-            throw new InvalidPositionException();
+            return null;
         else if (key.compareTo(head.getElement().getKey()) == 0) {
             return removeFirst();
         }

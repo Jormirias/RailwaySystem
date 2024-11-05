@@ -58,7 +58,7 @@ public class Network implements Serializable {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
-            if(next.getName().equals(lineName)) {
+            if(next.getName().toUpperCase().equals(lineName.toUpperCase())) {
                 lines.remove(next);
                 return;
             }
@@ -109,7 +109,7 @@ public class Network implements Serializable {
      * @param timeAsString is the time corresponding to the first time of the schedule
      *
      */
-    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException, NullPointerException, EmptyListException, InvalidPositionException {
+    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException, InvalidPositionException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -119,7 +119,7 @@ public class Network implements Serializable {
         }
     }
 
-    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException {
+    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException, NullPointerException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -139,7 +139,7 @@ public class Network implements Serializable {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
-            if(next.getName().equals(lineName)) {
+            if(next.getName().toUpperCase().equals(lineName.toUpperCase())) {
                  return next;
             }
         }

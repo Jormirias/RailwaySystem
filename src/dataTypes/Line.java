@@ -123,19 +123,23 @@ public class Line implements Serializable {
      * THEN, each station
      *
      */
-    public void removeSchedule(String departureStationName, String timeAsString) throws  NullPointerException, EmptyListException, InvalidPositionException {
+    public void removeSchedule(String departureStationName, String timeAsString) throws  InvalidPositionException {
         Schedule schedule = null;
         Time time = new Time(timeAsString);
 
         //Compares the input station to both collections' first element's station. If they match, procedes to iterate the collection
         // for a given Time key, and if it is found, it's removed. Otherwise, errors in the .remove() will results in output error messages.
-        if(departureStationName.equals(stations.getFirst().getName())) {
-                schedule = schedulesNormal.remove(time);
+        if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
+            schedule = schedulesNormal.remove(time);
         }
-        else if(departureStationName.equals(stations.getLast().getName())) {
+        else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
             schedule = schedulesInverted.remove(time);
         } else {
-            throw new NullPointerException();
+            // should not be hit.
+        }
+
+        if(schedule == null) {
+            throw new InvalidPositionException();
         }
 
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
@@ -156,17 +160,15 @@ public class Line implements Serializable {
         }
     }
 
-    public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) {
-        if(departureStationName.equals(stations.getFirst().getName())) {
+    public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NullPointerException {
+        if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
             return schedulesNormal.iterator();
         }
-        else if(departureStationName.equals(stations.getLast().getName())) {
+        else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
             return schedulesInverted.iterator();
         } else {
-            // throw
+            throw new NullPointerException();
         }
-
-        return null;
     }
 
     @Override
