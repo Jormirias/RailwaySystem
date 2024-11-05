@@ -6,7 +6,7 @@
 package dataTypes;
 
 import dataStructures.*;
-import dataStructures.IllegalArgumentException;
+import dataTypes.exceptions.*;
 
 import java.io.Serializable;
 
@@ -79,14 +79,14 @@ public class Line implements Serializable {
      *      in the insertion and removal but makes Consult actions more efficient in Temporal Complexity, like  command MH)
      *
      */
-    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws IllegalArgumentException {
+    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
 
         int train = Integer.parseInt(trainNumber);
         String[] firstStopString = stationAndTimesString.getFirst();
 
         //Validity Check
         if(!scheduleCheck(stationAndTimesString, firstStopString)) {
-            throw new IllegalArgumentException();
+            throw new InvalidScheduleException();
         }
 
         
@@ -129,7 +129,7 @@ public class Line implements Serializable {
      * THEN, each station
      *
      */
-    public void removeSchedule(String departureStationName, String timeAsString) throws  InvalidPositionException {
+    public void removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException {
         Schedule schedule = null;
         Time time = new Time(timeAsString);
 
@@ -145,7 +145,7 @@ public class Line implements Serializable {
         }
 
         if(schedule == null) {
-            throw new InvalidPositionException();
+            throw new NoSuchScheduleException();
         }
 
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
@@ -166,14 +166,14 @@ public class Line implements Serializable {
         }
     }
 
-    public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NullPointerException {
+    public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NoSuchDepartureStationException {
         if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
             return schedulesNormal.iterator();
         }
         else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
             return schedulesInverted.iterator();
         } else {
-            throw new NullPointerException();
+            throw new NoSuchDepartureStationException();
         }
     }
 
@@ -219,6 +219,7 @@ public class Line implements Serializable {
         if(inverted) {
             stationAndTimesString.invert();
         }
+
         Iterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();
 
@@ -239,6 +240,9 @@ public class Line implements Serializable {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
                     if(!stationAndTimesIt.hasNext()) {
+                        if(inverted) {
+                            stationAndTimesString.invert();
+                        }
                         return true;
                     } else {
                         break;

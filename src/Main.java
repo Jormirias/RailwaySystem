@@ -1,8 +1,8 @@
 import java.io.*;
 import java.util.Scanner;
 
-import dataStructures.IllegalArgumentException;
 import dataTypes.*;
+import dataTypes.exceptions.*;
 import dataStructures.*;
 
 /**
@@ -66,7 +66,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = false;
     private static final boolean PERSISTENT = false;
-    private static final String TEST_FILE = "./tests/test_station_names.txt";
+    private static final String TEST_FILE = "./tests/test_phase_1.txt";
 
     /**
      * MAIN
@@ -204,7 +204,7 @@ public class Main {
             network.insertLine(lineName, newStations);
 
             System.out.println(INSERT_LINE_OK);
-        } catch (dataStructures.IllegalArgumentException e) {
+        } catch (LineAlreadyExistsException e) {
             //caso uma linha já exista com este nome
             System.out.println(INSERT_LINE_ERR);
         }
@@ -227,7 +227,7 @@ public class Main {
             String lineName = in.nextLine().trim();
             network.removeLine(lineName);
             System.out.println(REMOVE_LINE_OK);
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
     }
@@ -251,7 +251,7 @@ public class Main {
             while(it.hasNext()) {
                 System.out.println(it.next());
             }
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
     }
@@ -300,10 +300,10 @@ public class Main {
 
             System.out.println(INSERT_TIMETABLE_OK);
         }
-        catch (NoSuchElementException e) {
+        catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
-        catch (dataStructures.IllegalArgumentException | NullPointerException e) {
+        catch (InvalidScheduleException e) {
             System.out.println(INSERT_TIMETABLE_ERR);
         }
     }
@@ -333,10 +333,10 @@ public class Main {
 
             System.out.println(REMOVE_TIMETABLE_OK);
             }
-        catch (NoSuchElementException e) {
+        catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
-        catch (InvalidPositionException e) {
+        catch (NoSuchScheduleException e) {
             System.out.println(TIMETABLE_NULL);
         }
     }
@@ -370,10 +370,10 @@ public class Main {
                 }
            }
         }
-        catch (NoSuchElementException e) {
+        catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
-        catch (NullPointerException e) {
+        catch (NoSuchDepartureStationException e) {
             System.out.println(FIRST_STATION_NULL);
         }
     }

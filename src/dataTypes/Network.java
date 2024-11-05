@@ -6,7 +6,7 @@
 package dataTypes;
 
 import dataStructures.*;
-import dataStructures.IllegalArgumentException;
+import dataTypes.exceptions.*;
 
 import java.io.Serializable;
 
@@ -47,11 +47,10 @@ public class Network implements Serializable {
      * @param newStations element with collection of station for the new Line element.
      *
      */
-    public void insertLine(String lineName, ListInArray<Station> newStations) throws dataStructures.IllegalArgumentException {
+    public void insertLine(String lineName, ListInArray<Station> newStations) throws LineAlreadyExistsException {
         if (findLineWithName(lineName) != null){
-            throw new dataStructures.IllegalArgumentException();
+            throw new LineAlreadyExistsException();
         }
-
         else{
             lines.addLast(new Line(lineName, newStations));
             addNewStationNames(newStations);
@@ -65,7 +64,7 @@ public class Network implements Serializable {
      * This method doesn't use the findLineWithName method to prevent iterating twice over the same collection. Instead, it automatically removes the line while iterating.
      *
      */
-    public void removeLine(String lineName) throws NoSuchElementException {
+    public void removeLine(String lineName) throws NoSuchLineException {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
@@ -75,7 +74,7 @@ public class Network implements Serializable {
             }
         }
 
-        throw new NoSuchElementException();
+        throw new NoSuchLineException();
     }
 
     /**
@@ -85,10 +84,10 @@ public class Network implements Serializable {
      * @return If the Line exists, the method returns a collection of its Stations
      *
      */
-    public ListInArray<Station> getStations(String lineName) throws NoSuchElementException {
+    public ListInArray<Station> getStations(String lineName) throws NoSuchLineException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else
             return line.getStations();
@@ -102,10 +101,10 @@ public class Network implements Serializable {
      * @param stationAndTimes is the collections of stops to be associated with the new Schedule
      *
      */
-    public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
+    public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchLineException, InvalidScheduleException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else {
             line.insertSchedule(trainNumber, stationAndTimes);
@@ -120,20 +119,20 @@ public class Network implements Serializable {
      * @param timeAsString is the time corresponding to the first time of the schedule
      *
      */
-    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException, InvalidPositionException {
+    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchLineException, NoSuchScheduleException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else {
             line.removeSchedule(departureStationName, timeAsString);
         }
     }
 
-    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException, NullPointerException {
+    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchLineException, NoSuchDepartureStationException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else {
             return line.getSchedules(departureStationName);
