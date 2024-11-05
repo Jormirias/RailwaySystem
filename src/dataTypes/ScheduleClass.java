@@ -5,12 +5,15 @@
 
 package dataTypes;
 
+import java.io.Serializable;
+
 import dataStructures.*;
+import dataTypes.interfaces.*;
 
 /**
  * Class which implements a Train Schedule
  */
-public class Schedule  {
+public class ScheduleClass implements Schedule, Serializable  {
     int trainNumber;
     /**
      * Stop Collection
@@ -26,20 +29,18 @@ public class Schedule  {
      * @param newSchedule ListInArray of stops
      *
      */
-    public Schedule(int train, ListInArray<Stop> newSchedule) {
+    public ScheduleClass(int train, ListInArray<Stop> newSchedule) {
         trainNumber = train;
         stops = newSchedule;
     }
 
+    @Override
     public int getTrainNumber() {
         return trainNumber;
     }
 
+    @Override
     public Iterator<Stop> getStops() {
         return this.stops.iterator();
-    }
-
-    public Station getOriginStation() {
-        return stops.getFirst().getStation();
     }
 }

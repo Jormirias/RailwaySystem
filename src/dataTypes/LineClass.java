@@ -7,13 +7,14 @@ package dataTypes;
 
 import dataStructures.*;
 import dataTypes.exceptions.*;
+import dataTypes.interfaces.*;
 
 import java.io.Serializable;
 
 /**
  * Class which implements a Rail Line
  */
-public class Line implements Serializable {
+public class LineClass implements Line, Serializable {
 
     /**
      * String Line name
@@ -46,7 +47,7 @@ public class Line implements Serializable {
      * Receives the lineName and the Station collection, allocates them, and initializes two Schedule Collections, one normal and the other for the inverted line direction
      *
      */
-    public Line(String lineName, ListInArray<Station> newStations) {
+    public LineClass(String lineName, ListInArray<Station> newStations) {
         name = lineName;
         stations = newStations;
 
@@ -54,33 +55,18 @@ public class Line implements Serializable {
         schedulesInverted = new OrderedDoubleList<>();
     }
 
-    /**
-     * Returns the name of the Line
-     * @return the String holding the name of this Line.
-     *
-     */
+    @Override
     public String getName() {
         return this.name;
     }
-    /**
-     * Returns the Station collection of the Line
-     * @return the Collection of Stations in this Line
-     *
-     */
+    
+    @Override
     public ListInArray<Station> getStations() {
         return stations;
     }
 
-    /**
-     * Insert a new Schedule into the Line
-     * It first checks the schedule validity using the method scheduleCheck, sending an error upstream if it's invalid
-     * If it's confirmed as valid, adds it to the corresponding schedule collection depending on its initial station
-     *      AND also adds it to the Collections inside each os the Stations in its Stops (doing this here sacrifices efficiency
-     *      in the insertion and removal but makes Consult actions more efficient in Temporal Complexity, like  command MH)
-     *
-     */
+    @Override
     public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
-
         int train = Integer.parseInt(trainNumber);
         String[] firstStopString = stationAndTimesString.getFirst();
 
@@ -98,20 +84,20 @@ public class Line implements Serializable {
         while(stationAndTimesStringIt.hasNext()) {
             String[] stationAndTimeString = stationAndTimesStringIt.next();
             String stationName = stationAndTimeString[0];
-            Time time = new Time(stationAndTimeString[1]);
+            Time time = new TimeClass(stationAndTimeString[1]);
             
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
                     station.addStop(train, time);
-                    stops.addLast(new Stop(station, time));
+                    stops.addLast(new StopClass(station, time));
                     break;
                 }
             }
         }
 
         //Create Schedule and put it in corresponding OrderedDoubleList
-        Schedule schedule = new Schedule(train, stops);
+        Schedule schedule = new ScheduleClass(train, stops);
         Stop firstStop = stops.getFirst();
         if(firstStop.getStation().getName().equals(stations.getFirst().getName())) {
             schedulesNormal.insert(firstStop.getTime(), schedule);
@@ -121,17 +107,10 @@ public class Line implements Serializable {
         }
     }
 
-    /**
-     * Remove a Schedule from the Line
-     * It first checks if the Station name is one of the 2 terminals of the line. If not, it throws an error, represented in the output as an empty string.
-     * Then it iterates the collection for the given departure time. If it doesn't exist, it throws an error.
-     * If it exists, the corresponding schedule is removed from the collection.
-     * THEN, each station
-     *
-     */
+    @Override
     public void removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException {
         Schedule schedule = null;
-        Time time = new Time(timeAsString);
+        Time time = new TimeClass(timeAsString);
 
         //Compares the input station to both collections' first element's station. If they match, procedes to iterate the collection
         // for a given Time key, and if it is found, it's removed. Otherwise, errors in the .remove() will results in output error messages.
@@ -166,6 +145,7 @@ public class Line implements Serializable {
         }
     }
 
+    @Override
     public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NoSuchDepartureStationException {
         if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
             return schedulesNormal.iterator();
@@ -188,7 +168,7 @@ public class Line implements Serializable {
         }
 
         final Line other = (Line) obj;
-        if (!this.name.equals(other.name)) {
+        if (!this.name.equals(other.getName())) {
             return false;
         }
 
@@ -223,12 +203,12 @@ public class Line implements Serializable {
         Iterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();
 
-        Time lastTime = new Time(0,0);
+        Time lastTime = new TimeClass(0,0);
         //itera sobre stationAndTimes, e stations
         while (stationAndTimesIt.hasNext() && stationIt.hasNext()) {
             String[] stationAndTimeString = stationAndTimesIt.next();
             String stationName = stationAndTimeString[0];
-            Time time = new Time(stationAndTimeString[1]);
+            Time time = new TimeClass(stationAndTimeString[1]);
 
             //se a sequencia de horários não for estritamente crescente, return false
             if(time.compareTo(lastTime) <= 0) {

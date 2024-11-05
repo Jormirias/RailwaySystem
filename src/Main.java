@@ -2,13 +2,14 @@ import java.io.*;
 import java.util.Scanner;
 
 import dataTypes.*;
+import dataTypes.interfaces.*;
 import dataTypes.exceptions.*;
 import dataStructures.*;
 
 /**
  * Sistema de Suporte de uma Rede Ferroviária
- * @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
  * @author Jorge Dias (72360) jmr.dias@campus.fct.unl.pt
+ * @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
  * @version 1.0
  *
  * Class which holds the main function of the program.
@@ -77,7 +78,7 @@ public class Main {
         if(PERSISTENT) {
             network = load();
         } else {
-            network = new Network();
+            network = new NetworkClass();
         }
 
         Scanner in;
@@ -168,11 +169,11 @@ public class Main {
         } catch (IOException e) {
             System.out.println
             ("Non existing serialization file: Creating new Object.");
-            return new Network();
+            return new NetworkClass();
         } catch (ClassNotFoundException e) {
             System.out.println
             ("Problems with serialization: Creating new Object.");
-            return new Network();
+            return new NetworkClass();
         }
 
     }
@@ -197,7 +198,7 @@ public class Main {
             String stationName = in.nextLine();
             while (!stationName.isEmpty()) {
                 stationName = network.getStationName(stationName);
-                newStations.addLast(new Station(stationName));
+                newStations.addLast(new StationClass(stationName));
                 stationName = in.nextLine();
             }
 
