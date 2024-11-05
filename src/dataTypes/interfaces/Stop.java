@@ -5,7 +5,9 @@
 
 package dataTypes.interfaces;
 
-public interface Stop {
+import java.io.Serializable;
+
+public interface Stop extends Serializable{
     /**
      * Get the Station of this Stop.
      * @return the Station of this Stop.

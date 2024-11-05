@@ -9,7 +9,9 @@ import dataStructures.*;
 import dataTypes.*;
 import dataTypes.exceptions.*;
 
-public interface Line {
+import java.io.Serializable;
+
+public interface Line extends Serializable {
     /**
      * Returns the name of the Line
      * @return the String holding the name of this Line.

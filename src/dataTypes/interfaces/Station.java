@@ -5,9 +5,9 @@
 
 package dataTypes.interfaces;
 
-import dataTypes.*;
+import java.io.Serializable;
 
-public interface Station {
+public interface Station extends Serializable {
     /**
      * Get the name of the Station.
      * @return the name of the Station.

@@ -5,15 +5,13 @@
 
 package dataTypes;
 
-import java.io.Serializable;
-
 import dataStructures.*;
 import dataTypes.interfaces.*;
 
 /**
  * Class which implements a Train Schedule
  */
-public class ScheduleClass implements Schedule, Serializable  {
+public class ScheduleClass implements Schedule  {
     int trainNumber;
     /**
      * Stop Collection

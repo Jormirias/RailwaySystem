@@ -5,15 +5,13 @@
 
 package dataTypes;
 
-
-import java.io.Serializable;
 import dataStructures.OrderedVector;
 import dataTypes.interfaces.*;
 
 /**
  * Class which implements a Train Station
  */
-public class StationClass  implements Station, Serializable {
+public class StationClass  implements Station {
     private final String name;
 
     /**

@@ -5,7 +5,9 @@
 
 package dataTypes.interfaces;
 
-public interface Time extends Comparable<Time>{
+import java.io.Serializable;
+
+public interface Time extends Comparable<Time>, Serializable{
     /**
      * Get the hours of this Time.
      * @return the hours of this Time.

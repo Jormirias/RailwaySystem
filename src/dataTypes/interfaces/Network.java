@@ -5,11 +5,13 @@
 
 package dataTypes.interfaces;
 
+import java.io.Serializable;
+
 import dataStructures.*;
 import dataTypes.*;
 import dataTypes.exceptions.*;
 
-public interface Network {
+public interface Network extends Serializable {
     /**
      * Add new Line to Network
      * @param lineName receives the line name, which must be unique. The method iterates over the collection of lines to find out if it already exists,

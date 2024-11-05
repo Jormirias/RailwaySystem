@@ -9,12 +9,10 @@ import dataStructures.*;
 import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
-import java.io.Serializable;
-
 /**
  * Class which implements a Rail Line
  */
-public class LineClass implements Line, Serializable {
+public class LineClass implements Line {
 
     /**
      * String Line name
@@ -156,25 +154,6 @@ public class LineClass implements Line, Serializable {
             throw new NoSuchDepartureStationException();
         }
     }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-
-        if (obj.getClass() != this.getClass()) {
-            return false;
-        }
-
-        final Line other = (Line) obj;
-        if (!this.name.equals(other.getName())) {
-            return false;
-        }
-
-        return true;
-    }
-
 
     /**
      * Helper method to check a Schedule validity

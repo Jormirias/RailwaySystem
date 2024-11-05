@@ -9,12 +9,10 @@ import dataStructures.*;
 import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
-import java.io.Serializable;
-
 /**
  * Class which implements a Rail Network
  */
-public class NetworkClass implements Network, Serializable {
+public class NetworkClass implements Network {
 
     /**
      * Line Collection

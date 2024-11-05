@@ -5,10 +5,10 @@
 
 package dataTypes.interfaces;
 
-import dataTypes.Stop;
 import dataStructures.*;
+import java.io.Serializable;
 
-public interface Schedule {
+public interface Schedule extends Serializable{
     /**
      * Get the number of the train that runs this Schedule.
      * @return the number of the train.
