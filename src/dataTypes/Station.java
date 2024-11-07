@@ -28,23 +28,33 @@ public class Station implements Serializable {
      * STRUCT_CHOICE: We chose to have these be OrderedDoubleList (SHOULD BE A BST IN FASE 2?), since the MH command will need to iterate over the structure.
      *
      */
-    private OrderedDoubleList<Time, Integer> stops;
+    private OrderedDoubleList<Time, Integer> stopsNormal;
+    private OrderedDoubleList<Time, Integer> stopsReverse;
 
     public Station(String name) {
         this.name = name;
-        this.stops = new OrderedDoubleList<>(); //Passar aqui para 10000??
+        this.stopsNormal = new OrderedDoubleList<>();
+        this.stopsReverse = new OrderedDoubleList<>();
     }
 
     public String getName() {
         return name;
     }
 
-    public void addStop(Time time, int train) {
-        stops.insert(time, train);
+    public void addStop(Time time, int train, boolean isInverted) {
+        if(isInverted) {
+            stopsReverse.insert(time, train);
+        } else {
+            stopsNormal.insert(time, train);
+        }
     }
 
-    public void removeStop(Time time) {
-        stops.remove(time);
+    public void removeStop(Time time, boolean isInverted) {
+        if(isInverted) {
+            stopsReverse.remove(time);
+        } else {
+            stopsNormal.remove(time);
+        }
     }
 
     @Override
@@ -67,8 +77,12 @@ public class Station implements Serializable {
     }
 
 
-    public TwoWayIterator<Entry<Time, Integer>> stopsIterator() {
-        return stops.iterator();
+    public TwoWayIterator<Entry<Time, Integer>> stopsIterator(boolean isInverted) {
+        if(isInverted) {
+            return stopsReverse.iterator();
+        } else {
+            return stopsNormal.iterator();
+        }
     }
     
 }

@@ -83,24 +83,25 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     }
 
     @Override
-    public V find(K key) throws EmptyListException, InvalidPositionException {
+    public V find(K key) {
         if ( isEmpty() )
-            throw new EmptyDictionaryException();
+            return null;
 
         //Verifica se a key dada é menor do que a da head
         else if ( key.compareTo(head.getElement().getKey()) < 0 )
-            throw new InvalidPositionException();
+            return null;
 
         //Verifica se a key dada é maior do que a da tail
         else if ( key.compareTo(tail.getElement().getKey()) > 0 )
-            throw new InvalidPositionException();
+            return null;
 
         //Verifica todos os nodes a partir do primeiro
         else {
-            if (findNode(key) != null)
-                return findNode(key).getElement().getValue();
+            DoubleListNode<Entry<K, V>> node =  findNode(key);
+            if (node != null)
+                return node.getElement().getValue();
             else
-                throw new InvalidPositionException();
+                return null;
         }
     }
 
@@ -213,6 +214,9 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
         if ( this.isEmpty() )
             return null;
         DoubleListNode<Entry<K, V>> node = findNode(key);
+        if(node == null) {
+            return null;
+        }
         this.removeMiddleNode(node);
         return node.getElement().getValue();
     }

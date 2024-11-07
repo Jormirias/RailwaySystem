@@ -1,0 +1,33 @@
+iL train line 1
+sTaTiOn 0
+sTaTiOn 1
+sTaTiOn 2
+sTaTiOn 3
+sTaTiOn 4
+
+cL train line 1
+
+iL fruits
+banana
+apple
+orange
+lemon
+grape
+
+cl fruits
+
+il animals
+cat
+dog
+bird
+squirrel
+horse
+cow
+pig
+chicken
+goat
+sheep
+
+cl animals
+
+ta
