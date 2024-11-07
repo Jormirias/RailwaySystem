@@ -1,14 +1,15 @@
 import java.io.*;
 import java.util.Scanner;
 
-import dataStructures.IllegalArgumentException;
 import dataTypes.*;
+import dataTypes.interfaces.*;
+import dataTypes.exceptions.*;
 import dataStructures.*;
 
 /**
  * Sistema de Suporte de uma Rede Ferroviária
- * @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
  * @author Jorge Dias (72360) jmr.dias@campus.fct.unl.pt
+ * @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
  * @version 1.0
  *
  * Class which holds the main function of the program.
@@ -66,7 +67,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = false;
     private static final boolean PERSISTENT = false;
-    private static final String TEST_FILE = "./tests/test_station_names.txt";
+    private static final String TEST_FILE = "./tests/test_phase_1.txt";
 
     /**
      * MAIN
@@ -77,7 +78,7 @@ public class Main {
         if(PERSISTENT) {
             network = load();
         } else {
-            network = new Network();
+            network = new NetworkClass();
         }
 
         Scanner in;
@@ -168,11 +169,11 @@ public class Main {
         } catch (IOException e) {
             System.out.println
             ("Non existing serialization file: Creating new Object.");
-            return new Network();
+            return new NetworkClass();
         } catch (ClassNotFoundException e) {
             System.out.println
             ("Problems with serialization: Creating new Object.");
-            return new Network();
+            return new NetworkClass();
         }
 
     }
@@ -197,14 +198,14 @@ public class Main {
             String stationName = in.nextLine();
             while (!stationName.isEmpty()) {
                 stationName = network.getStationName(stationName);
-                newStations.addLast(new Station(stationName));
+                newStations.addLast(new StationClass(stationName));
                 stationName = in.nextLine();
             }
 
             network.insertLine(lineName, newStations);
 
             System.out.println(INSERT_LINE_OK);
-        } catch (dataStructures.IllegalArgumentException e) {
+        } catch (LineAlreadyExistsException e) {
             //caso uma linha já exista com este nome
             System.out.println(INSERT_LINE_ERR);
         }
@@ -227,7 +228,7 @@ public class Main {
             String lineName = in.nextLine().trim();
             network.removeLine(lineName);
             System.out.println(REMOVE_LINE_OK);
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
     }
@@ -251,7 +252,7 @@ public class Main {
             while(it.hasNext()) {
                 System.out.println(it.next());
             }
-        } catch (NoSuchElementException e) {
+        } catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
     }
@@ -300,10 +301,10 @@ public class Main {
 
             System.out.println(INSERT_TIMETABLE_OK);
         }
-        catch (NoSuchElementException e) {
+        catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
-        catch (dataStructures.IllegalArgumentException | NullPointerException e) {
+        catch (InvalidScheduleException e) {
             System.out.println(INSERT_TIMETABLE_ERR);
         }
     }
@@ -333,10 +334,10 @@ public class Main {
 
             System.out.println(REMOVE_TIMETABLE_OK);
             }
-        catch (NoSuchElementException e) {
+        catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
-        catch (InvalidPositionException e) {
+        catch (NoSuchScheduleException e) {
             System.out.println(TIMETABLE_NULL);
         }
     }
@@ -370,10 +371,10 @@ public class Main {
                 }
            }
         }
-        catch (NoSuchElementException e) {
+        catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
-        catch (NullPointerException e) {
+        catch (NoSuchDepartureStationException e) {
             System.out.println(FIRST_STATION_NULL);
         }
     }

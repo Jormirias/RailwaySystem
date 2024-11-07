@@ -5,14 +5,13 @@
 
 package dataTypes;
 
-
-import java.io.Serializable;
 import dataStructures.OrderedVector;
+import dataTypes.interfaces.*;
 
 /**
  * Class which implements a Train Station
  */
-public class Station  implements Serializable {
+public class StationClass  implements Station {
     private final String name;
 
     /**
@@ -23,38 +22,27 @@ public class Station  implements Serializable {
     private OrderedVector<Integer, Time> stopsByTrain;
     private OrderedVector<Time, Integer> stopsByTime;
 
-    public Station(String name) {
+    public StationClass(String name) {
         this.name = name;
         this.stopsByTrain = new OrderedVector<Integer, Time>(100); //Passar aqui para 10000??
         this.stopsByTime = new OrderedVector<Time, Integer>(100);//Passar aqui para 10000??
     }
 
+    @Override
     public String getName() {
         return name;
     }
 
+    @Override
     public void addStop(int train, Time time) {
         stopsByTrain.insert(train, time);
         stopsByTime.insert(time, train);
     }
 
+    @Override
     public void removeStop(int train, Time time) {
         stopsByTrain.remove(train);
         stopsByTime.remove(time);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        if(!other.getClass().equals(this.getClass())) {
-            return false;
-        }
-
-        Station otherStation = (Station) other;
-        if(!this.name.toUpperCase().equals(otherStation.getName().toUpperCase())) {
-            return false;
-        }
-
-        return true;
     }
 
     @Override
