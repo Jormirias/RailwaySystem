@@ -7,40 +7,44 @@ package dataTypes;
 
 
 import java.io.Serializable;
-import dataStructures.OrderedVector;
+
+import dataStructures.Entry;
+import dataStructures.TwoWayIterator;
+import dataStructures.OrderedDoubleList;
 
 /**
  * Class which implements a Train Station
  */
-public class Station  implements Serializable {
+public class Station implements Serializable {
+
+    /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
     private final String name;
 
     /**
      * Collections of trains and times for the station to have as reference
-     * STRUCT_CHOICE: We chose to have these be OrderedVector (SHOULD BE A BST IN FASE 2?), ordered, since the MH command will need to iterate over them and that enables binary search.
+     * STRUCT_CHOICE: We chose to have these be OrderedDoubleList (SHOULD BE A BST IN FASE 2?), since the MH command will need to iterate over the structure.
      *
      */
-    private OrderedVector<Integer, Time> stopsByTrain;
-    private OrderedVector<Time, Integer> stopsByTime;
+    private OrderedDoubleList<Time, Integer> stops;
 
     public Station(String name) {
         this.name = name;
-        this.stopsByTrain = new OrderedVector<Integer, Time>(100); //Passar aqui para 10000??
-        this.stopsByTime = new OrderedVector<Time, Integer>(100);//Passar aqui para 10000??
+        this.stops = new OrderedDoubleList<>(); //Passar aqui para 10000??
     }
 
     public String getName() {
         return name;
     }
 
-    public void addStop(int train, Time time) {
-        stopsByTrain.insert(train, time);
-        stopsByTime.insert(time, train);
+    public void addStop(Time time, int train) {
+        stops.insert(time, train);
     }
 
-    public void removeStop(int train, Time time) {
-        stopsByTrain.remove(train);
-        stopsByTime.remove(time);
+    public void removeStop(Time time) {
+        stops.remove(time);
     }
 
     @Override
@@ -50,16 +54,21 @@ public class Station  implements Serializable {
         }
 
         Station otherStation = (Station) other;
-        if(!this.name.toUpperCase().equals(otherStation.getName().toUpperCase())) {
-            return false;
-        }
+        return this.name.equalsIgnoreCase(otherStation.getName());
+    }
 
-        return true;
+    public boolean testName(String other) {
+        return this.name.equalsIgnoreCase(other.trim());
     }
 
     @Override
     public String toString() {
         return name;
+    }
+
+
+    public TwoWayIterator<Entry<Time, Integer>> stopsIterator() {
+        return stops.iterator();
     }
     
 }

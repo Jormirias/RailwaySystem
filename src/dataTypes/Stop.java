@@ -1,7 +1,13 @@
 package dataTypes;
 import dataStructures.*;
+import java.io.Serializable;
 
-public class Stop  {
+public class Stop implements Serializable {
+
+    /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
     private Station station;
     private Time time;
 
@@ -24,11 +30,11 @@ public class Stop  {
         return station + " " + time;
     }
 
-    public void setKey(Station station) {
+    public void setStation(Station station) {
         this.station = station;
     }
 
-    public void setValue(Time time) {
+    public void setTime(Time time) {
         this.time = time;
     }
 }

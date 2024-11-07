@@ -1,6 +1,13 @@
 package dataStructures;
 
-public class EntryClass<K, V> implements Entry<K, V> {
+import java.io.Serializable;
+
+public class EntryClass<K, V> implements Entry<K, V>, Serializable {
+
+    /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
     private K key;
     private V value;
 

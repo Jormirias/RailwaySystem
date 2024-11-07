@@ -16,6 +16,11 @@ import java.io.Serializable;
 public class Line implements Serializable {
 
     /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
+
+    /**
      * String Line name
      * Unique identifier for a Line
      *
@@ -93,17 +98,18 @@ public class Line implements Serializable {
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, inserts the train number and time to its collections.
         ListInArray<Stop> stops = new ListInArray<>();
-        Iterator<String[]> stationAndTimesStringIt = stationAndTimesString.iterator();
-        Iterator<Station> stationIt = stations.iterator();
+        TwoWayIterator<String[]> stationAndTimesStringIt = stationAndTimesString.iterator();
+
         while(stationAndTimesStringIt.hasNext()) {
             String[] stationAndTimeString = stationAndTimesStringIt.next();
             String stationName = stationAndTimeString[0];
             Time time = new Time(stationAndTimeString[1]);
+            Iterator<Station> stationIt = stations.iterator();
             
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    station.addStop(train, time);
+                    station.addStop(time, train);
                     stops.addLast(new Stop(station, time));
                     break;
                 }
@@ -135,14 +141,13 @@ public class Line implements Serializable {
 
         //Compares the input station to both collections' first element's station. If they match, procedes to iterate the collection
         // for a given Time key, and if it is found, it's removed. Otherwise, errors in the .remove() will results in output error messages.
-        if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
+        if(departureStationName.equalsIgnoreCase(stations.getFirst().getName())) {
             schedule = schedulesNormal.remove(time);
         }
-        else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
+        else if(departureStationName.equalsIgnoreCase(stations.getLast().getName())) {
             schedule = schedulesInverted.remove(time);
-        } else {
-            // should not be hit.
         }
+
 
         if(schedule == null) {
             throw new InvalidPositionException();
@@ -150,16 +155,15 @@ public class Line implements Serializable {
 
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, removes the train number from this line Station
-        int trainNumber = schedule.getTrainNumber();
         Iterator<Stop> stopsIt = schedule.getStops();
-        Iterator<Station> stationIt = stations.iterator();
         while(stopsIt.hasNext()) {
             Stop stop = stopsIt.next();
 
+            Iterator<Station> stationIt = stations.iterator();
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.equals(stop.getStation())) {
-                   station.removeStop(trainNumber, stop.getTime());
+                   station.removeStop(stop.getTime());
                    break;
                 }
             }
@@ -167,14 +171,85 @@ public class Line implements Serializable {
     }
 
     public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NullPointerException {
-        if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
+        if(departureStationName.equalsIgnoreCase(stations.getFirst().getName())) {
             return schedulesNormal.iterator();
         }
-        else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
+        else if(departureStationName.equalsIgnoreCase(stations.getLast().getName())) {
             return schedulesInverted.iterator();
         } else {
             throw new NullPointerException();
         }
+    }
+
+    public Schedule bestSchedule(String departureStationName, String arrivalStationName, String timeAsString)
+            throws NullPointerException, IllegalArgumentException {
+
+        //search for the arrival station, already searching for teh first station, also
+        Iterator<Station> stationIt = stations.iterator();
+        Station firstStation = null;
+        Station lastStation = null;
+        Station currStation;
+        boolean isInverted = false;
+        while (stationIt.hasNext()) {
+            currStation = stationIt.next();
+            if (currStation.testName(departureStationName)) {
+                firstStation = currStation;
+            }
+            if (currStation.testName(arrivalStationName)) {
+                lastStation = currStation;
+                break;
+            }
+        }
+        if (lastStation == null) {
+            throw new IllegalArgumentException();
+        }
+
+        //then, search for the departure station and establish which List (normal or inverted) to use
+
+        if (firstStation == null) {
+            isInverted = true;
+            //Iterate from the last station to the end of Stations collection..
+            while (stationIt.hasNext()) {
+                currStation = stationIt.next();
+                if (currStation.testName(departureStationName)) {
+                    firstStation = currStation;
+                    break;
+                }
+            }
+
+            if (firstStation == null) {
+                throw new NullPointerException();
+            }
+        }
+
+        //iterate backwards until you find correct time; if not, throw
+        int trainByLastStation;
+        Time targetTime = new Time(timeAsString);
+        TwoWayIterator<Entry<Time, Integer>> stopsIt = lastStation.stopsIterator();
+        stopsIt.fullForward();
+        Schedule bestSchedule = null;
+        while(stopsIt.hasPrevious()) {
+            Entry<Time, Integer> stop = stopsIt.previous();
+            if (stop.getKey().compareTo(targetTime) <= 0) {
+                trainByLastStation = stop.getValue();
+                //check schedule list for train number
+                bestSchedule = findSchedule(trainByLastStation, isInverted, targetTime, departureStationName);
+                break;
+            }
+        }
+
+        if(bestSchedule == null) {
+            throw new IllegalArgumentException();
+        }
+
+        return bestSchedule;
+
+        //1 ITERADOR DA COLLECTION DE STATIONS
+        //procurar collection de stations, encontrar departureStationName IF NOT, RETURN NullPointerException
+        //procurar collection de stations, para a frente (set Normal), e para trás (set Inverted) IF NOT, RETURN IllegalArgumentException
+
+        //1 ITERADOR DAS STOPS EM STATION
+        //procurar na arrivalStationName pela Stop mais próxima da timeAsString - Ver se esse train number passa na departureStationName (conforme seja Normal ou Inverted)
     }
 
     @Override
@@ -188,11 +263,7 @@ public class Line implements Serializable {
         }
 
         final Line other = (Line) obj;
-        if (!this.name.equals(other.name)) {
-            return false;
-        }
-
-        return true;
+        return this.name.equals(other.name);
     }
 
 
@@ -207,22 +278,27 @@ public class Line implements Serializable {
     private boolean scheduleCheck (ListInArray<String[]> stationAndTimesString, String[] firstStopString) {
 
         boolean inverted;
+        boolean invertFlag = false;
 
         //Verificar se a Station da primeira Stop corresponde a uma das 2 estações terminais, e a qual
-        if(firstStopString[0].toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
+        if(firstStopString[0].equalsIgnoreCase(stations.getFirst().getName())) {
             inverted=false;
-        } else if (firstStopString[0].toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
+        } else if (firstStopString[0].equalsIgnoreCase(stations.getLast().getName())) {
             inverted = true;
         } else
             return false;
 
         if(inverted) {
             stationAndTimesString.invert();
+            invertFlag = true;
         }
-        Iterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
+        TwoWayIterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();
-
-        Time lastTime = new Time(0,0);
+        Time lastTime = new Time(0, 0);
+        if(inverted) {
+            stationAndTimesIt.rewind();
+            lastTime = new Time(23, 59);
+        }
         //itera sobre stationAndTimes, e stations
         while (stationAndTimesIt.hasNext() && stationIt.hasNext()) {
             String[] stationAndTimeString = stationAndTimesIt.next();
@@ -230,7 +306,11 @@ public class Line implements Serializable {
             Time time = new Time(stationAndTimeString[1]);
 
             //se a sequencia de horários não for estritamente crescente, return false
-            if(time.compareTo(lastTime) <= 0) {
+
+            if(invertFlag && time.compareTo(lastTime) >= 0) {
+                return false;
+            }
+            else if (!invertFlag && time.compareTo(lastTime) <= 0){
                 return false;
             }
 
@@ -238,19 +318,50 @@ public class Line implements Serializable {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    if(!stationAndTimesIt.hasNext()) {
-                        return true;
-                    } else {
-                        break;
-                    }
+                    break;
                 }
-
             }
 
             lastTime = time;
         }
-        
+        if(invertFlag) {
+            stationAndTimesString.invert();
+        }
+
         //se a sequencia de estaçoes não segue as da linha, return false
-        return false;
+        return !stationAndTimesIt.hasNext();
     }
+
+    /**
+     * Helper method to find a Schedule by train number
+     * @return receives a train number, searches the collection of Schedules and return given Schedule if it exists
+     *
+     */
+    private Schedule findSchedule (int trainNumber, boolean isInverted, Time targetTime, String originStationName) {
+        TwoWayIterator<Entry<Time, Schedule>> schedulesIt ;
+        if (isInverted) {
+            schedulesIt = schedulesInverted.iterator();
+        } else {
+            schedulesIt = schedulesNormal.iterator();
+        }
+
+        while (schedulesIt.hasNext()) {
+            Entry<Time, Schedule> next = schedulesIt.next();
+            if (next.getValue().getTrainNumber() == (trainNumber)) {
+                TwoWayIterator<Stop> stopsIt = next.getValue().getStops();
+                while (stopsIt.hasNext()) {
+                    Stop stop = stopsIt.next();
+                    if (stop.getStation().testName(originStationName)) {
+                        return next.getValue();
+                    }
+                }
+            }
+            //se o Time a ser iterado for igual ou maior que o do destino, é impossivel um comboio sair duma estaçao a essa hora e não vale a pena continuar a iteração
+            if (next.getKey().compareTo(targetTime) > 0) {
+                break;
+            }
+        }
+        return null;
+    }
+
 }

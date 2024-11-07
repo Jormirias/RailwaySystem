@@ -16,6 +16,11 @@ import java.io.Serializable;
 public class Network implements Serializable {
 
     /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
+
+    /**
      * Line Collection
      * STRUCT_CHOICE: We chose to have this be a DoubleList due to the ease of iteration on a DoubleList which is O(n),
      * and the ease of adding or removing elements, which is O(1).
@@ -29,7 +34,7 @@ public class Network implements Serializable {
      * For the first phase of the project, we felt that Stations not being unique
      * objects would allow us to squeeze a bit more performance in searches.
      */
-    private final DoubleList<String> stationNames;
+    private final DoubleList<Entry<String, Integer>> stationNames;
 
     // maybe not worth it yet as we do not have all the tools available
     // private Station[] stations;
@@ -47,7 +52,7 @@ public class Network implements Serializable {
      * @param newStations element with collection of station for the new Line element.
      *
      */
-    public void insertLine(String lineName, ListInArray<Station> newStations) throws dataStructures.IllegalArgumentException {
+    public void insertLine(String lineName, ListInArray<Station> newStations) throws IllegalArgumentException {
         if (findLineWithName(lineName) != null){
             throw new dataStructures.IllegalArgumentException();
         }
@@ -69,7 +74,8 @@ public class Network implements Serializable {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
-            if(next.getName().toUpperCase().equals(lineName.toUpperCase())) {
+            if(next.getName().equalsIgnoreCase(lineName)) {
+                removeStationNames(next.getStations());
                 lines.remove(next);
                 return;
             }
@@ -113,7 +119,7 @@ public class Network implements Serializable {
     }
 
     /**
-     * Remove a new from a Line
+     * Remove a Schedule from a Line
      * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
      * If it doesn't exist, it throws an error upstream
      * @param departureStationName indicates the name of the first station of the Schedule
@@ -130,6 +136,13 @@ public class Network implements Serializable {
         }
     }
 
+    /**
+     * Find Schedules in a Line
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @param departureStationName indicates the name of the first station of the Schedules to be found
+     *
+     */
     public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException, NullPointerException {
         Line line = findLineWithName(lineName);
         if (line == null){
@@ -141,15 +154,36 @@ public class Network implements Serializable {
     }
 
     public String getStationName(String tentativeName) {
-        Iterator<String> it = stationNames.iterator();
+        TwoWayIterator<Entry<String, Integer>> it = stationNames.iterator();
         while(it.hasNext()) {
-            String name = it.next();
-            if(name.toUpperCase().equals(tentativeName.toUpperCase())) {
+            String name = it.next().getKey();
+            if(name.equalsIgnoreCase(tentativeName)) {
                 return name;
             }
         }
         
         return tentativeName;
+    }
+
+    /**
+     * Find the Best Schedule in a Line for specific Stations and a Time
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @param departureStationName indicates the name of the first station to find in the Schedule
+     * @param arrivalStationName indicates the name of the last station to find in the Schedule
+     * @param timeAsString indicates the time to arrive in the arrivalStationName
+     *
+     */
+
+    public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString)
+            throws NoSuchElementException, NullPointerException, IllegalArgumentException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
+        }
+        else {
+            return line.bestSchedule(departureStationName, arrivalStationName, timeAsString);
+        }
     }
 
     /**
@@ -162,7 +196,7 @@ public class Network implements Serializable {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
-            if(next.getName().toUpperCase().equals(lineName.toUpperCase())) {
+            if(next.getName().equalsIgnoreCase(lineName)) {
                  return next;
             }
         }
@@ -171,23 +205,46 @@ public class Network implements Serializable {
      }
 
     private void addNewStationNames(ListInArray<Station> newStations) {
-        Iterator<Station> newStationsIt = newStations.iterator();
+        TwoWayIterator<Station> newStationsIt = newStations.iterator();
         while(newStationsIt.hasNext()) {
             Station newStation = newStationsIt.next();
 
             boolean found = false;
-            Iterator<String> stationNamesIt = stationNames.iterator();
+            TwoWayIterator<Entry<String, Integer>> stationNamesIt = stationNames.iterator();
             while(stationNamesIt.hasNext()) {
-                String existantStationName = stationNamesIt.next();
-                if(existantStationName.toUpperCase().equals(newStation.getName().toUpperCase())) {
+                Entry<String, Integer> existantStationName = stationNamesIt.next();
+                if(existantStationName.getKey().equalsIgnoreCase(newStation.getName())) {
                     found = true;
+                    existantStationName.setValue(existantStationName.getValue() + 1);
                     break;
                 }
             }
             
             if(!found) {
-                stationNames.addLast(newStation.getName());
+                stationNames.addLast(new EntryClass<>(newStation.getName(), 1));
             }
+        }
+    }
+
+    private void removeStationNames(ListInArray<Station> stations) {
+        TwoWayIterator<Station> stationsIt = stations.iterator();
+        while(stationsIt.hasNext()) {
+            Station removeStation = stationsIt.next();
+
+            TwoWayIterator<Entry<String, Integer>> stationNamesIt = stationNames.iterator();
+            while(stationNamesIt.hasNext()) {
+                Entry<String, Integer> existantStation = stationNamesIt.next();
+                if(existantStation.getKey().equalsIgnoreCase(removeStation.getName())) {
+                    int numberOfLinesWithStation = existantStation.getValue() - 1;
+                    if(numberOfLinesWithStation == 0) {
+                        stationNames.remove(existantStation);
+                    }
+                    else
+                        existantStation.setValue(numberOfLinesWithStation);
+                    break;
+                }
+            }
+
         }
     }
 
