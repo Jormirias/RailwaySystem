@@ -66,7 +66,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = false;
     private static final boolean PERSISTENT = false;
-    private static final String TEST_FILE = "./tests/test_phase_1.txt";
+    private static final String TEST_FILE = "./tests/test_station_names.txt";
 
     /**
      * MAIN
@@ -196,6 +196,7 @@ public class Main {
             ListInArray<Station> newStations = new ListInArray<>();
             String stationName = in.nextLine();
             while (!stationName.isEmpty()) {
+                stationName = network.getStationName(stationName);
                 newStations.addLast(new Station(stationName));
                 stationName = in.nextLine();
             }
@@ -245,7 +246,7 @@ public class Main {
     private static void consultLine(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim();
-            ListInArray<Station> stations = network.getStationNames(lineName);
+            ListInArray<Station> stations = network.getStations(lineName);
             Iterator<Station> it = stations.iterator();
             while(it.hasNext()) {
                 System.out.println(it.next());
@@ -283,14 +284,15 @@ public class Main {
 
             //criar logo aqui uma coleção das stops a ser inseridas no Schedule, à medida que elas são lidas do input, poupa uma iteração mais tarde
             String stationAndTime = in.nextLine();
-            ListInArray<Stop<Station, Time>> stops = new ListInArray<>();
+            ListInArray<String[]> stops = new ListInArray<>();
             while (!stationAndTime.isEmpty()) {
                 int whiteSpaceIndex = stationAndTime.lastIndexOf(' ');
                 String splitStation = stationAndTime.substring(0, whiteSpaceIndex);
                 String splitTime = stationAndTime.substring(whiteSpaceIndex + 1);
-                //criar método em network para verificar o nome na primeira ocorrencia em coleção de Stations da Network
-                Stop<Station, Time> stop = new Stop<>(new Station(splitStation), new Time(splitTime));
-                stops.addLast(stop);
+            
+                String stationName = network.getStationName(splitStation);
+                String[] stopAsString = new String[]{stationName, splitTime};
+                stops.addLast(stopAsString);
                 stationAndTime = in.nextLine();
             }
 
@@ -362,7 +364,7 @@ public class Main {
                 Schedule schedule = schedulesIt.next().getValue();
                 System.out.println(schedule.getTrainNumber());
 
-                Iterator<Stop<Station,Time>> stopsIt = schedule.getStops();
+                Iterator<Stop> stopsIt = schedule.getStops();
                 while(stopsIt.hasNext()) {
                     System.out.println(stopsIt.next());
                 }

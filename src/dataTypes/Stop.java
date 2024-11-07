@@ -1,7 +1,7 @@
 package dataTypes;
 import dataStructures.*;
 
-public class Stop<Station, Time> implements Entry<Station, Time> {
+public class Stop  {
     private Station station;
     private Time time;
 
@@ -10,13 +10,12 @@ public class Stop<Station, Time> implements Entry<Station, Time> {
         this.time = time;
     }
 
-    @Override
-    public Station getKey() {
+    public Station getStation() {
         return station;
     }
 
-    @Override
-    public Time getValue() {
+
+    public Time getTime() {
         return time;
     }
 
