@@ -18,9 +18,6 @@ sTaTiOn 2 04:20
 sTaTiOn 1 04:30
 sTaTiOn 0 04:40
 
-ch train line 1
-sTaTiOn 4
-
 mh train line 1
 sTaTiOn 2
 sTaTiOn 1
@@ -39,8 +36,39 @@ sTaTiOn 1
 04:42
 
 mh train line 1
+sTaTiOn 1
+sTaTiOn 2
+04:42
+
+iH train line 1
+1
+sTaTiOn 0 00:07
+sTaTiOn 1 01:08
+sTaTiOn 2 02:09
+sTaTiOn 3 03:10
+sTaTiOn 4 04:11
+
+iH train line 1
+101
+sTaTiOn 0 00:11
+sTaTiOn 1 01:12
+sTaTiOn 2 02:13
+sTaTiOn 3 03:14
+
+iH train line 1
+102
+sTaTiOn 0 00:12
+sTaTiOn 2 03:40
+sTaTiOn 3 03:14
+
+mh train line 1
+sTaTiOn 1
+sTaTiOn 2
+04:42
+
+mh train line 1
 sTaTiOn 2
 sTaTiOn 1
-04:00
+04:42
 
 tA
