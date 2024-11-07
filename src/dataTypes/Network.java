@@ -58,7 +58,7 @@ public class Network implements Serializable {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
-            if(next.getName().toUpperCase().equals(lineName.toUpperCase())) {
+            if(next.getName().equalsIgnoreCase(lineName)) {
                 lines.remove(next);
                 return;
             }
@@ -102,7 +102,7 @@ public class Network implements Serializable {
     }
 
     /**
-     * Remove a new from a Line
+     * Remove a Schedule from a Line
      * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
      * If it doesn't exist, it throws an error upstream
      * @param departureStationName indicates the name of the first station of the Schedule
@@ -119,6 +119,13 @@ public class Network implements Serializable {
         }
     }
 
+    /**
+     * Find Schedules in a Line
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @param departureStationName indicates the name of the first station of the Schedules to be found
+     *
+     */
     public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException, NullPointerException {
         Line line = findLineWithName(lineName);
         if (line == null){
@@ -126,6 +133,27 @@ public class Network implements Serializable {
         }
         else {
             return line.getSchedules(departureStationName);
+        }
+    }
+
+    /**
+     * Find the Best Schedule in a Line for specific Stations and a Time
+     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
+     * If it doesn't exist, it throws an error upstream
+     * @param departureStationName indicates the name of the first station to find in the Schedule
+     * @param arrivalStationName indicates the name of the last station to find in the Schedule
+     * @param timeAsString indicates the time to arrive in the arrivalStationName
+     *
+     */
+
+    public Iterator<Stop<Station,Time>> getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString)
+            throws NoSuchElementException, NullPointerException, IllegalArgumentException {
+        Line line = findLineWithName(lineName);
+        if (line == null){
+            throw new NoSuchElementException();
+        }
+        else {
+            return line.bestSchedule(departureStationName, arrivalStationName, timeAsString);
         }
     }
 
@@ -139,7 +167,7 @@ public class Network implements Serializable {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
-            if(next.getName().toUpperCase().equals(lineName.toUpperCase())) {
+            if(next.getName().equalsIgnoreCase(lineName)) {
                  return next;
             }
         }

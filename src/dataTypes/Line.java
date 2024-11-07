@@ -129,10 +129,10 @@ public class Line implements Serializable {
 
         //Compares the input station to both collections' first element's station. If they match, procedes to iterate the collection
         // for a given Time key, and if it is found, it's removed. Otherwise, errors in the .remove() will results in output error messages.
-        if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
+        if(departureStationName.equalsIgnoreCase(stations.getFirst().getName())) {
             schedule = schedulesNormal.remove(time);
         }
-        else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
+        else if(departureStationName.equalsIgnoreCase(stations.getLast().getName())) {
             schedule = schedulesInverted.remove(time);
         } else {
             // should not be hit.
@@ -161,14 +161,35 @@ public class Line implements Serializable {
     }
 
     public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NullPointerException {
-        if(departureStationName.toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
+        if(departureStationName.equalsIgnoreCase(stations.getFirst().getName())) {
             return schedulesNormal.iterator();
         }
-        else if(departureStationName.toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
+        else if(departureStationName.equalsIgnoreCase(stations.getLast().getName())) {
             return schedulesInverted.iterator();
         } else {
             throw new NullPointerException();
         }
+    }
+
+    public Iterator<Stop<Station,Time>> bestSchedule(String departureStationName, String arrivalStationName, String timeAsString)
+            throws NullPointerException, IllegalArgumentException {
+
+        Iterator<Station> stationIt = stations.iterator();
+
+        while (stationIt.hasNext()) {
+            Station station = stationIt.next();
+            if (station.equals(arrivalStationName)) {
+                break;
+            }
+        }
+        return stationIt;
+
+        //1 ITERADOR DA COLLECTION DE STATIONS
+        //procurar collection de stations, encontrar departureStationName IF NOT, RETURN NullPointerException
+        //procurar collection de stations, para a frente (set Normal), e para trás (set Inverted) IF NOT, RETURN IllegalArgumentException
+
+        //1 ITERADOR DAS STOPS EM STATION
+        //procurar na arrivalStationName pela Stop mais próxima da timeAsString - Ver se esse train number passa na departureStationName (conforme seja Normal ou Inverted)
     }
 
     @Override
@@ -182,11 +203,7 @@ public class Line implements Serializable {
         }
 
         final Line other = (Line) obj;
-        if (!this.name.equals(other.name)) {
-            return false;
-        }
-
-        return true;
+        return this.name.equals(other.name);
     }
 
 
@@ -229,11 +246,15 @@ public class Line implements Serializable {
             }
 
             //Para cada estação dada, compara à atual das stations. se não corresponder, avança à procura dela,
+            boolean checkElement = true;
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
                    break;
                 }
+            }
+            if (!checkElement) {
+                return false;
             }
 
             lastTime = time;
@@ -241,5 +262,9 @@ public class Line implements Serializable {
         
         //se a sequencia de estaçoes não segue as da linha, return false
         return !stationAndTimesIt.hasNext();
+    }
+
+    private boolean bestScheduleCheck (ListInArray<Stop<Station,Time>> stationAndTimes, Stop<Station,Time> firstStop) {
+        return true;
     }
 }

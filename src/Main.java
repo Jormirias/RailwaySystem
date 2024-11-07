@@ -385,14 +385,47 @@ public class Main {
         throw new UnsupportedOperationException("Unimplemented method 'consultTrains'");
     }
 
-
+    /**
+     * Lida com o comando MH + line_name + first_terminal + first_terminal + arriving_time
+     * Se o nome da linha existe e pelo menos um Schedule existe com as Stations dadas, o output será uma listagem do melhor schedule para chegar o mais perto da hora esperada
+     * Se o nome da linha não existir, é apresentada uma mensagem de erro. (Prioritário 1)
+     * Se a Station de partida não existir, é apresentada uma outra mensagem de erro. (Prioritário 2)
+     * É ainda apresentado um terceiro erro SE: (Proritário 3)
+     *      Se a Station de chegada não existe, OU
+     *      Nenhum Schedule passa na duas Stations, OU
+     *      Nenhum Schedule chega à Station de chegada ANTES ou NA PRÓPRIA hora de chegada dada
+     * ANÁLISE TEMPORAL DO ALGORITMO:
+     * Melhor caso:
+     * Pior caso:
+     * Caso esperado:
+     * GERAÇÃO DE OUTPUT:
+     *
+     */
     private static void bestSchedule(Scanner in, Network network) {
-        // TODO Auto-generated method stub
-        //Basicamente:
         //ERRO1-Ver se linha existe
         //ERRO2-Ver se Station de partida existe em Stations
         //ERRO3-Ver se Station de chegada existe em Stations (Ver sentidO!) && se passa na Station de partida && se essa station tem Schedules com time <= à hora pedida ( esta 3ª condião vai gaurdando o Time mais próximo
-        //Se não há erros, apresentar o melhor Schdule guardado na ultima verificação
-        throw new UnsupportedOperationException("Unimplemented method 'bestSchedule'");
+        //Se não há erros, apresentar o melhor Schedule guardado na ultima verificação
+        try {
+            String lineName = in.nextLine().trim();
+            String departureStationName = in.nextLine();
+            String arrivalStationName = in.nextLine();
+            String timeAsString = in.nextLine();
+
+            Iterator<Stop<Station, Time>> stopsIt = network.getBestSchedule(lineName, departureStationName, arrivalStationName, timeAsString);
+            while(stopsIt.hasNext()) {
+                System.out.println(stopsIt.next());
+            }
+
+        }
+        catch (NoSuchElementException e) {
+            System.out.println(LINE_NULL);
+        }
+        catch (NullPointerException e) {
+            System.out.println(FIRST_STATION_NULL);
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println(CONSULT_BEST_TIMETABLE_ERR);
+        }
     }
 }
