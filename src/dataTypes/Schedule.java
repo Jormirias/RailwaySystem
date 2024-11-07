@@ -18,7 +18,7 @@ public class Schedule  {
      * Some consultation operations will need to iterate over it, but for those purposes it's indifferent for it to be a LinkedList or a ListInArray. Array takes precedence for spatial complexity considerations.
      *
      */
-    private final ListInArray<Stop<Station, Time>> stops;
+    private final ListInArray<Stop> stops;
 
     /**
      * Constructor
@@ -26,7 +26,7 @@ public class Schedule  {
      * @param newSchedule ListInArray of stops
      *
      */
-    public Schedule(int train, ListInArray<Stop<Station, Time>> newSchedule) {
+    public Schedule(int train, ListInArray<Stop> newSchedule) {
         trainNumber = train;
         stops = newSchedule;
     }
@@ -35,11 +35,11 @@ public class Schedule  {
         return trainNumber;
     }
 
-    public Iterator<Stop<Station, Time>> getStops() {
+    public Iterator<Stop> getStops() {
         return this.stops.iterator();
     }
 
     public Station getOriginStation() {
-        return stops.getFirst().getKey();
+        return stops.getFirst().getStation();
     }
 }

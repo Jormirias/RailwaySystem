@@ -79,39 +79,45 @@ public class Line implements Serializable {
      *      in the insertion and removal but makes Consult actions more efficient in Temporal Complexity, like  command MH)
      *
      */
-    public void insertSchedule(String trainNumber, ListInArray<Stop<Station, Time>> stationAndTimes) throws IllegalArgumentException {
+    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws IllegalArgumentException {
 
         int train = Integer.parseInt(trainNumber);
-        Stop<Station,Time> firstStop = stationAndTimes.getFirst();
+        String[] firstStopString = stationAndTimesString.getFirst();
 
         //Validity Check
-        if(!scheduleCheck(stationAndTimes, firstStop)) {
+        if(!scheduleCheck(stationAndTimesString, firstStopString)) {
             throw new IllegalArgumentException();
         }
 
-        //Create Schedule and put it in corresponding OrderedDoubleList
-        Schedule schedule = new Schedule(train, stationAndTimes);
-        if(firstStop.getKey().equals(stations.getFirst())) {
-            schedulesNormal.insert(firstStop.getValue(), schedule);
-        }
-        else if(firstStop.getKey().equals(stations.getLast())) {
-            schedulesInverted.insert(firstStop.getValue(), schedule);
-        }
-
+        
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, inserts the train number and time to its collections.
-        Iterator<Stop<Station,Time>> stopsIt = schedule.getStops();
+        ListInArray<Stop> stops = new ListInArray<>();
+        Iterator<String[]> stationAndTimesStringIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();
-        while(stopsIt.hasNext()) {
-            Stop<Station,Time> stop = stopsIt.next();
-
+        while(stationAndTimesStringIt.hasNext()) {
+            String[] stationAndTimeString = stationAndTimesStringIt.next();
+            String stationName = stationAndTimeString[0];
+            Time time = new Time(stationAndTimeString[1]);
+            
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
-                if (station.equals(stop.getKey())) {
-                    station.addStop(train, stop.getValue());
+                if (station.getName().equals(stationName)) {
+                    station.addStop(train, time);
+                    stops.addLast(new Stop(station, time));
                     break;
                 }
             }
+        }
+
+        //Create Schedule and put it in corresponding OrderedDoubleList
+        Schedule schedule = new Schedule(train, stops);
+        Stop firstStop = stops.getFirst();
+        if(firstStop.getStation().getName().equals(stations.getFirst().getName())) {
+            schedulesNormal.insert(firstStop.getTime(), schedule);
+        }
+        else if(firstStop.getStation().getName().equals(stations.getLast().getName())) {
+            schedulesInverted.insert(firstStop.getTime(), schedule);
         }
     }
 
@@ -145,15 +151,15 @@ public class Line implements Serializable {
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, removes the train number from this line Station
         int trainNumber = schedule.getTrainNumber();
-        Iterator<Stop<Station,Time>> stopsIt = schedule.getStops();
+        Iterator<Stop> stopsIt = schedule.getStops();
         Iterator<Station> stationIt = stations.iterator();
         while(stopsIt.hasNext()) {
-            Stop<Station,Time> stop = stopsIt.next();
+            Stop stop = stopsIt.next();
 
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
-                if (station.equals(stop.getKey())) {
-                   station.removeStop(trainNumber, stop.getValue());
+                if (station.equals(stop.getStation())) {
+                   station.removeStop(trainNumber, stop.getTime());
                    break;
                 }
             }
@@ -198,30 +204,30 @@ public class Line implements Serializable {
      *         If are checks are passed, it returns TRUE
      *
      */
-    private boolean scheduleCheck (ListInArray<Stop<Station,Time>> stationAndTimes, Stop<Station,Time> firstStop) {
+    private boolean scheduleCheck (ListInArray<String[]> stationAndTimesString, String[] firstStopString) {
 
         boolean inverted;
 
         //Verificar se a Station da primeira Stop corresponde a uma das 2 estações terminais, e a qual
-        if(firstStop.getKey().equals(stations.getFirst())) {
+        if(firstStopString[0].toUpperCase().equals(stations.getFirst().getName().toUpperCase())) {
             inverted=false;
-        } else if (firstStop.getKey().equals(stations.getLast())) {
+        } else if (firstStopString[0].toUpperCase().equals(stations.getLast().getName().toUpperCase())) {
             inverted = true;
         } else
             return false;
 
         if(inverted) {
-            stationAndTimes.invert();
+            stationAndTimesString.invert();
         }
-        Iterator<Stop<Station,Time>> stationAndTimesIt = stationAndTimes.iterator();
+        Iterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();
 
         Time lastTime = new Time(0,0);
         //itera sobre stationAndTimes, e stations
         while (stationAndTimesIt.hasNext() && stationIt.hasNext()) {
-            Stop<Station,Time> stationAndTime = stationAndTimesIt.next();
-            String stationName = stationAndTime.getKey().getName();
-            Time time = stationAndTime.getValue();
+            String[] stationAndTimeString = stationAndTimesIt.next();
+            String stationName = stationAndTimeString[0];
+            Time time = new Time(stationAndTimeString[1]);
 
             //se a sequencia de horários não for estritamente crescente, return false
             if(time.compareTo(lastTime) <= 0) {
@@ -232,14 +238,19 @@ public class Line implements Serializable {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                   break;
+                    if(!stationAndTimesIt.hasNext()) {
+                        return true;
+                    } else {
+                        break;
+                    }
                 }
+
             }
 
             lastTime = time;
         }
         
         //se a sequencia de estaçoes não segue as da linha, return false
-        return !stationAndTimesIt.hasNext();
+        return false;
     }
 }

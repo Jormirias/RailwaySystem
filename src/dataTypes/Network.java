@@ -17,11 +17,19 @@ public class Network implements Serializable {
 
     /**
      * Line Collection
-     * STRUCT_CHOICE: We chose to have this be a DoubleList due to the ease of iteration on a DoubleList which is O(n), and the ease of adding or removing elements, which is O(1)
+     * STRUCT_CHOICE: We chose to have this be a DoubleList due to the ease of iteration on a DoubleList which is O(n),
+     * and the ease of adding or removing elements, which is O(1).
      *
      */
     /*Should this be Dictionaries as their identifier is only their name? It would be more efficient for searching operations*/
     private final DoubleList<Line> lines;
+
+    /**
+     * Collection of Station names.
+     * For the first phase of the project, we felt that Stations not being unique
+     * objects would allow us to squeeze a bit more performance in searches.
+     */
+    private final DoubleList<String> stationNames;
 
     // maybe not worth it yet as we do not have all the tools available
     // private Station[] stations;
@@ -29,12 +37,14 @@ public class Network implements Serializable {
     public Network()
     {
         lines = new DoubleList<>();
+        stationNames = new DoubleList<>();
     }
 
     /**
      * Add new Line to Network
-     * @param lineName receives the line name, which must be unique. The method iterates over the collection of lines to find out if it already exists, and if it does, it throws an error
-     * @param newStations element with collection of station for the new Line element
+     * @param lineName receives the line name, which must be unique. The method iterates over the collection of lines to find out if it already exists,
+     *        and if it does, it throws an error.
+     * @param newStations element with collection of station for the new Line element.
      *
      */
     public void insertLine(String lineName, ListInArray<Station> newStations) throws dataStructures.IllegalArgumentException {
@@ -44,6 +54,7 @@ public class Network implements Serializable {
 
         else{
             lines.addLast(new Line(lineName, newStations));
+            addNewStationNames(newStations);
         }
     }
 
@@ -74,7 +85,7 @@ public class Network implements Serializable {
      * @return If the Line exists, the method returns a collection of its Stations
      *
      */
-    public ListInArray<Station> getStationNames(String lineName) throws NoSuchElementException {
+    public ListInArray<Station> getStations(String lineName) throws NoSuchElementException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -91,7 +102,7 @@ public class Network implements Serializable {
      * @param stationAndTimes is the collections of stops to be associated with the new Schedule
      *
      */
-    public void insertSchedule(String lineName, String trainNumber, ListInArray<Stop<Station, Time>> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
+    public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
         Line line = findLineWithName(lineName);
         if (line == null){
             throw new NoSuchElementException();
@@ -129,6 +140,18 @@ public class Network implements Serializable {
         }
     }
 
+    public String getStationName(String tentativeName) {
+        Iterator<String> it = stationNames.iterator();
+        while(it.hasNext()) {
+            String name = it.next();
+            if(name.toUpperCase().equals(tentativeName.toUpperCase())) {
+                return name;
+            }
+        }
+        
+        return tentativeName;
+    }
+
     /**
      * Helper method
      * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists
@@ -146,5 +169,26 @@ public class Network implements Serializable {
 
          return null;
      }
+
+    private void addNewStationNames(ListInArray<Station> newStations) {
+        Iterator<Station> newStationsIt = newStations.iterator();
+        while(newStationsIt.hasNext()) {
+            Station newStation = newStationsIt.next();
+
+            boolean found = false;
+            Iterator<String> stationNamesIt = stationNames.iterator();
+            while(stationNamesIt.hasNext()) {
+                String existantStationName = stationNamesIt.next();
+                if(existantStationName.toUpperCase().equals(newStation.getName().toUpperCase())) {
+                    found = true;
+                    break;
+                }
+            }
+            
+            if(!found) {
+                stationNames.addLast(newStation.getName());
+            }
+        }
+    }
 
 }
