@@ -1,0 +1,46 @@
+iL train line 1
+sTaTiOn 0
+sTaTiOn 1
+sTaTiOn 2
+sTaTiOn 3
+sTaTiOn 4
+
+mh train line 1
+jigabigule
+sTaTiOn 4
+04:42
+
+iH train line 1
+207
+sTaTiOn 4 04:00
+sTaTiOn 3 04:10
+sTaTiOn 2 04:20
+sTaTiOn 1 04:30
+sTaTiOn 0 04:40
+
+ch train line 1
+sTaTiOn 4
+
+mh train line 1
+sTaTiOn 2
+sTaTiOn 1
+04:42
+
+iH train line 1
+208
+sTaTiOn 4 04:01
+sTaTiOn 3 04:12
+sTaTiOn 1 04:39
+sTaTiOn 0 04:40
+
+mh train line 1
+sTaTiOn 2
+sTaTiOn 1
+04:42
+
+mh train line 1
+sTaTiOn 2
+sTaTiOn 1
+04:00
+
+tA

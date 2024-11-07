@@ -227,22 +227,26 @@ public class Line implements Serializable {
         Time targetTime = new Time(timeAsString);
         TwoWayIterator<Entry<Time, Integer>> stopsIt = lastStation.stopsIterator();
         stopsIt.fullForward();
-        Schedule bestSchedule = null;
+        int targetTrain = -1;
         while(stopsIt.hasPrevious()) {
             Entry<Time, Integer> stop = stopsIt.previous();
             if (stop.getKey().compareTo(targetTime) <= 0) {
                 trainByLastStation = stop.getValue();
-                //check schedule list for train number
-                bestSchedule = findSchedule(trainByLastStation, isInverted, targetTime, departureStationName);
-                break;
+                if(doesTrainPassDeparture(trainByLastStation, firstStation)) {
+                    targetTrain =  trainByLastStation;
+                    break;
+                }
             }
         }
 
-        if(bestSchedule == null) {
+        Schedule bestSchedule = null;
+        if(targetTrain != -1) {
+            bestSchedule = findSchedule(targetTrain, isInverted);
+        } else {
             throw new IllegalArgumentException();
         }
 
-        return bestSchedule;
+        return bestSchedule; // should never happen
 
         //1 ITERADOR DA COLLECTION DE STATIONS
         //procurar collection de stations, encontrar departureStationName IF NOT, RETURN NullPointerException
@@ -332,13 +336,21 @@ public class Line implements Serializable {
         return !stationAndTimesIt.hasNext();
     }
 
-    /**
-     * Helper method to find a Schedule by train number
-     * @return receives a train number, searches the collection of Schedules and return given Schedule if it exists
-     *
-     */
-    private Schedule findSchedule (int trainNumber, boolean isInverted, Time targetTime, String originStationName) {
-        TwoWayIterator<Entry<Time, Schedule>> schedulesIt ;
+    private boolean doesTrainPassDeparture (int targetTrain, Station originStation) {
+        TwoWayIterator<Entry<Time, Integer>> stopsIt = originStation.stopsIterator();
+
+        while (stopsIt.hasNext()) {
+            Entry<Time, Integer> next = stopsIt.next();
+            int trainNumber = next.getValue();
+            if (trainNumber == targetTrain) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Schedule findSchedule (int trainNumber, boolean isInverted) {
+        TwoWayIterator<Entry<Time, Schedule>> schedulesIt;
         if (isInverted) {
             schedulesIt = schedulesInverted.iterator();
         } else {
@@ -348,17 +360,7 @@ public class Line implements Serializable {
         while (schedulesIt.hasNext()) {
             Entry<Time, Schedule> next = schedulesIt.next();
             if (next.getValue().getTrainNumber() == (trainNumber)) {
-                TwoWayIterator<Stop> stopsIt = next.getValue().getStops();
-                while (stopsIt.hasNext()) {
-                    Stop stop = stopsIt.next();
-                    if (stop.getStation().testName(originStationName)) {
-                        return next.getValue();
-                    }
-                }
-            }
-            //se o Time a ser iterado for igual ou maior que o do destino, é impossivel um comboio sair duma estaçao a essa hora e não vale a pena continuar a iteração
-            if (next.getKey().compareTo(targetTime) > 0) {
-                break;
+                return next.getValue();
             }
         }
         return null;
