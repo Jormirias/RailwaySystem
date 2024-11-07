@@ -58,7 +58,7 @@ public class DoubleList<E> implements List<E>
 
 
     @Override
-    public Iterator<E> iterator( )
+    public TwoWayIterator<E> iterator( )
     {
         return new DoubleListIterator<E>(head, tail);
     }

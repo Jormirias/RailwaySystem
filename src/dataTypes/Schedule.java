@@ -6,11 +6,18 @@
 package dataTypes;
 
 import dataStructures.*;
+import java.io.Serializable;
 
 /**
  * Class which implements a Train Schedule
  */
-public class Schedule  {
+public class Schedule implements Serializable {
+
+    /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
+
     int trainNumber;
     /**
      * Stop Collection
@@ -35,7 +42,7 @@ public class Schedule  {
         return trainNumber;
     }
 
-    public Iterator<Stop> getStops() {
+    public TwoWayIterator<Stop> getStops() {
         return this.stops.iterator();
     }
 

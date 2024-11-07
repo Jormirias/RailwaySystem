@@ -1,6 +1,14 @@
 package dataTypes;
 
-public class Time implements Comparable<Time> {
+import java.io.Serializable;
+
+public class Time implements Comparable<Time>, Serializable {
+
+    /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
+
     public static final int MIN_HOURS = 0;
     public static final int MAX_HOURS = 23;
     public static final int MIN_MINUTES = 0;

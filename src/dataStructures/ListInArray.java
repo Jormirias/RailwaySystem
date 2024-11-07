@@ -52,7 +52,7 @@ public class ListInArray<E> implements List<E> {
     }
 
     @Override
-    public Iterator<E> iterator() {
+    public TwoWayIterator<E> iterator() {
         ListInArrayIterator<E> newIterator = new ListInArrayIterator<>(array, size);
         if(isInverted) newIterator.invert();
         return newIterator;

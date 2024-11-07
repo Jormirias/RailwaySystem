@@ -46,7 +46,7 @@ public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDic
     }
 
     @Override
-    public Iterator<Entry<K, V>> iterator() {
+    public TwoWayIterator<Entry<K, V>> iterator() {
         return new DoubleListIterator<>(head, tail);
     }
 

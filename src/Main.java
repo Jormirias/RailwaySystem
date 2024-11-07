@@ -66,7 +66,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = false;
     private static final boolean PERSISTENT = false;
-    private static final String TEST_FILE = "./tests/test_station_names.txt";
+    private static final String TEST_FILE = "./tests/test.txt";
 
     /**
      * MAIN
@@ -92,7 +92,12 @@ public class Main {
         // Delimiter is whitespace by default
 
         do {
-            cmd = in.next().toUpperCase();
+            if (in.hasNext()) {
+                cmd = in.next().toUpperCase();
+            } else {
+                break;
+            }
+
             switch (cmd) {
                 case INSERT_LINE:
                     insertLine(in, network);
@@ -145,11 +150,11 @@ public class Main {
             file.writeObject(network);
             file.flush();
             file.close();
-            System.out.println
-            ("Serialization file saved.");
+            //System.out.println
+            //("Serialization file saved.");
         } catch (IOException e) {
-            System.out.println
-            ("Problem saving?");
+            //System.out.println
+            //(e);
         }
     }
 
@@ -163,15 +168,15 @@ public class Main {
 
             Network network = (Network) file.readObject();
             file.close();
-            System.out.println("Serialization file loaded.");
+            //System.out.println("Serialization file loaded.");
             return network;
         } catch (IOException e) {
-            System.out.println
-            ("Non existing serialization file: Creating new Object.");
+            //System.out.println
+            //("Non existing serialization file: Creating new Object.");
             return new Network();
         } catch (ClassNotFoundException e) {
-            System.out.println
-            ("Problems with serialization: Creating new Object.");
+            //System.out.println
+            //("Problems with serialization: Creating new Object.");
             return new Network();
         }
 
@@ -414,7 +419,11 @@ public class Main {
             String arrivalStationName = in.nextLine();
             String timeAsString = in.nextLine();
 
-            Iterator<Stop<Station, Time>> stopsIt = network.getBestSchedule(lineName, departureStationName, arrivalStationName, timeAsString);
+            Schedule bestSchedule = network.getBestSchedule(lineName, departureStationName, arrivalStationName, timeAsString);
+            int trainNumber = bestSchedule.getTrainNumber();
+            Iterator<Stop> stopsIt = bestSchedule.getStops();
+            System.out.println(trainNumber);
+            System.out.println(stopsIt.next());
             while(stopsIt.hasNext()) {
                 System.out.println(stopsIt.next());
             }
