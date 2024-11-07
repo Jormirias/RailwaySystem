@@ -1,0 +1,86 @@
+iL train line 1
+sTaTiOn 0
+sTaTiOn 1
+sTaTiOn 2
+sTaTiOn 3
+sTaTiOn 4
+
+iL fruits
+banana
+apple
+orange
+lemon
+grape
+
+cl fruits
+
+il animals
+cat
+dog
+bird
+squirrel
+horse
+cow
+pig
+chicken
+goat
+sheep
+
+cl animals
+
+iH train line 1
+201
+sTaTiOn 0 01:08
+sTaTiOn 2 02:09
+sTaTiOn 3 03:10
+sTaTiOn 4 04:11
+
+iH train line 1
+202
+sTaTiOn 0 01:18
+sTaTiOn 1 02:19
+sTaTiOn 2 03:20
+sTaTiOn 4 04:21
+
+iH train line 1
+203
+sTaTiOn 0 01:28
+sTaTiOn 3 02:29
+sTaTiOn 4 03:30
+
+iH train line 1
+204
+sTaTiOn 0 01:38
+sTaTiOn 4 04:41
+
+iH train line 1
+205
+sTaTiOn 4 01:48
+sTaTiOn 3 02:49
+sTaTiOn 2 03:50
+sTaTiOn 1 04:51
+sTaTiOn 0 05:00
+
+iH train line 1
+206
+sTaTiOn 0 01:58
+sTaTiOn 4 05:01
+
+iH train line 1
+207
+sTaTiOn 4 02:00
+sTaTiOn 0 03:00
+
+ch train line 1
+sTaTiOn 0
+
+ch train line 1
+sTaTiOn 4
+
+rh train line 1
+sTaTiOn 0 01:38
+
+rh train line 1
+sTaTiOn 0 01:38
+
+tA
