@@ -6,20 +6,20 @@
 package dataTypes;
 
 import dataStructures.*;
-import dataStructures.IllegalArgumentException;
+import dataTypes.exceptions.*;
+import dataTypes.interfaces.*;
 
 import java.io.Serializable;
 
 /**
  * Class which implements a Rail Network
  */
-public class Network implements Serializable {
+public class NetworkClass implements Network {
 
     /**
      * Serial Version UID of the Class
      */
     static final long serialVersionUID = 0L;
-
     /**
      * Line Collection
      * STRUCT_CHOICE: We chose to have this be a DoubleList due to the ease of iteration on a DoubleList which is O(n),
@@ -39,7 +39,7 @@ public class Network implements Serializable {
     // maybe not worth it yet as we do not have all the tools available
     // private Station[] stations;
 
-    public Network()
+    public NetworkClass()
     {
         lines = new DoubleList<>();
         stationNames = new DoubleList<>();
@@ -52,13 +52,14 @@ public class Network implements Serializable {
      * @param newStations element with collection of station for the new Line element.
      *
      */
-    public void insertLine(String lineName, ListInArray<Station> newStations) throws IllegalArgumentException {
+    @Override
+    public void insertLine(String lineName, ListInArray<Station> newStations) throws LineAlreadyExistsException {
         if (findLineWithName(lineName) != null){
-            throw new dataStructures.IllegalArgumentException();
+            throw new LineAlreadyExistsException();
         }
 
         else{
-            lines.addLast(new Line(lineName, newStations));
+            lines.addLast(new LineClass(lineName, newStations));
             addNewStationNames(newStations);
         }
     }
@@ -70,7 +71,7 @@ public class Network implements Serializable {
      * This method doesn't use the findLineWithName method to prevent iterating twice over the same collection. Instead, it automatically removes the line while iterating.
      *
      */
-    public void removeLine(String lineName) throws NoSuchElementException {
+    public void removeLine(String lineName) throws NoSuchLineException {
         Iterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
@@ -81,7 +82,7 @@ public class Network implements Serializable {
             }
         }
 
-        throw new NoSuchElementException();
+        throw new NoSuchLineException();
     }
 
     /**
@@ -91,10 +92,10 @@ public class Network implements Serializable {
      * @return If the Line exists, the method returns a collection of its Stations
      *
      */
-    public ListInArray<Station> getStations(String lineName) throws NoSuchElementException {
+    public ListInArray<Station> getStations(String lineName) throws NoSuchLineException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else
             return line.getStations();
@@ -108,10 +109,10 @@ public class Network implements Serializable {
      * @param stationAndTimes is the collections of stops to be associated with the new Schedule
      *
      */
-    public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchElementException, IllegalArgumentException {
+    public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchLineException, InvalidScheduleException, NullPointerException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else {
             line.insertSchedule(trainNumber, stationAndTimes);
@@ -126,10 +127,10 @@ public class Network implements Serializable {
      * @param timeAsString is the time corresponding to the first time of the schedule
      *
      */
-    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchElementException, InvalidPositionException {
+    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchLineException, NoSuchScheduleException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else {
             line.removeSchedule(departureStationName, timeAsString);
@@ -143,10 +144,10 @@ public class Network implements Serializable {
      * @param departureStationName indicates the name of the first station of the Schedules to be found
      *
      */
-    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchElementException, NullPointerException {
+    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchLineException, NoSuchDepartureStationException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else {
             return line.getSchedules(departureStationName);
@@ -174,12 +175,12 @@ public class Network implements Serializable {
      * @param timeAsString indicates the time to arrive in the arrivalStationName
      *
      */
-
+    @Override
     public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString)
-            throws NoSuchElementException, NullPointerException, IllegalArgumentException {
+            throws NoSuchLineException, NoSuchDepartureStationException, ImpossibleRouteException {
         Line line = findLineWithName(lineName);
         if (line == null){
-            throw new NoSuchElementException();
+            throw new NoSuchLineException();
         }
         else {
             return line.bestSchedule(departureStationName, arrivalStationName, timeAsString);

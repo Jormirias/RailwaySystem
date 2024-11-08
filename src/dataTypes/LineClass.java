@@ -6,20 +6,18 @@
 package dataTypes;
 
 import dataStructures.*;
-import dataStructures.IllegalArgumentException;
-
-import java.io.Serializable;
+import dataTypes.exceptions.*;
+import dataTypes.interfaces.*;
 
 /**
  * Class which implements a Rail Line
  */
-public class Line implements Serializable {
+public class LineClass implements Line {
 
     /**
      * Serial Version UID of the Class
      */
     static final long serialVersionUID = 0L;
-
     /**
      * String Line name
      * Unique identifier for a Line
@@ -51,7 +49,7 @@ public class Line implements Serializable {
      * Receives the lineName and the Station collection, allocates them, and initializes two Schedule Collections, one normal and the other for the inverted line direction
      *
      */
-    public Line(String lineName, ListInArray<Station> newStations) {
+    public LineClass(String lineName, ListInArray<Station> newStations) {
         name = lineName;
         stations = newStations;
 
@@ -84,14 +82,14 @@ public class Line implements Serializable {
      *      in the insertion and removal but makes Consult actions more efficient in Temporal Complexity, like  command MH)
      *
      */
-    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws IllegalArgumentException {
+    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException, NullPointerException {
 
         int train = Integer.parseInt(trainNumber);
         String[] firstStopString = stationAndTimesString.getFirst();
 
         //Validity Check
         if(!scheduleCheck(stationAndTimesString, firstStopString)) {
-            throw new IllegalArgumentException();
+            throw new InvalidScheduleException();
         }
 
         boolean isInverted;
@@ -109,21 +107,21 @@ public class Line implements Serializable {
         while(stationAndTimesStringIt.hasNext()) {
             String[] stationAndTimeString = stationAndTimesStringIt.next();
             String stationName = stationAndTimeString[0];
-            Time time = new Time(stationAndTimeString[1]);
+            Time time = new TimeClass(stationAndTimeString[1]);
             Iterator<Station> stationIt = stations.iterator();
             
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
                     station.addStop(time, train, isInverted);
-                    stops.addLast(new Stop(station, time));
+                    stops.addLast(new StopClass(station, time));
                     break;
                 }
             }
         }
 
         //Create Schedule and put it in corresponding OrderedDoubleList
-        Schedule schedule = new Schedule(train, stops);
+        Schedule schedule = new ScheduleClass(train, stops);
         Stop firstStop = stops.getFirst();
         if(firstStop.getStation().getName().equals(stations.getFirst().getName())) {
             schedulesNormal.insert(firstStop.getTime(), schedule);
@@ -141,9 +139,9 @@ public class Line implements Serializable {
      * THEN, each station
      *
      */
-    public void removeSchedule(String departureStationName, String timeAsString) throws  InvalidPositionException {
+    public void removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException {
         Schedule schedule = null;
-        Time time = new Time(timeAsString);
+        Time time = new TimeClass(timeAsString);
         boolean isInverted = false;
 
         //Compares the input station to both collections' first element's station. If they match, procedes to iterate the collection
@@ -158,12 +156,12 @@ public class Line implements Serializable {
 
 
         if(schedule == null) {
-            throw new InvalidPositionException();
+            throw new NoSuchScheduleException();
         }
 
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, removes the train number from this line Station
-        Iterator<Stop> stopsIt = schedule.getStops();
+        TwoWayIterator<Stop> stopsIt = schedule.getStops();
         while(stopsIt.hasNext()) {
             Stop stop = stopsIt.next();
 
@@ -190,10 +188,10 @@ public class Line implements Serializable {
     }
 
     public Schedule bestSchedule(String departureStationName, String arrivalStationName, String timeAsString)
-            throws NullPointerException, IllegalArgumentException {
+            throws NoSuchDepartureStationException, ImpossibleRouteException {
 
         //search for the arrival station, already searching for teh first station, also
-        Iterator<Station> stationIt = stations.iterator();
+        TwoWayIterator<Station> stationIt = stations.iterator();
         Station firstStation = null;
         Station lastStation = null;
         Station currStation;
@@ -209,7 +207,7 @@ public class Line implements Serializable {
             }
         }
         if (lastStation == null) {
-            throw new IllegalArgumentException();
+            throw new ImpossibleRouteException();
         }
 
         //then, search for the departure station and establish which List (normal or inverted) to use
@@ -226,13 +224,13 @@ public class Line implements Serializable {
             }
 
             if (firstStation == null) {
-                throw new NullPointerException();
+                throw new NoSuchDepartureStationException();
             }
         }
 
         //iterate backwards until you find correct time; if not, throw
         int trainByLastStation;
-        Time targetTime = new Time(timeAsString);
+        Time targetTime = new TimeClass(timeAsString);
         TwoWayIterator<Entry<Time, Integer>> stopsIt = lastStation.stopsIterator(isInverted);
         stopsIt.fullForward();
         int targetTrain = -1;
@@ -251,7 +249,7 @@ public class Line implements Serializable {
         if(targetTrain != -1) {
             bestSchedule = findSchedule(targetTrain, isInverted);
         } else {
-            throw new IllegalArgumentException();
+            throw new ImpossibleRouteException();
         }
 
         return bestSchedule; // should never happen
@@ -274,7 +272,7 @@ public class Line implements Serializable {
             return false;
         }
 
-        final Line other = (Line) obj;
+        final LineClass other = (LineClass) obj;
         return this.name.equals(other.name);
     }
 
@@ -306,16 +304,16 @@ public class Line implements Serializable {
         }
         TwoWayIterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();
-        Time lastTime = new Time(0, 0);
+        TimeClass lastTime = new TimeClass(0, 0);
         if(inverted) {
             stationAndTimesIt.rewind();
-            lastTime = new Time(23, 59);
+            lastTime = new TimeClass(23, 59);
         }
         //itera sobre stationAndTimes, e stations
         while (stationAndTimesIt.hasNext() && stationIt.hasNext()) {
             String[] stationAndTimeString = stationAndTimesIt.next();
             String stationName = stationAndTimeString[0];
-            Time time = new Time(stationAndTimeString[1]);
+            TimeClass time = new TimeClass(stationAndTimeString[1]);
 
             //se a sequencia de horários não for estritamente crescente, return false
 

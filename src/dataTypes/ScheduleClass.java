@@ -6,18 +6,18 @@
 package dataTypes;
 
 import dataStructures.*;
-import java.io.Serializable;
+import dataTypes.interfaces.*;
+import dataTypes.exceptions.*;
 
 /**
  * Class which implements a Train Schedule
  */
-public class Schedule implements Serializable {
+public class ScheduleClass implements Schedule {
 
     /**
      * Serial Version UID of the Class
      */
     static final long serialVersionUID = 0L;
-
     int trainNumber;
     /**
      * Stop Collection
@@ -33,7 +33,7 @@ public class Schedule implements Serializable {
      * @param newSchedule ListInArray of stops
      *
      */
-    public Schedule(int train, ListInArray<Stop> newSchedule) {
+    public ScheduleClass(int train, ListInArray<Stop> newSchedule) {
         trainNumber = train;
         stops = newSchedule;
     }

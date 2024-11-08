@@ -1,8 +1,8 @@
 package dataTypes;
-import dataStructures.*;
-import java.io.Serializable;
+import dataTypes.exceptions.*;
+import dataTypes.interfaces.*;
 
-public class Stop implements Serializable {
+public class StopClass implements Stop {
 
     /**
      * Serial Version UID of the Class
@@ -11,7 +11,7 @@ public class Stop implements Serializable {
     private Station station;
     private Time time;
 
-    public Stop(Station station, Time time) {
+    public StopClass(Station station, Time time) {
         this.station = station;
         this.time = time;
     }
@@ -20,7 +20,7 @@ public class Stop implements Serializable {
         return station;
     }
 
-
+    @Override
     public Time getTime() {
         return time;
     }

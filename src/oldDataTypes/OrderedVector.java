@@ -1,6 +1,13 @@
-package dataStructures;
+package oldDataTypes;
+
+import dataStructures.*;
 
 public class OrderedVector<K extends Comparable<K>, V> implements OrderedDictionary<K, V> {
+
+    /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
     private int capacity;
     private int size;
 

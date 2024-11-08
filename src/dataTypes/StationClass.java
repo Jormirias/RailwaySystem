@@ -11,11 +11,13 @@ import java.io.Serializable;
 import dataStructures.Entry;
 import dataStructures.TwoWayIterator;
 import dataStructures.OrderedDoubleList;
+import dataTypes.exceptions.*;
+import dataTypes.interfaces.*;
 
 /**
  * Class which implements a Train Station
  */
-public class Station implements Serializable {
+public class StationClass implements Station {
 
     /**
      * Serial Version UID of the Class
@@ -31,7 +33,7 @@ public class Station implements Serializable {
     private OrderedDoubleList<Time, Integer> stopsNormal;
     private OrderedDoubleList<Time, Integer> stopsReverse;
 
-    public Station(String name) {
+    public StationClass(String name) {
         this.name = name;
         this.stopsNormal = new OrderedDoubleList<>();
         this.stopsReverse = new OrderedDoubleList<>();
@@ -41,6 +43,7 @@ public class Station implements Serializable {
         return name;
     }
 
+    @Override
     public void addStop(Time time, int train, boolean isInverted) {
         if(isInverted) {
             stopsReverse.insert(time, train);
@@ -49,6 +52,7 @@ public class Station implements Serializable {
         }
     }
 
+    @Override
     public void removeStop(Time time, boolean isInverted) {
         if(isInverted) {
             stopsReverse.remove(time);
@@ -63,7 +67,7 @@ public class Station implements Serializable {
             return false;
         }
 
-        Station otherStation = (Station) other;
+        StationClass otherStation = (StationClass) other;
         return this.name.equalsIgnoreCase(otherStation.getName());
     }
 

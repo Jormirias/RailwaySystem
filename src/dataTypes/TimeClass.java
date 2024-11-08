@@ -1,14 +1,13 @@
 package dataTypes;
 
-import java.io.Serializable;
+import dataTypes.interfaces.*;
 
-public class Time implements Comparable<Time>, Serializable {
+public class TimeClass implements Time {
 
     /**
      * Serial Version UID of the Class
      */
     static final long serialVersionUID = 0L;
-
     public static final int MIN_HOURS = 0;
     public static final int MAX_HOURS = 23;
     public static final int MIN_MINUTES = 0;
@@ -17,7 +16,7 @@ public class Time implements Comparable<Time>, Serializable {
     private int hours = 0;
     private int minutes = 0;
 
-    public Time(int hours, int minutes) {
+    public TimeClass(int hours, int minutes) {
         if((MIN_HOURS <= hours) && (hours <= MAX_HOURS)) {
             this.hours = hours;
         }
@@ -27,7 +26,7 @@ public class Time implements Comparable<Time>, Serializable {
         }
     }
 
-    public Time(String timeAsString) {
+    public TimeClass(String timeAsString) {
         String[] splitString = timeAsString.split(":");
         int hours = Integer.parseInt(splitString[0]);
         int minutes = Integer.parseInt(splitString[1]);
@@ -52,16 +51,16 @@ public class Time implements Comparable<Time>, Serializable {
     //returns
     @Override
     public int compareTo(Time other) {
-        if(this.hours < other.hours) {
+        if(this.hours < other.getHours()) {
             return -1;
         }
-        else if(this.hours > other.hours) {
+        else if(this.hours > other.getHours()) {
             return 1;
         } else {
-            if(this.minutes < other.minutes) {
+            if(this.minutes < other.getMinutes()) {
                 return -1;
             }
-            else if(this.minutes > other.minutes) {
+            else if(this.minutes > other.getMinutes()) {
                 return 1;
             }
         }
