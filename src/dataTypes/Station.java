@@ -28,7 +28,7 @@ public class Station implements Serializable {
      * STRUCT_CHOICE: We chose to have these be OrderedDoubleList (SHOULD BE A BST IN FASE 2?), since the MH command will need to iterate over the structure.
      *
      */
-    private OrderedDoubleList<Time, Integer> stops;
+    private final OrderedDoubleList<Time, Integer> stops;
 
     public Station(String name) {
         this.name = name;

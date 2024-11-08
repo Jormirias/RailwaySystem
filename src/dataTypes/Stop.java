@@ -1,5 +1,4 @@
 package dataTypes;
-import dataStructures.*;
 import java.io.Serializable;
 
 public class Stop implements Serializable {

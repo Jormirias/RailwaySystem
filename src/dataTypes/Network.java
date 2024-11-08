@@ -34,7 +34,7 @@ public class Network implements Serializable {
      * For the first phase of the project, we felt that Stations not being unique
      * objects would allow us to squeeze a bit more performance in searches.
      */
-    private final DoubleList<Entry<String, Integer>> stationNames;
+    private DoubleList<Entry<String, Integer>> stationNames;
 
     // maybe not worth it yet as we do not have all the tools available
     // private Station[] stations;
@@ -71,7 +71,7 @@ public class Network implements Serializable {
      *
      */
     public void removeLine(String lineName) throws NoSuchElementException {
-        Iterator<Line> it = lines.iterator();
+        TwoWayIterator<Line> it = lines.iterator();
         while(it.hasNext()) {
             Line next = it.next();
             if(next.getName().equalsIgnoreCase(lineName)) {
@@ -156,9 +156,9 @@ public class Network implements Serializable {
     public String getStationName(String tentativeName) {
         TwoWayIterator<Entry<String, Integer>> it = stationNames.iterator();
         while(it.hasNext()) {
-            String name = it.next().getKey();
-            if(name.equalsIgnoreCase(tentativeName)) {
-                return name;
+            Entry<String, Integer> name = it.next();
+            if(name.getKey().equalsIgnoreCase(tentativeName)) {
+                return name.getKey();
             }
         }
         
