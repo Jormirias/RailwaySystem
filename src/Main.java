@@ -67,7 +67,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = true;
     private static final boolean PERSISTENT = true;
-    private static final String TEST_FILE = "./tests/best_schedule_test.txt";
+    private static final String TEST_FILE = "./tests/test_phase_1.txt";
 
     /**
      * MAIN
@@ -257,7 +257,7 @@ public class Main {
             while(it.hasNext()) {
                 System.out.println(it.next());
             }
-        } catch (LineAlreadyExistsException e) {
+        } catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
     }

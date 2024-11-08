@@ -176,14 +176,14 @@ public class LineClass implements Line {
         }
     }
 
-    public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NullPointerException {
+    public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NoSuchDepartureStationException {
         if(departureStationName.equalsIgnoreCase(stations.getFirst().getName())) {
             return schedulesNormal.iterator();
         }
         else if(departureStationName.equalsIgnoreCase(stations.getLast().getName())) {
             return schedulesInverted.iterator();
         } else {
-            throw new NullPointerException();
+            throw new NoSuchDepartureStationException();
         }
     }
 
