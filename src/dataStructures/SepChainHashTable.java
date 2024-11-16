@@ -36,9 +36,7 @@ public class SepChainHashTable<K extends Comparable<K>, V>
         // Compiler gives a warning.
         table = (Dictionary<K,V>[]) new Dictionary[arraySize];
         for ( int i = 0; i < arraySize; i++ )
-            //TODO: Original comentado para nao dar erro de compilacao.
-            // table[i] = new OrderedDoubleList<K,V>();
-            table[i] = null;
+            table[i] = new OrderedDoubleList<K,V>();
         maxSize = capacity;
         currentSize = 0;
     }                                      
@@ -68,29 +66,73 @@ public class SepChainHashTable<K extends Comparable<K>, V>
     @Override
     public V insert( K key, V value )
     {
-        if ( this.isFull() )
-            //TODO: left as an exercise.
-        	//Original commented, to compile.
-            // this.rehash();
+        if ( this.isFull() ) {
+            this.rehash();
             return null;
+        }
 
-        //TODO: Left as an exercise.
-        return null;
+        int position = this.hash(key);
+        this.table[position].insert(key, value);
+        ++currentSize;
+        return value;
     }
 
     @Override
     public V remove( K key )
     {
-        //TODO: Left as an exercise.
-        return null;
+        int position = this.hash(key);
+        V value = this.table[position].remove(key);
+        --currentSize;
+        return value;
     }
 
     @Override
-    public Iterator<Entry<K,V>> iterator( )
+    public Iterator<Entry<K,V>> iterator()
     {
-        //TODO: Left as an exercise.
-        return null;
+        ListInArray<Entry<K,V>> list = new ListInArray<>(this.maxSize);
+
+        for(int i = 0; i < this.maxSize; ++i) {
+            Dictionary<K, V> dictionary = this.table[i];
+            if(!dictionary.isEmpty()) {
+                Iterator<Entry<K, V>> it = dictionary.iterator();
+                while(it.hasNext()) {
+                    list.addLast(it.next());
+                }
+            }
+        }
+
+        // The garbage collector won't kill the array so long as this iterator points to it.
+        return list.iterator();
     } 
+
+    /**
+     * Allocates new table array and reinserts existing elements.
+     * Same use-case as resize in other collections.
+     */
+    @SuppressWarnings("unchecked")
+    private void rehash() {
+        Dictionary<K, V>[] oldTable = this.table;
+        int oldMaxSize = this.maxSize;
+
+        // Java doesn't allow placement new...
+        int arraySize = HashTable.nextPrime((int) (1.1 * (maxSize * 2)));
+        this.table = (Dictionary<K,V>[]) new Dictionary[arraySize];
+        for ( int i = 0; i < arraySize; i++ )
+            table[i] = new OrderedDoubleList<K,V>();
+        this.maxSize = arraySize;
+        this.currentSize = 0;
+        
+        for(int i = 0; i < oldMaxSize; ++i) {
+            Dictionary<K, V> dictionary = oldTable[i];
+            if(!dictionary.isEmpty()) {
+                Iterator<Entry<K, V>> it = dictionary.iterator();
+                while(it.hasNext()) {
+                    Entry<K, V> next = it.next();
+                    this.insert(next.getKey(), next.getValue());
+                }
+            }
+        } 
+    }
 }
 
 

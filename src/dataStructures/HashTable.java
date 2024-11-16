@@ -128,7 +128,7 @@ public abstract class HashTable<K,V> implements Dictionary<K,V>
 
     
     /**
-     * Returns true iff the hash table cannot contain more entries.
+     * Returns true if the hash table cannot contain more entries.
      * @return true if the hash table cannot contain more entries.
      */
     protected boolean isFull( )
