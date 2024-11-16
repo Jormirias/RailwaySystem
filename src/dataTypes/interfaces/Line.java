@@ -24,7 +24,7 @@ public interface Line extends Serializable {
      * @return the Collection of Stations in this Line
      *
      */
-    public ListInArray<Station> getStations();
+    public Iterator<Station> getStations();
 
     /**
      * Insert a new Schedule into the Line.

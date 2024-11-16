@@ -82,7 +82,9 @@ public class SepChainHashTable<K extends Comparable<K>, V>
     {
         int position = this.hash(key);
         V value = this.table[position].remove(key);
-        --currentSize;
+        if(value != null) {
+            --currentSize;
+        }
         return value;
     }
 

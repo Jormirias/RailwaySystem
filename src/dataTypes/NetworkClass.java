@@ -10,6 +10,7 @@ import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Class which implements a Rail Network
@@ -20,80 +21,46 @@ public class NetworkClass implements Network {
      * Serial Version UID of the Class
      */
     static final long serialVersionUID = 0L;
-    /**
-     * Line Collection
-     * STRUCT_CHOICE: We chose to have this be a DoubleList due to the ease of iteration on a DoubleList which is O(n),
-     * and the ease of adding or removing elements, which is O(1).
-     *
-     */
-    /*Should this be Dictionaries as their identifier is only their name? It would be more efficient for searching operations*/
-    private final DoubleList<Line> lines;
 
-    /**
-     * Collection of Station names.
-     * For the first phase of the project, we felt that Stations not being unique
-     * objects would allow us to squeeze a bit more performance in searches.
-     */
-    private final DoubleList<Entry<String, Integer>> stationNames;
-
-    // maybe not worth it yet as we do not have all the tools available
-    // private Station[] stations;
+    // Dictionary, with Separate Chaining Hash Table implementation.
+    // Why? Strings are used as unique identifiers for the both elements,
+    // and hash maps allow an expected case O(1 + occupancy) for insertion, removal and search.
+    private final Dictionary<String, Line> lines;
+    private final Dictionary<String, Station> stations;
 
     public NetworkClass()
     {
-        lines = new DoubleList<>();
-        stationNames = new DoubleList<>();
+        lines = new SepChainHashTable<>();
+        stations = new SepChainHashTable<>();
     }
 
-    /**
-     * Add new Line to Network
-     * @param lineName receives the line name, which must be unique. The method iterates over the collection of lines to find out if it already exists,
-     *        and if it does, it throws an error.
-     * @param newStations element with collection of station for the new Line element.
-     *
-     */
     @Override
-    public void insertLine(String lineName, ListInArray<Station> newStations) throws LineAlreadyExistsException {
-        if (findLineWithName(lineName) != null){
+    public void insertLine(String lineName, ListInArray<String> stationNames) throws LineAlreadyExistsException {
+        String lineNameUpper = lineName.toUpperCase();
+        if (lines.find(lineNameUpper) != null){
             throw new LineAlreadyExistsException();
         }
 
         else{
-            lines.addLast(new LineClass(lineName, newStations));
-            addNewStationNames(newStations);
+            ListInArray<Station> lineStations = getStations(stationNames);
+            Line line = new LineClass(lineName, lineStations);
+            lines.insert(lineNameUpper, line);
+            addLineToStations(line, lineStations);
         }
     }
 
-    /**
-     * Remove Line from Network
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, and if it does, it removes it.
-     * If it doesn't exist, it throws an error upstream
-     * This method doesn't use the findLineWithName method to prevent iterating twice over the same collection. Instead, it automatically removes the line while iterating.
-     *
-     */
+    @Override
     public void removeLine(String lineName) throws NoSuchLineException {
-        Iterator<Line> it = lines.iterator();
-        while(it.hasNext()) {
-            Line next = it.next();
-            if(next.getName().equalsIgnoreCase(lineName)) {
-                removeStationNames(next.getStations());
-                lines.remove(next);
-                return;
-            }
+        Line line = lines.remove(lineName);
+        if(line == null) {
+            throw new NoSuchLineException();
         }
-
-        throw new NoSuchLineException();
+        removeLineFromStations(line);
     }
 
-    /**
-     * Consult Line Stations
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
-     * If it doesn't exist, it throws an error upstream
-     * @return If the Line exists, the method returns a collection of its Stations
-     *
-     */
-    public ListInArray<Station> getStations(String lineName) throws NoSuchLineException {
-        Line line = findLineWithName(lineName);
+    @Override
+    public Iterator<Station> getLineStations(String lineName) throws NoSuchLineException {
+        Line line = lines.find(lineName.toUpperCase());
         if (line == null){
             throw new NoSuchLineException();
         }
@@ -101,16 +68,20 @@ public class NetworkClass implements Network {
             return line.getStations();
     }
 
-    /**
-     * Insert a new Schedule in a Line
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
-     * If it doesn't exist, it throws an error upstream
-     * @param trainNumber indicates the train number associated with the new Schedule
-     * @param stationAndTimes is the collections of stops to be associated with the new Schedule
-     *
-     */
+    @Override
+    public Iterator<Line> getStationLines(String stationName) throws NoSuchStationException {
+        Station station = stations.find(stationName);
+        if (station == null) {
+            throw new NoSuchStationException();
+        }
+        else {
+            return station.getLines();
+        }
+    }
+
+    @Override
     public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchLineException, InvalidScheduleException, NullPointerException {
-        Line line = findLineWithName(lineName);
+        Line line = lines.find(lineName.toUpperCase());
         if (line == null){
             throw new NoSuchLineException();
         }
@@ -119,16 +90,9 @@ public class NetworkClass implements Network {
         }
     }
 
-    /**
-     * Remove a Schedule from a Line
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
-     * If it doesn't exist, it throws an error upstream
-     * @param departureStationName indicates the name of the first station of the Schedule
-     * @param timeAsString is the time corresponding to the first time of the schedule
-     *
-     */
+    @Override
     public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchLineException, NoSuchScheduleException {
-        Line line = findLineWithName(lineName);
+        Line line = lines.find(lineName.toUpperCase());
         if (line == null){
             throw new NoSuchLineException();
         }
@@ -137,15 +101,9 @@ public class NetworkClass implements Network {
         }
     }
 
-    /**
-     * Find Schedules in a Line
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
-     * If it doesn't exist, it throws an error upstream
-     * @param departureStationName indicates the name of the first station of the Schedules to be found
-     *
-     */
+    @Override
     public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchLineException, NoSuchDepartureStationException {
-        Line line = findLineWithName(lineName);
+        Line line = lines.find(lineName.toUpperCase());
         if (line == null){
             throw new NoSuchLineException();
         }
@@ -154,31 +112,10 @@ public class NetworkClass implements Network {
         }
     }
 
-    public String getStationName(String tentativeName) {
-        TwoWayIterator<Entry<String, Integer>> it = stationNames.iterator();
-        while(it.hasNext()) {
-            String name = it.next().getKey();
-            if(name.equalsIgnoreCase(tentativeName)) {
-                return name;
-            }
-        }
-        
-        return tentativeName;
-    }
-
-    /**
-     * Find the Best Schedule in a Line for specific Stations and a Time
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
-     * If it doesn't exist, it throws an error upstream
-     * @param departureStationName indicates the name of the first station to find in the Schedule
-     * @param arrivalStationName indicates the name of the last station to find in the Schedule
-     * @param timeAsString indicates the time to arrive in the arrivalStationName
-     *
-     */
     @Override
     public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString)
             throws NoSuchLineException, NoSuchDepartureStationException, ImpossibleRouteException {
-        Line line = findLineWithName(lineName);
+        Line line = lines.find(lineName.toUpperCase());
         if (line == null){
             throw new NoSuchLineException();
         }
@@ -187,65 +124,43 @@ public class NetworkClass implements Network {
         }
     }
 
-    /**
-     * Helper method
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists
-     * @return If the Line exists, the method returns it. Otherwise, it returns null.
-     *
-     */
-    private Line findLineWithName(String lineName) {
-        Iterator<Line> it = lines.iterator();
+    // TODO
+    private ListInArray<Station> getStations(ListInArray<String> newStations) {
+        ListInArray<Station> lineStations = new ListInArray<>();
+
+        Iterator<String> it = newStations.iterator();
         while(it.hasNext()) {
-            Line next = it.next();
-            if(next.getName().equalsIgnoreCase(lineName)) {
-                 return next;
+            String stationName = it.next();
+            String stationNameUpper = stationName.toUpperCase();
+            Station station = stations.find(stationNameUpper);
+            if(station == null) {
+                station = new StationClass(stationName);
+                stations.insert(stationNameUpper, station);
             }
+            lineStations.addLast(station);
         }
 
-         return null;
-     }
+        return lineStations;
+    }
 
-    private void addNewStationNames(ListInArray<Station> newStations) {
-        TwoWayIterator<Station> newStationsIt = newStations.iterator();
-        while(newStationsIt.hasNext()) {
-            Station newStation = newStationsIt.next();
-
-            boolean found = false;
-            TwoWayIterator<Entry<String, Integer>> stationNamesIt = stationNames.iterator();
-            while(stationNamesIt.hasNext()) {
-                Entry<String, Integer> existantStationName = stationNamesIt.next();
-                if(existantStationName.getKey().equalsIgnoreCase(newStation.getName())) {
-                    found = true;
-                    existantStationName.setValue(existantStationName.getValue() + 1);
-                    break;
-                }
-            }
-            
-            if(!found) {
-                stationNames.addLast(new EntryClass<>(newStation.getName(), 1));
-            }
+    // TODO
+    private void addLineToStations(Line line, ListInArray<Station> lineStations) {
+        Iterator<Station> it = lineStations.iterator();
+        while(it.hasNext()) {
+            Station station = it.next();
+            station.addLine(line);
         }
     }
 
-    private void removeStationNames(ListInArray<Station> stations) {
-        TwoWayIterator<Station> stationsIt = stations.iterator();
-        while(stationsIt.hasNext()) {
-            Station removeStation = stationsIt.next();
-
-            TwoWayIterator<Entry<String, Integer>> stationNamesIt = stationNames.iterator();
-            while(stationNamesIt.hasNext()) {
-                Entry<String, Integer> existantStation = stationNamesIt.next();
-                if(existantStation.getKey().equalsIgnoreCase(removeStation.getName())) {
-                    int numberOfLinesWithStation = existantStation.getValue() - 1;
-                    if(numberOfLinesWithStation == 0) {
-                        stationNames.remove(existantStation);
-                    }
-                    else
-                        existantStation.setValue(numberOfLinesWithStation);
-                    break;
-                }
+    // TODO
+    private void removeLineFromStations(Line line) {
+        Iterator<Station> it = line.getStations();
+        while(it.hasNext()) {
+            Station station = it.next();
+            station.removeLine(line);
+            if(!station.hasLines()) {
+                stations.remove(station.getName().toUpperCase());
             }
-
         }
     }
 

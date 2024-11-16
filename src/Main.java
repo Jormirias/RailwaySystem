@@ -198,16 +198,14 @@ public class Main {
         try {
             String lineName = in.nextLine().trim();
 
-            //criar logo aqui uma coleção das stations a ser inseridas na line, à medida que elas são lidas do input, poupa uma iteração mais tarde
-            ListInArray<Station> newStations = new ListInArray<>();
+            ListInArray<String> stationNames = new ListInArray<>();
             String stationName = in.nextLine();
             while (!stationName.isEmpty()) {
-                stationName = network.getStationName(stationName);
-                newStations.addLast(new StationClass(stationName));
+                stationNames.addLast(stationName);
                 stationName = in.nextLine();
             }
 
-            network.insertLine(lineName, newStations);
+            network.insertLine(lineName, stationNames);
 
             System.out.println(INSERT_LINE_OK);
         } catch (LineAlreadyExistsException e) {
@@ -252,8 +250,7 @@ public class Main {
     private static void consultLine(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim();
-            ListInArray<Station> stations = network.getStations(lineName);
-            Iterator<Station> it = stations.iterator();
+            Iterator<Station> it = network.getLineStations(lineName);
             while(it.hasNext()) {
                 System.out.println(it.next());
             }
@@ -267,8 +264,15 @@ public class Main {
      *
      */
     private static void consultStation(Scanner in, Network network) {
-        // TODO implement in second phase
-        throw new UnsupportedOperationException("Unimplemented method 'consultStation'");
+        try {
+            String stationName = in.nextLine().trim();
+            Iterator<Line> it = network.getStationLines(stationName);
+            while(it.hasNext()) {
+                System.out.println(it.next());
+            }
+        } catch (NoSuchStationException e) {
+            System.out.println(STATION_NULL);
+        }
     }
 
     /**

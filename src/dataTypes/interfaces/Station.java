@@ -6,6 +6,7 @@
 package dataTypes.interfaces;
 
 import dataStructures.Entry;
+import dataStructures.Iterator;
 import dataStructures.TwoWayIterator;
 import dataTypes.TimeClass;
 
@@ -32,6 +33,18 @@ public interface Station extends Serializable {
      * @param isInverted - indicates if this stop belongs to an inverted schedule
      */
     public void removeStop(Time time, boolean isInverted);
+
+    // TODO
+    public void addLine(Line line);
+
+    // TODO
+    public void removeLine(Line line);
+
+    // TODO
+    public Iterator<Line> getLines();
+
+    // TODO
+    public boolean hasLines();
 
     public boolean testName(String other);
 

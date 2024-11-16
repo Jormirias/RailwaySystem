@@ -9,6 +9,7 @@ package dataTypes;
 import java.io.Serializable;
 
 import dataStructures.Entry;
+import dataStructures.ListInArray;
 import dataStructures.TwoWayIterator;
 import dataStructures.OrderedDoubleList;
 import dataTypes.exceptions.*;
@@ -32,6 +33,8 @@ public class StationClass implements Station {
      */
     private OrderedDoubleList<Time, Integer> stopsNormal;
     private OrderedDoubleList<Time, Integer> stopsReverse;
+
+    private OrderedDoubleList<String, Line> lines;
 
     public StationClass(String name) {
         this.name = name;
@@ -87,6 +90,21 @@ public class StationClass implements Station {
         } else {
             return stopsNormal.iterator();
         }
+    }
+
+    @Override
+    public void addLine(Line line) {
+        lines.insert(line.getName().toUpperCase(), line);
+    }
+
+    @Override
+    public void removeLine(Line line) {
+        lines.remove(line.getName().toUpperCase());
+    }
+
+    @Override
+    public boolean hasLines() {
+        return !lines.isEmpty();
     }
     
 }

@@ -70,8 +70,8 @@ public class LineClass implements Line {
      * @return the Collection of Stations in this Line
      *
      */
-    public ListInArray<Station> getStations() {
-        return stations;
+    public Iterator<Station> getStations() {
+        return stations.iterator();
     }
 
     /**
