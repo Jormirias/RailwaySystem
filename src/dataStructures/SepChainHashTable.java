@@ -68,7 +68,6 @@ public class SepChainHashTable<K extends Comparable<K>, V>
     {
         if ( this.isFull() ) {
             this.rehash();
-            return null;
         }
 
         int position = this.hash(key);
