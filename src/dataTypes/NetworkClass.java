@@ -9,9 +9,6 @@ import dataStructures.*;
 import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
-import java.io.Serializable;
-import java.util.HashMap;
-
 /**
  * Class which implements a Rail Network
  */
@@ -30,8 +27,8 @@ public class NetworkClass implements Network {
 
     public NetworkClass()
     {
-        lines = new SepChainHashTable<>();
-        stations = new SepChainHashTable<>();
+        lines = new SepChainHashTable<>(500);
+        stations = new SepChainHashTable<>(1000);
     }
 
     @Override
@@ -51,7 +48,7 @@ public class NetworkClass implements Network {
 
     @Override
     public void removeLine(String lineName) throws NoSuchLineException {
-        Line line = lines.remove(lineName);
+        Line line = lines.remove(lineName.toUpperCase());
         if(line == null) {
             throw new NoSuchLineException();
         }
@@ -69,8 +66,8 @@ public class NetworkClass implements Network {
     }
 
     @Override
-    public Iterator<Line> getStationLines(String stationName) throws NoSuchStationException {
-        Station station = stations.find(stationName);
+    public Iterator<Entry<String,Line>> getStationLines(String stationName) throws NoSuchStationException {
+        Station station = stations.find(stationName.toUpperCase());
         if (station == null) {
             throw new NoSuchStationException();
         }
@@ -80,7 +77,7 @@ public class NetworkClass implements Network {
     }
 
     @Override
-    public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchLineException, InvalidScheduleException, NullPointerException {
+    public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchLineException, InvalidScheduleException {
         Line line = lines.find(lineName.toUpperCase());
         if (line == null){
             throw new NoSuchLineException();

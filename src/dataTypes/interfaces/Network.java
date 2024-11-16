@@ -35,7 +35,7 @@ public interface Network extends Serializable {
     public Iterator<Station> getLineStations(String lineName) throws NoSuchLineException;
 
     // TODO
-    public Iterator<Line> getStationLines(String stationName) throws NoSuchStationException;
+    public Iterator<Entry<String,Line>> getStationLines(String stationName) throws NoSuchStationException;
 
     /**
      * Insert a new Schedule in a Line
@@ -66,14 +66,6 @@ public interface Network extends Serializable {
      * @throws NoSuchDepartureStationException
      */
     public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchLineException, NoSuchDepartureStationException;
-
-    /**
-     * Get the first occurrence of the Station name.
-     * @param tentativeName - the name which of a desired Station.
-     * @return a String with an existing Station's name, if none exists,
-     *  the tentative name.
-     */
-    public String getStationName(String tentativeName);
 
     public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString);
 }

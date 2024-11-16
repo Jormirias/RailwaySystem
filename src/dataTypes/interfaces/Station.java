@@ -41,7 +41,7 @@ public interface Station extends Serializable {
     public void removeLine(Line line);
 
     // TODO
-    public Iterator<Line> getLines();
+    public Iterator<Entry<String, Line>> getLines();
 
     // TODO
     public boolean hasLines();

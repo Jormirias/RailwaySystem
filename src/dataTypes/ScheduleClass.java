@@ -7,7 +7,6 @@ package dataTypes;
 
 import dataStructures.*;
 import dataTypes.interfaces.*;
-import dataTypes.exceptions.*;
 
 /**
  * Class which implements a Train Schedule

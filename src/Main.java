@@ -65,9 +65,9 @@ public class Main {
      * PERSISTENT: if true, loads saved file; if false, will create a new network
      *
      */
-    private static final boolean CONSOLE_INPUT = true;
-    private static final boolean PERSISTENT = true;
-    private static final String TEST_FILE = "./tests/test_phase_1.txt";
+    private static final boolean CONSOLE_INPUT = false;
+    private static final boolean PERSISTENT = false;
+    private static final String TEST_FILE = "./tests/test_station_lines.txt";
 
     /**
      * MAIN
@@ -259,16 +259,13 @@ public class Main {
         }
     }
 
-    /**
-     * SEGUNDA FASE
-     *
-     */
+    // TODO
     private static void consultStation(Scanner in, Network network) {
         try {
             String stationName = in.nextLine().trim();
-            Iterator<Line> it = network.getStationLines(stationName);
+            Iterator<Entry<String, Line>> it = network.getStationLines(stationName);
             while(it.hasNext()) {
-                System.out.println(it.next());
+                System.out.println(it.next().getValue().getName());
             }
         } catch (NoSuchStationException e) {
             System.out.println(STATION_NULL);
@@ -299,9 +296,7 @@ public class Main {
                 int whiteSpaceIndex = stationAndTime.lastIndexOf(' ');
                 String splitStation = stationAndTime.substring(0, whiteSpaceIndex);
                 String splitTime = stationAndTime.substring(whiteSpaceIndex + 1);
-            
-                String stationName = network.getStationName(splitStation);
-                String[] stopAsString = new String[]{stationName, splitTime};
+                String[] stopAsString = new String[]{splitStation, splitTime};
                 stops.addLast(stopAsString);
                 stationAndTime = in.nextLine();
             }
@@ -313,7 +308,7 @@ public class Main {
         catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
-        catch (InvalidScheduleException | NullPointerException e) {
+        catch (InvalidScheduleException e) {
             System.out.println(INSERT_TIMETABLE_ERR);
         }
     }
