@@ -4,13 +4,7 @@
 */
 
 package dataTypes;
-
-
-import java.io.Serializable;
-
-import dataStructures.Entry;
-import dataStructures.TwoWayIterator;
-import dataStructures.OrderedDoubleList;
+import dataStructures.*;
 import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
@@ -33,10 +27,13 @@ public class StationClass implements Station {
     private OrderedDoubleList<Time, Integer> stopsNormal;
     private OrderedDoubleList<Time, Integer> stopsReverse;
 
+    private OrderedDoubleList<String, Line> lines;
+
     public StationClass(String name) {
         this.name = name;
         this.stopsNormal = new OrderedDoubleList<>();
         this.stopsReverse = new OrderedDoubleList<>();
+        this.lines = new OrderedDoubleList<>();
     }
 
     public String getName() {
@@ -87,6 +84,26 @@ public class StationClass implements Station {
         } else {
             return stopsNormal.iterator();
         }
+    }
+
+    @Override
+    public void addLine(Line line) {
+        lines.insert(line.getName().toUpperCase(), line);
+    }
+
+    @Override
+    public void removeLine(Line line) {
+        lines.remove(line.getName().toUpperCase());
+    }
+
+    @Override
+    public boolean hasLines() {
+        return !lines.isEmpty();
+    }
+
+    @Override
+    public Iterator<Entry<String, Line>> getLines() {
+        return lines.iterator();
     }
     
 }

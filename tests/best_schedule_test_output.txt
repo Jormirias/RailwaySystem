@@ -1,0 +1,32 @@
+Inserção de linha com sucesso.
+Estação de partida inexistente.
+Criação de horário com sucesso.
+207
+sTaTiOn 4 04:00
+sTaTiOn 3 04:10
+sTaTiOn 2 04:20
+sTaTiOn 1 04:30
+sTaTiOn 0 04:40
+Criação de horário com sucesso.
+207
+sTaTiOn 4 04:00
+sTaTiOn 3 04:10
+sTaTiOn 2 04:20
+sTaTiOn 1 04:30
+sTaTiOn 0 04:40
+Percurso impossível.
+Criação de horário com sucesso.
+Criação de horário com sucesso.
+Horário inválido.
+101
+sTaTiOn 0 00:11
+sTaTiOn 1 01:12
+sTaTiOn 2 02:13
+sTaTiOn 3 03:14
+207
+sTaTiOn 4 04:00
+sTaTiOn 3 04:10
+sTaTiOn 2 04:20
+sTaTiOn 1 04:30
+sTaTiOn 0 04:40
+Aplicação terminada.

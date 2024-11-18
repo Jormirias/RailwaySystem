@@ -6,9 +6,6 @@
 package dataTypes.interfaces;
 
 import dataStructures.*;
-import dataTypes.ScheduleClass;
-import dataTypes.exceptions.ImpossibleRouteException;
-import dataTypes.exceptions.NoSuchDepartureStationException;
 
 import java.io.Serializable;
 

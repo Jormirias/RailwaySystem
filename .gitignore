@@ -31,3 +31,6 @@ replay_pid*
 
 # Data files
 .dat
+
+# Binary files
+.bin/*

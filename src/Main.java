@@ -67,7 +67,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = true;
     private static final boolean PERSISTENT = true;
-    private static final String TEST_FILE = "./tests/test_phase_1.txt";
+    private static final String TEST_FILE = "./tests/best_schedule_test.txt";
 
     /**
      * MAIN
@@ -198,16 +198,14 @@ public class Main {
         try {
             String lineName = in.nextLine().trim();
 
-            //criar logo aqui uma coleção das stations a ser inseridas na line, à medida que elas são lidas do input, poupa uma iteração mais tarde
-            ListInArray<Station> newStations = new ListInArray<>();
+            ListInArray<String> stationNames = new ListInArray<>();
             String stationName = in.nextLine();
             while (!stationName.isEmpty()) {
-                stationName = network.getStationName(stationName);
-                newStations.addLast(new StationClass(stationName));
+                stationNames.addLast(stationName);
                 stationName = in.nextLine();
             }
 
-            network.insertLine(lineName, newStations);
+            network.insertLine(lineName, stationNames);
 
             System.out.println(INSERT_LINE_OK);
         } catch (LineAlreadyExistsException e) {
@@ -252,8 +250,7 @@ public class Main {
     private static void consultLine(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim();
-            ListInArray<Station> stations = network.getStations(lineName);
-            Iterator<Station> it = stations.iterator();
+            Iterator<Station> it = network.getLineStations(lineName);
             while(it.hasNext()) {
                 System.out.println(it.next());
             }
@@ -262,13 +259,17 @@ public class Main {
         }
     }
 
-    /**
-     * SEGUNDA FASE
-     *
-     */
+    // TODO
     private static void consultStation(Scanner in, Network network) {
-        // TODO implement in second phase
-        throw new UnsupportedOperationException("Unimplemented method 'consultStation'");
+        try {
+            String stationName = in.nextLine().trim();
+            Iterator<Entry<String, Line>> it = network.getStationLines(stationName);
+            while(it.hasNext()) {
+                System.out.println(it.next().getValue().getName());
+            }
+        } catch (NoSuchStationException e) {
+            System.out.println(STATION_NULL);
+        }
     }
 
     /**
@@ -295,9 +296,7 @@ public class Main {
                 int whiteSpaceIndex = stationAndTime.lastIndexOf(' ');
                 String splitStation = stationAndTime.substring(0, whiteSpaceIndex);
                 String splitTime = stationAndTime.substring(whiteSpaceIndex + 1);
-            
-                String stationName = network.getStationName(splitStation);
-                String[] stopAsString = new String[]{stationName, splitTime};
+                String[] stopAsString = new String[]{splitStation, splitTime};
                 stops.addLast(stopAsString);
                 stationAndTime = in.nextLine();
             }
@@ -309,7 +308,7 @@ public class Main {
         catch (NoSuchLineException e) {
             System.out.println(LINE_NULL);
         }
-        catch (InvalidScheduleException | NullPointerException e) {
+        catch (InvalidScheduleException e) {
             System.out.println(INSERT_TIMETABLE_ERR);
         }
     }

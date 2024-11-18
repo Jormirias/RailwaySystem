@@ -70,8 +70,8 @@ public class LineClass implements Line {
      * @return the Collection of Stations in this Line
      *
      */
-    public ListInArray<Station> getStations() {
-        return stations;
+    public Iterator<Station> getStations() {
+        return stations.iterator();
     }
 
     /**
@@ -82,7 +82,7 @@ public class LineClass implements Line {
      *      in the insertion and removal but makes Consult actions more efficient in Temporal Complexity, like  command MH)
      *
      */
-    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException, NullPointerException {
+    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
 
         int train = Integer.parseInt(trainNumber);
         String[] firstStopString = stationAndTimesString.getFirst();

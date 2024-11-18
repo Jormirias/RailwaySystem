@@ -1,0 +1,17 @@
+iL train line 1
+sTaTiOn 0
+sTaTiOn 1
+sTaTiOn 2
+sTaTiOn 3
+sTaTiOn 4
+
+iL train line 2
+station 0
+station 1
+station 2
+station 3
+station 5
+
+ce station 0
+
+ta
