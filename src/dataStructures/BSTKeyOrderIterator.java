@@ -42,5 +42,4 @@ class BSTKeyOrderIterator<K,V> implements Iterator<Entry<K,V>> {
 		p = new StackInList<BSTNode<Entry<K,V>>>();
     	pushPathToMinimum(root);
     }
-
 }

@@ -180,7 +180,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
         if ( node == null || node.getElement().getKey().compareTo(key) != 0 )
         { // Key does not exist, node is "parent"
             BSTNode<Entry<K,V>> newLeaf = new BSTNode<>(new EntryClass<>(key, value));
-            this.linkSubtree(newLeaf, node);
+            this.linkSubtreeInsert(newLeaf, node);
             currentSize++;
             return null;   
         }                                 
@@ -199,18 +199,43 @@ public class BinarySearchTree<K extends Comparable<K>, V>
      * @param node - root of the subtree
      * @param parent - parent node for the new subtree
      */
-    void linkSubtree( BSTNode<Entry<K,V>> node, BSTNode<Entry<K,V>> parent )
-    {
+    void linkSubtreeInsert(BSTNode<Entry<K,V>> node, BSTNode<Entry<K,V>> parent) {
         if ( parent == null )
             // Change the root of the tree.
             root = node;
         else {
-            node.setParent(parent);
-            // Change child of parent.
-            if (parent.getElement().getKey().compareTo(node.getElement().getKey()) >= 0)
-                parent.setLeft(node);
+            if (node != null) {
+                node.setParent(parent);
+                // Change child of parent.
+                if (parent.getElement().getKey().compareTo(node.getElement().getKey()) <= 0)
+                    parent.setLeft(node);
+                else
+                    parent.setRight(node);
+            }
+        }
+    }
+
+    /**
+     *
+     * @param grandchild child of middle, to be made child of parent.
+     * @param parent to be linked to grandchild, if not null.
+     * @param middle node that is to be removed, child of parent, parent of grandchild
+     */
+    void linkSubtreeRemove( BSTNode<Entry<K,V>> grandchild, BSTNode<Entry<K,V>> parent, BSTNode<Entry<K,V>> middle)
+    {
+        if ( parent == null )
+            // Change the root of the tree.
+            root = grandchild;
+        else {
+	        if (grandchild != null)
+                grandchild.setParent(parent);
+
+            //Find where to replace middle with grandchild as new child of parent
+            if (middle == parent.left)
+                parent.setLeft(grandchild);
             else
-                parent.setRight(node);
+                parent.setRight(grandchild);
+
         }
     }
 
@@ -228,12 +253,13 @@ public class BinarySearchTree<K extends Comparable<K>, V>
         else
         {
             V oldValue = node.getElement().getValue();
-            if ( node.getLeft() == null )
+
+	        if ( node.getLeft() == null )
                 // The left subtree is empty.
-                this.linkSubtree(node.getRight(), node.getParent());
+                this.linkSubtreeRemove(node.getRight(), node.getParent(),node);
             else if ( node.getRight() == null )
                 // The right subtree is empty.
-                this.linkSubtree(node.getLeft(), node.getParent());
+                this.linkSubtreeRemove(node.getLeft(), node.getParent(),node);
             else
             {
                 // Node has 2 children. Replace the node's entry with
@@ -241,7 +267,7 @@ public class BinarySearchTree<K extends Comparable<K>, V>
                 BSTNode<Entry<K,V>> minNode = this.minNode(node.getRight());
                 node.setElement( minNode.getElement() );
                 // Remove the 'minEntry' of the right subtree.
-                this.linkSubtree(minNode.getRight(), minNode.getParent());
+                this.linkSubtreeRemove(minNode.getRight(), minNode.getParent(),minNode);
             }
             currentSize--;
             return oldValue;
