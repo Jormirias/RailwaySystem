@@ -96,8 +96,9 @@ public class BSTNode<E> implements Serializable
         return parent;
     }
 
+    // A node is internal when it is not the root nor a leaf.
     boolean isInternal() {
-        return (left != null || right != null);
+        return (parent != null && (left != null || right != null));
     }
 
     public void setLeft(BSTNode<E> left) {

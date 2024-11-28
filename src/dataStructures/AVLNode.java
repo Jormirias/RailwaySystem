@@ -83,8 +83,15 @@ class AVLNode<E> extends BSTNode<E>
      * Return the child of this node with greater height
      */
     AVLNode<E> tallerChild()  {
-        //TODO -- careful about ties
-        return null;
+        int leftHeight = getHeight((AVLNode<E>) left);
+        int rightHeight = getHeight((AVLNode<E>) right);
+        if(leftHeight > rightHeight) {
+            return (AVLNode<E>) left;
+        } else if (leftHeight < rightHeight) {
+            return (AVLNode<E>) right;
+        }
+
+        return null; // ????????
     }
 
 }

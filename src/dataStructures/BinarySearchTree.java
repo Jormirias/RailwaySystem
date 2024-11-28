@@ -59,34 +59,6 @@ public class BinarySearchTree<K extends Comparable<K>, V>
             return node.getElement().getValue();
     }
 
-
-    /*
-    **
-     * Returns the node whose key is the specified key;
-     * or null if no such node exists.        
-     *                         
-     * @param node where the search starts 
-     * @param key to be found
-     * @return the found node, when the search is successful
-     *
-    BSTNode<Entry<K,V>> findNode( BSTNode<Entry<K,V>> node, K key )
-    {                                                                   
-        if ( node == null )
-            return null;
-        else
-        {
-            int compResult = key.compareTo( node.getElement().getKey() );
-            if ( compResult == 0 )
-                return node;                                         
-            else if ( compResult < 0 )
-                return this.findNode(node.getLeft(), key);
-            else                                                     
-                return this.findNode(node.getRight(), key); 
-        }                 
-    }
-    */
-
-
     @Override
     public Entry<K,V> minEntry( ) throws EmptyDictionaryException
     {                                                                   

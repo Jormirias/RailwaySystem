@@ -1,17 +1,17 @@
-package dataStructures;                                         
+package dataStructures;
 
 /**
  * AVL tree implementation
- * 
+ *
  * @author AED team
  * @version 1.0
  *
  * @param <K> Generic type Key, must extend comparable
- * @param <V> Generic type Value 
+ * @param <V> Generic type Value
  */
-public class AVLTree<K extends Comparable<K>, V> 
+public class AVLTree<K extends Comparable<K>, V>
     extends AdvancedBSTree<K,V> implements OrderedDictionary<K,V>
-{                                                                   
+{
 
     AVLTree(AVLNode<Entry<K,V>> node) {
         root = node;
@@ -30,17 +30,18 @@ public class AVLTree<K extends Comparable<K>, V>
     void rebalance(AVLNode<Entry<K,V>> zPos) {
         if(zPos.isInternal())
             zPos.setHeight();
-        // Improve if possible...
         while (zPos!=null) {  // traverse up the tree towards the root
             zPos = (AVLNode<Entry<K, V>>) zPos.getParent();
             if (zPos == null) //reached the root, stop.
                break;
+
             zPos.setHeight();
             if (!zPos.isBalanced()) {
                 // perform a trinode restructuring at zPos's tallest grandchild
                 //If yPos (zPos.tallerChild()) denote the child of zPos with greater height.
                 //Finally, let xPos be the child of yPos with greater height
                 AVLNode<Entry<K,V>> xPos = zPos.tallerChild().tallerChild();
+                // AVLNode<Entry<K,V>> xPos = yPos.tallerChild();
 
                 zPos = (AVLNode<Entry<K, V>>) restructure(xPos); // tri-node restructure (from parent class)
                 ((AVLNode<Entry<K, V>>) zPos.getLeft()).setHeight();  // recompute heights
@@ -65,16 +66,6 @@ public class AVLTree<K extends Comparable<K>, V>
 
     }
 
-
-
-
-
-
-
-        
-
-               
-
    @Override
     public V remove( K key )
      {
@@ -86,18 +77,5 @@ public class AVLTree<K extends Comparable<K>, V>
              rebalance(node); // rebalance up from the node
          return valueToReturn;
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
