@@ -8,95 +8,62 @@ import java.io.Serializable;
  * @author AED team
  * @version 1.0
  *
- * @param <K> Generic type Key
- * @param <V> Generic type Value 
+ * @param <E> Generic Value
  */
-class BSTNode<K,V> implements Serializable
+public class BSTNode<E> implements Serializable
 {                                                                   
 
-	/**
-	 * Serial Version UID of the Class.
-	 */
-    static final long serialVersionUID = 0L;
 
 
     /**
-     * Entry stored in the node.
+     * Element stored in the node.
      */
-    private EntryClass<K,V> entry;                                      
+    protected E element;
+
+
 
     /**
      * (Pointer to) the left child.
      * 
      */
-    private BSTNode<K,V> leftChild;
+    protected BSTNode<E> left;
 
     /**
      * (Pointer to) the right child.
      * 
      */
-    private BSTNode<K,V> rightChild;
-
+    protected BSTNode<E> right;
+    /**
+     * (Pointer to) the parent node.
+     *
+     */
+    protected BSTNode<E> parent;
 
     /**
      * Constructor for BST nodes
      * 
-     * @param key to be stored in this BST tree node
-     * @param value to be stored in this BST tree node
-     * @param left sub-tree of this node
-     * @param right sub-tree of this node
      */
-    public BSTNode( K key, V value, BSTNode<K,V> left, BSTNode<K,V> right )
+    public BSTNode( E elem, BSTNode<E> parent, BSTNode<E> left, BSTNode<E> right )
     {                                                                
-        entry = new EntryClass<K,V>(key, value);
-        leftChild = left; 
-        rightChild = right;                                      
+        this.element = elem;
+        this.parent = parent;
+        this.left = left;
+        this.right = right;
+    }
+    public BSTNode(E elem) {
+        this(elem,null,null,null);
     }
 
-
     /**
-     * Constructor for BST nodes
-     * 
-     * @param key to be stored in this BST tree node
-     * @param value to be stored in this BST tree node
-     */
-    public BSTNode( K key, V value )
-    {    
-        this(key, value, null, null);
-    }
-
-
-    /**
-     * Returns the entry (key and value) of the current node.
+     * Returns the element of the current node.
      * 
      * @return
      */
-    public EntryClass<K,V> getEntry( )                           
+    E getElement( )
     {
-        return entry;
+        return element;
     }
 
-
-    /**
-     * Returns the key of the current node.
-     * 
-     * @return
-     */
-    public K getKey( )                           
-    {
-        return entry.getKey();
-    }
-
-
-    /**
-     * Returns the value of the current node.
-     * 
-     * @return
-     */
-    public V getValue( )                           
-    {
-        return entry.getValue();
-    }
 
 
     /**
@@ -104,9 +71,9 @@ class BSTNode<K,V> implements Serializable
      * 
      * @return
      */
-    public BSTNode<K,V> getLeft( )                                     
+    BSTNode<E> getLeft( )
     {    
-        return leftChild;
+        return left;
     }
 
 
@@ -115,89 +82,38 @@ class BSTNode<K,V> implements Serializable
      * 
      * @return
      */
-    public BSTNode<K,V> getRight( )                                    
-    {    
-        return rightChild;
+    BSTNode<E> getRight( )
+    {
+        return right;
     }
-
-
     /**
-     * Assigns a new entry (key and value) to the current BST node
-     *   
-     * @param newEntry
-     */
-    public void setEntry( EntryClass<K,V> newEntry )
-    {    
-        entry = newEntry;
-    }
-
-
-    /**
-     * Assigns new a key and value to the current BST node
-     * 
-     * @param newKey 
-     * @param newValue
-     */
-    public void setEntry( K newKey, V newValue )
-    {    
-        entry.setKey(newKey);
-        entry.setValue(newValue);
-    }
-
-
-    /**
-     * Sets the new key of the current node.
-     * 
-     * @param newKey
-     */
-    public void setKey( K newKey )
-    {    
-        entry.setKey(newKey);
-    }
-
-
-    /**
-     * Sets the new value object of the current node.
-     * 
-     * @param newValue
-     */
-    public void setValue( V newValue )
-    {    
-        entry.setValue(newValue);
-    }
-
-
-    /**
-     * Sets the new left child node of the this node
-     * 
-     * @param newLeft the new left child node of the current node
-     */
-    public void setLeft( BSTNode<K,V> newLeft )                     
-    {    
-        leftChild = newLeft;
-    }
-
-
-    /**
-     * Sets the new right child node of the this node
-     * 
-     * @param newLeft the new right child node of the current node
-     */
-    public void setRight( BSTNode<K,V> newRight )                   
-    {    
-        rightChild = newRight;
-    }
-
-
-    /**
-     * Returns true iff the node is a leaf.
-     * 
+     * Returns the parent node of the current node.
+     *
      * @return
      */
-    public boolean isLeaf( )                                
-    {    
-        return leftChild == null && rightChild == null;          
-    }                                                                  
+    BSTNode<E> getParent( )
+    {
+        return parent;
+    }
 
+    // A node is internal when it is not the root nor a leaf.
+    boolean isInternal() {
+        return (parent != null && (left != null || right != null));
+    }
 
+    public void setLeft(BSTNode<E> left) {
+        this.left = left;
+    }
+
+    public void setRight(BSTNode<E> right) {
+        this.right = right;
+    }
+
+    public void setElement(E element) {
+        this.element = element;
+    }
+
+    public void setParent(BSTNode<E> parent) {
+        this.parent = parent;
+    }
 }

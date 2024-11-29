@@ -90,6 +90,7 @@ public class SepChainHashTable<K extends Comparable<K>, V>
     @Override
     public Iterator<Entry<K,V>> iterator()
     {
+        // TODO: redo this with a class that iterates over  the lists
         ListInArray<Entry<K,V>> list = new ListInArray<>(this.maxSize);
 
         for(int i = 0; i < this.maxSize; ++i) {

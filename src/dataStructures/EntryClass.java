@@ -1,35 +1,35 @@
+/**
+ * 
+ */
 package dataStructures;
 
-public class EntryClass<K, V> implements Entry<K, V> {
+/**
+ * @author AED
+ *
+ */
+public class EntryClass<K, V> implements Entry<K, V>{
+	protected K key;
+	protected V value;
+	
+	public EntryClass(K k, V v){
+		key=k;
+		value=v;
+	}
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
+	@Override
+	public K getKey() {
+		return key;
+	}
 
-    private K key;
-    private V value;
+	@Override
+	public V getValue() {
+		return value;
+	}
 
-    public EntryClass(K key, V value) {
-        this.key = key;
-        this.value = value;
-    }
+	public void setValue(V value2) {
+		value=value2;
+	}
+	
+	
 
-    @Override
-    public K getKey() {
-        return key;
-    }
-
-    @Override
-    public V getValue() {
-        return value;
-    }
-
-    public void setKey(K key) {
-        this.key = key;
-    }
-
-    public void setValue(V value) {
-        this.value = value;
-    }
 }
