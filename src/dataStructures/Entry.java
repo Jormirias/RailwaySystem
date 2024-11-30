@@ -13,4 +13,8 @@ public interface Entry<K, V> {
 	 
 	// Returns the value in the entry.
 	V getValue( );
+
+	void setKey(K key);
+	
+	void setValue(V value);
 }

@@ -41,7 +41,6 @@ public class AVLTree<K extends Comparable<K>, V>
                 //If yPos (zPos.tallerChild()) denote the child of zPos with greater height.
                 //Finally, let xPos be the child of yPos with greater height
                 AVLNode<Entry<K,V>> xPos = zPos.tallerChild().tallerChild();
-                // AVLNode<Entry<K,V>> xPos = yPos.tallerChild();
 
                 zPos = (AVLNode<Entry<K, V>>) restructure(xPos); // tri-node restructure (from parent class)
                 ((AVLNode<Entry<K, V>>) zPos.getLeft()).setHeight();  // recompute heights
@@ -55,27 +54,60 @@ public class AVLTree<K extends Comparable<K>, V>
     @Override
     public V insert( K key, V value )
     {
-        //TODO
-        V valueToReturn=null;
-        AVLNode<Entry<K,V>> newNode=null; // node where the new entry is being inserted (if find(key)==null)
-        // insert the new Entry (if find(key)==null)
-        // or set the new value (if find(key)!=null)
-        if(newNode != null) //(if find(key)==null)
-            rebalance(newNode); // rebalance up from the insertion node
-        return valueToReturn;
+        V valueToReturn = null;
+        if(isEmpty()) {
+            root = new AVLNode<Entry<K,V>>(new EntryClass<K,V>(key, value));
+            return valueToReturn;
+        }
 
+        AVLNode<Entry<K,V>> newNode = (AVLNode<Entry<K,V>>) findNode(key);
+        int keyComparsionResult = key.compareTo(newNode.getElement().getKey());
+        if(keyComparsionResult != 0) { // add new node
+            AVLNode<Entry<K,V>> parentNode = newNode;
+            newNode = new AVLNode<Entry<K,V>>(new EntryClass<K,V>(key, value));
+            newNode.setParent(parentNode);
+
+            if(keyComparsionResult < 0) {
+                parentNode.setLeft(newNode);
+            } else {
+                parentNode.setRight(newNode);
+            }
+
+            rebalance(newNode); // rebalance up from the insertion node
+        } else { // update the node's element
+            valueToReturn = newNode.getElement().getValue();
+            newNode.setElement(new EntryClass<K,V>(key, value));
+        }
+
+        return valueToReturn;
     }
 
    @Override
     public V remove( K key )
-     {
-         // TODO
-         V valueToReturn=null;
-         AVLNode<Entry<K,V>> node=null; // father of node where the key was
-         // removeNode is the BST remove(key)
-         if(node != null) //(if find(key)==null)
-             rebalance(node); // rebalance up from the node
-         return valueToReturn;
+    {
+        if(isEmpty()) {
+            return null;
+        }
+        
+        AVLNode<Entry<K,V>> node = (AVLNode<Entry<K,V>>) findNode(key);
+        if(node != null) //(if find(key)==null)
+            rebalance(node); // rebalance up from the node
+        return node.getElement().getValue();
     }
 
+    public static void main(String[] args) {
+        AVLTree<Integer, Integer> tree = new AVLTree<>();
+        tree.insert(0, 0);
+        System.out.println(tree.find(0));
+        tree.insert(0, 1);
+        System.out.println(tree.find(0));
+
+        tree.insert(2, 1);
+        tree.insert(-10, 1);
+
+        tree.insert(1, 1);
+        tree.insert(3, 1);
+        tree.insert(4, 1);
+    }
 }
+

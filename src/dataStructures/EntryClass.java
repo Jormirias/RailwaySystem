@@ -26,8 +26,14 @@ public class EntryClass<K, V> implements Entry<K, V>{
 		return value;
 	}
 
-	public void setValue(V value2) {
-		value=value2;
+	@Override
+	public void setKey(K key) {
+		this.key = key;
+	}
+
+	@Override
+	public void setValue(V value) {
+		this.value = value;
 	}
 	
 	
