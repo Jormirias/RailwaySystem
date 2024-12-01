@@ -54,6 +54,7 @@ public class AVLTree<K extends Comparable<K>, V>
         V valueToReturn = null;
         if (isEmpty()) {
             root = new AVLNode<Entry<K, V>>(new EntryClass<K, V>(key, value));
+            ++currentSize;
             return valueToReturn;
         }
 
@@ -70,7 +71,8 @@ public class AVLTree<K extends Comparable<K>, V>
                 parentNode.setRight(newNode);
             }
 
-            rebalance(newNode); // rebalance up from the insertion node
+            rebalance(newNode); // rebalance up from the insertion node, also updates parent height
+            ++currentSize;
         } else { // update the node's element
             valueToReturn = newNode.getElement().getValue();
             newNode.setElement(new EntryClass<K, V>(key, value));
@@ -81,28 +83,34 @@ public class AVLTree<K extends Comparable<K>, V>
 
     @Override
     public V remove(K key) {
-        if (isEmpty()) {
-            return null;
+        V valueToReturn = super.remove(key); // will decrement size if key exists.
+        if(valueToReturn != null) {
+            AVLNode<Entry<K, V>> node = (AVLNode<Entry<K, V>>) findNode(key);
+            node.setHeight();
+            rebalance(node);
         }
-
-        AVLNode<Entry<K, V>> node = (AVLNode<Entry<K, V>>) findNode(key);
-        if (node != null) // (if find(key)==null)
-            rebalance(node); // rebalance up from the node
-        return node.getElement().getValue();
+        return valueToReturn;
     }
+
+
 
     public static void main(String[] args) {
         AVLTree<Integer, Integer> tree = new AVLTree<>();
-        tree.insert(0, 0);
-        System.out.println(tree.find(0));
-        tree.insert(0, 1);
-        System.out.println(tree.find(0));
+        tree.insert(50, 0);
+        tree.insert(25, 0);
+        tree.insert(75, 0);
+        tree.insert(15, 0);
+        tree.insert(35, 0);
+        tree.insert(60, 0);
+        tree.insert(120, 0);
+        tree.insert(10, 0);
+        tree.insert(68, 0);
+        tree.insert(90, 0);
+        tree.insert(125, 0);
+        tree.insert(83, 0);
+        tree.insert(100, 0);
 
-        tree.insert(2, 1);
-        tree.insert(-10, 1);
-
-        tree.insert(1, 1);
-        tree.insert(3, 1);
-        tree.insert(4, 1);
+        tree.remove(120);
+        tree.remove(10);
     }
 }

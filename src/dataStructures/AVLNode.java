@@ -77,17 +77,15 @@ class AVLNode<E> extends BSTNode<E> {
     /**
      * Return the child of this node with greater height
      */
-    // Isn't this only used for rebalancing purposes?
-    // Should that not make it impossible to have two equally sized children?
     AVLNode<E> tallerChild() {
         int leftHeight = getHeight((AVLNode<E>) left);
         int rightHeight = getHeight((AVLNode<E>) right);
         if (leftHeight > rightHeight) {
             return (AVLNode<E>) left;
-        } else if (leftHeight < rightHeight) {
+        } else { // leftHeight <= rightHeight
             return (AVLNode<E>) right;
         }
-        return null; // ????????
+        // TODO: could maybe be optimized to facilitate removals
     }
 
 }
