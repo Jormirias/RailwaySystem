@@ -145,7 +145,6 @@ public class StationClass implements Station {
     }
 
     // Internal class to help with listing Trains for this Station
-    // This might not be worth it vs having one more collection. Look at that next()...
     class TrainIterator implements Iterator<Entry<Time,Train>> {
         private final Iterator<Entry<Time,Train>> stopsNormalIt;
         private final Iterator<Entry<Time,Train>> stopsReverseIt;
@@ -172,6 +171,29 @@ public class StationClass implements Station {
             return stopsNormalIt.hasNext() || stopsReverseIt.hasNext();
         }
 
+        Entry<Time, Train> advanceAndReturn(boolean isNormal) {
+            Entry<Time, Train> entryToReturn;
+
+            if(isNormal) {
+                entryToReturn = currentNormal;
+                if(stopsNormalIt.hasNext()) {
+                    currentNormal = stopsNormalIt.next();
+                } else {
+                    currentNormal = null;
+                }
+                return entryToReturn;
+            } else {
+                entryToReturn = currentReverse;
+                if(stopsReverseIt.hasNext()) {
+                    currentReverse = stopsReverseIt.next();
+                } else {
+                    currentReverse = null;
+                }
+            }
+            
+            return entryToReturn;
+        }
+
         @Override
         public Entry<Time, Train> next() throws NoSuchElementException {
             Entry<Time, Train> entryToReturn = null;
@@ -184,61 +206,25 @@ public class StationClass implements Station {
                     Train reverseTrain = currentReverse.getValue();
                     int trainComparsion = normalTrain.getTrainNumber().compareTo(reverseTrain.getTrainNumber());
                     if(trainComparsion < 0) {
-                        entryToReturn = currentNormal;
-                        if(stopsNormalIt.hasNext()) {
-                            currentNormal = stopsNormalIt.next();
-                        } else {
-                            currentNormal = null;
-                        }
-                        return entryToReturn;
+                        return advanceAndReturn(true);
                     } else {
-                        entryToReturn = currentReverse;
-                        if(stopsReverseIt.hasNext()) {
-                            currentReverse = stopsReverseIt.next();
-                        } else {
-                            currentReverse = null;
-                        }
-                        return entryToReturn;
+                        return advanceAndReturn(false);
                     }
                 }
 
                 if(timeComparsion < 0) {
-                    entryToReturn = currentNormal;
-                    if(stopsNormalIt.hasNext()) {
-                        currentNormal = stopsNormalIt.next();
-                    } else {
-                        currentNormal = null;
-                    }
-                    return entryToReturn;
+                    return advanceAndReturn(true);
                 } else {
-                    entryToReturn = currentReverse;
-                    if(stopsReverseIt.hasNext()) {
-                        currentReverse = stopsReverseIt.next();
-                    } else {
-                        currentReverse = null;
-                    }
-                    return entryToReturn;
+                    return advanceAndReturn(false);
                 }
             }
 
             if(currentReverse == null) {
-                entryToReturn = currentNormal;
-                if(stopsNormalIt.hasNext()) {
-                    currentNormal = stopsNormalIt.next();
-                } else {
-                    currentNormal = null;
-                }
-                return entryToReturn;
+                return advanceAndReturn(true);
             }
 
             if(currentNormal == null) {
-                entryToReturn = currentReverse;
-                if(stopsReverseIt.hasNext()) {
-                    currentReverse = stopsReverseIt.next();
-                } else {
-                    currentReverse = null;
-                }
-                return entryToReturn;
+                return advanceAndReturn(false);
             }
 
             throw new NoSuchElementException();
