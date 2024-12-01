@@ -116,6 +116,7 @@ public class LineClass implements Line {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
                     station.addStop(this.name, time, train, isInverted);
+                    train.setAsStop(station);
                     stops.addLast(new StopClass(station, time));
                     break;
                 }
@@ -229,38 +230,16 @@ public class LineClass implements Line {
             }
         }
 
-        //iterate backwards until you find correct time; if not, throw
-        int trainByLastStation;
         Time targetTime = new TimeClass(timeAsString);
-        TwoWayIterator<Entry<Time, Integer>> stopsIt = lastStation.stopsIterator(isInverted);
-        stopsIt.fullForward();
-        int targetTrain = -1;
-        while(stopsIt.hasPrevious()) {
-            Entry<Time, Integer> stop = stopsIt.previous();
-            if (stop.getKey().compareTo(targetTime) <= 0) {
-                trainByLastStation = stop.getValue();
-                if(doesTrainPassDeparture(trainByLastStation, firstStation, isInverted)) {
-                    targetTrain =  trainByLastStation;
-                    break;
-                }
+        Stack<Train> trainsInOrder = lastStation.findBestScheduleTrains(this.name, targetTime, isInverted);
+        while(!trainsInOrder.isEmpty()) {
+            Train arrivalTrain = trainsInOrder.pop();
+            if (arrivalTrain.stopsAt(firstStation)) {
+                return findSchedule(arrivalTrain.getNumber(), isInverted);
             }
         }
 
-        Schedule bestSchedule = null;
-        if(targetTrain != -1) {
-            bestSchedule = findSchedule(targetTrain, isInverted);
-        } else {
-            throw new ImpossibleRouteException();
-        }
-
-        return bestSchedule; // should never happen
-
-        //1 ITERADOR DA COLLECTION DE STATIONS
-        //procurar collection de stations, encontrar departureStationName IF NOT, RETURN NullPointerException
-        //procurar collection de stations, para a frente (set Normal), e para trás (set Inverted) IF NOT, RETURN IllegalArgumentException
-
-        //1 ITERADOR DAS STOPS EM STATION
-        //procurar na arrivalStationName pela Stop mais próxima da timeAsString - Ver se esse train number passa na departureStationName (conforme seja Normal ou Inverted)
+        throw new ImpossibleRouteException();
     }
 
     @Override
@@ -349,19 +328,6 @@ public class LineClass implements Line {
 
         //se a sequencia de estaçoes não segue as da linha, return false
         return !stationAndTimesIt.hasNext();
-    }
-
-    private boolean doesTrainPassDeparture (int targetTrain, Station originStation, boolean isInverted) {
-        TwoWayIterator<Entry<Time, Integer>> stopsIt = originStation.stopsIterator(isInverted);
-
-        while (stopsIt.hasNext()) {
-            Entry<Time, Integer> next = stopsIt.next();
-            int trainNumber = next.getValue();
-            if (trainNumber == targetTrain) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private Schedule findSchedule (int trainNumber, boolean isInverted) {

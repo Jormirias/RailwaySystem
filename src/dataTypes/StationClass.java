@@ -35,6 +35,14 @@ public class StationClass implements Station {
             return line;
         }
 
+        public boolean hasStops(boolean isInverted) {
+            if(isInverted) {
+                return !stopsReverse.isEmpty();
+            } else {
+                return !stopsNormal.isEmpty();
+            }
+        }
+
         public void addStop(Time time, Train train, boolean isInverted) {
             if(isInverted) {
                 stopsReverse.insert(time, train);
@@ -74,32 +82,34 @@ public class StationClass implements Station {
 
     public boolean isStopValid(String lineName, Time departureTime, Time arrivalTime, boolean isInverted) {
         LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
-        Iterator<Entry<Time, Train>> it = lineWithStops.getStops(isInverted);
-        
-        Train previousTrain = null;
-        Train nextTrain = null;
-        while(it.hasNext())    {
-            Entry<Time, Train> next = it.next();
-            nextTrain = next.getValue();
-            Time nextStopTime = next.getKey();
-            int timeComparsion = arrivalTime.compareTo(nextStopTime);
-            if(timeComparsion == 0) { // two trains going the same direction can't be stopped at the same station at the same time.
+        if(lineWithStops.hasStops(isInverted)) {
+            Iterator<Entry<Time, Train>> it = lineWithStops.getStops(isInverted);
+            
+            Train previousTrain = null;
+            Train nextTrain = null;
+            while(it.hasNext())    {
+                Entry<Time, Train> next = it.next();
+                nextTrain = next.getValue();
+                Time nextStopTime = next.getKey();
+                int timeComparsion = arrivalTime.compareTo(nextStopTime);
+                if(timeComparsion == 0) { // two trains going the same direction can't be stopped at the same station at the same time.
+                    return false;
+                }
+                if(timeComparsion < 0) { // first stop which will come after the current one.
+                    break;
+                }
+
+                previousTrain = nextTrain;
+            }
+
+            if(previousTrain != null && previousTrain.departsAfter(departureTime)) {
                 return false;
             }
-            if(timeComparsion < 0) { // first stop which will come after the current one.
-                break;
+            if(nextTrain != previousTrain && nextTrain.departsBefore(departureTime)) {
+                return false;
             }
-
-            previousTrain = nextTrain;
         }
 
-        if(previousTrain != null && previousTrain.departsAfter(departureTime)) {
-            return false;
-        }
-        if(nextTrain != previousTrain && nextTrain.departsBefore(departureTime)) {
-            return false;
-        }
-        
         return true;
     }
 
@@ -134,16 +144,6 @@ public class StationClass implements Station {
         return name;
     }
 
-
-    public TwoWayIterator<Entry<Time, Train>> stopsIterator(boolean isInverted) {
-        // if(isInverted) {
-        //     return stopsReverse.iterator();
-        // } else {
-        //     return stopsNormal.iterator();
-        // }
-        return null;
-    }
-
     public Iterator<Entry<Time,Train>> getTrains(String lineName) {
         LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
         return new TrainIterator(lineWithStops.getStops(false), lineWithStops.getStops(true)); // TODO: random booleans are code smell.
@@ -166,8 +166,28 @@ public class StationClass implements Station {
 
     @Override
     public Iterator<Entry<String, Line>> getLines() {
-        // return lines.iterator();
-        return null;
+        return lines.iterator();
+    }
+
+    public Stack<Train> findBestScheduleTrains(String lineName, Time time, boolean isInverted) {
+        LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
+        Stack<Train> trainsInOrder = new StackInList<>();
+
+        if(lineWithStops.hasStops(isInverted)) {
+            Iterator<Entry<Time, Train>> stopsIt = lineWithStops.getStops(isInverted);
+            while(stopsIt.hasNext()) {
+                Entry<Time, Train> stop = stopsIt.next();
+                Time stopTime = stop.getKey();
+                Train stopTrain = stop.getValue();
+                if(time.compareTo(stopTime) < 0) {
+                    break;
+                }
+
+                trainsInOrder.push(stopTrain);
+            }
+        }
+
+        return trainsInOrder;
     }
     
 }
