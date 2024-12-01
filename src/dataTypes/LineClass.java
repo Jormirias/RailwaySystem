@@ -154,7 +154,6 @@ public class LineClass implements Line {
             isInverted = true;
         }
 
-
         if(schedule == null) {
             throw new NoSuchScheduleException();
         }
