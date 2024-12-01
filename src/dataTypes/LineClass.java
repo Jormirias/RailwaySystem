@@ -84,8 +84,10 @@ public class LineClass implements Line {
      */
     public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
 
-        int train = Integer.parseInt(trainNumber);
         String[] firstStopString = stationAndTimesString.getFirst();
+        
+        Time departureTime =  new TimeClass(firstStopString[1]);
+        Train train = new TrainClass(Integer.parseInt(trainNumber), stations, departureTime);
 
         //Validity Check
         if(!scheduleCheck(stationAndTimesString, firstStopString)) {
@@ -113,7 +115,7 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    station.addStop(time, train, isInverted);
+                    station.addStop(this.name, time, train, isInverted);
                     stops.addLast(new StopClass(station, time));
                     break;
                 }
@@ -121,7 +123,7 @@ public class LineClass implements Line {
         }
 
         //Create Schedule and put it in corresponding OrderedDoubleList
-        Schedule schedule = new ScheduleClass(train, stops);
+        Schedule schedule = new ScheduleClass(train.getNumber(), stops);
         Stop firstStop = stops.getFirst();
         if(firstStop.getStation().getName().equals(stations.getFirst().getName())) {
             schedulesNormal.insert(firstStop.getTime(), schedule);
@@ -168,7 +170,7 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.equals(stop.getStation())) {
-                   station.removeStop(stop.getTime(), isInverted);
+                   station.removeStop(this.name, stop.getTime(), isInverted);
                    break;
                 }
             }
@@ -286,21 +288,24 @@ public class LineClass implements Line {
      */
     private boolean scheduleCheck (ListInArray<String[]> stationAndTimesString, String[] firstStopString) {
 
+        
         boolean inverted;
         boolean invertFlag = false;
-
+        
         //Verificar se a Station da primeira Stop corresponde a uma das 2 estações terminais, e a qual
         if(firstStopString[0].equalsIgnoreCase(stations.getFirst().getName())) {
             inverted=false;
         } else if (firstStopString[0].equalsIgnoreCase(stations.getLast().getName())) {
             inverted = true;
         } else
-            return false;
-
+        return false;
+        
         if(inverted) {
             stationAndTimesString.invert();
             invertFlag = true;
         }
+        
+        Time departureTime =  new TimeClass(firstStopString[1]);
 
         TwoWayIterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();

@@ -104,14 +104,14 @@ public class StationClass implements Station {
     }
 
     @Override
-    public void addStop(Line line, Time time, int train, boolean isInverted) {
-        LineWithStops lineWithStops = lines.find(line.getName().toUpperCase());
+    public void addStop(String lineName, Time time, Train train, boolean isInverted) {
+        LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
         lineWithStops.addStop(time, train, isInverted);
     }
 
     @Override
-    public void removeStop(Line line, Time time, boolean isInverted) {
-        LineWithStops lineWithStops = lines.find(line.getName().toUpperCase());
+    public void removeStop(String lineName, Time time, boolean isInverted) {
+        LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
         lineWithStops.removeStop(time, isInverted);
     }
 
