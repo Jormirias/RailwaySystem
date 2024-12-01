@@ -84,7 +84,7 @@ public class AVLTree<K extends Comparable<K>, V>
     @Override
     public V remove(K key) {
         V valueToReturn = super.remove(key); // will decrement size if key exists.
-        if(valueToReturn != null) {
+        if(!isEmpty() && valueToReturn != null) {
             AVLNode<Entry<K, V>> node = (AVLNode<Entry<K, V>>) findNode(key);
             node.setHeight();
             rebalance(node);
