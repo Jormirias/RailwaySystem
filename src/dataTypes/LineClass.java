@@ -302,9 +302,10 @@ public class LineClass implements Line {
             stationAndTimesString.invert();
             invertFlag = true;
         }
+
         TwoWayIterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();
-        TimeClass lastTime = new TimeClass(0, 0);
+        Time lastTime = new TimeClass(0, 0);
         if(inverted) {
             stationAndTimesIt.rewind();
             lastTime = new TimeClass(23, 59);
@@ -313,7 +314,7 @@ public class LineClass implements Line {
         while (stationAndTimesIt.hasNext() && stationIt.hasNext()) {
             String[] stationAndTimeString = stationAndTimesIt.next();
             String stationName = stationAndTimeString[0];
-            TimeClass time = new TimeClass(stationAndTimeString[1]);
+            Time time = new TimeClass(stationAndTimeString[1]);
 
             //se a sequencia de horários não for estritamente crescente, return false
 
@@ -328,7 +329,11 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    break;
+                    if(station.isStopValid(this.name, departureTime, time, inverted)) {
+                        break;
+                    } else {
+                        return false;
+                    }
                 }
             }
 
