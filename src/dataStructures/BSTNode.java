@@ -1,6 +1,6 @@
-package dataStructures;                                         
+package dataStructures;
 
-import java.io.Serializable; 
+import java.io.Serializable;
 
 /**
  * BST node implementation
@@ -10,17 +10,12 @@ import java.io.Serializable;
  *
  * @param <E> Generic Value
  */
-public class BSTNode<E> implements Serializable
-{                                                                   
-
-
+public class BSTNode<E> implements Serializable {
 
     /**
      * Element stored in the node.
      */
     protected E element;
-
-
 
     /**
      * (Pointer to) the left child.
@@ -43,15 +38,15 @@ public class BSTNode<E> implements Serializable
      * Constructor for BST nodes
      * 
      */
-    public BSTNode( E elem, BSTNode<E> parent, BSTNode<E> left, BSTNode<E> right )
-    {                                                                
+    public BSTNode(E elem, BSTNode<E> parent, BSTNode<E> left, BSTNode<E> right) {
         this.element = elem;
         this.parent = parent;
         this.left = left;
         this.right = right;
     }
+
     public BSTNode(E elem) {
-        this(elem,null,null,null);
+        this(elem, null, null, null);
     }
 
     /**
@@ -59,40 +54,34 @@ public class BSTNode<E> implements Serializable
      * 
      * @return
      */
-    E getElement( )
-    {
+    E getElement() {
         return element;
     }
-
-
 
     /**
      * Returns the left child node of the current node.
      * 
      * @return
      */
-    BSTNode<E> getLeft( )
-    {    
+    BSTNode<E> getLeft() {
         return left;
     }
-
 
     /**
      * Returns the right child node of the current node.
      * 
      * @return
      */
-    BSTNode<E> getRight( )
-    {
+    BSTNode<E> getRight() {
         return right;
     }
+
     /**
      * Returns the parent node of the current node.
      *
      * @return
      */
-    BSTNode<E> getParent( )
-    {
+    BSTNode<E> getParent() {
         return parent;
     }
 
