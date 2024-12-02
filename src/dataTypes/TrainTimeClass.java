@@ -1,7 +1,9 @@
 package dataTypes;
 
+import dataStructures.OrderedDictionary;
 import dataTypes.interfaces.Time;
 import dataTypes.interfaces.*;
+import dataStructures.*;
 
 public class TrainTimeClass implements TrainTime {
 
@@ -9,33 +11,23 @@ public class TrainTimeClass implements TrainTime {
      * Serial Version UID of the Class
      */
     static final long serialVersionUID = 0L;
-    private int train;
-    private Time time;
+
+    private OrderedDoubleList<Integer, Time> trainTimes;
 
     public TrainTimeClass(int train, Time time) {
-        this.train = train;
-        this.time = time;
+        trainTimes = new OrderedDoubleList<>();
+        addTrain(train, time);
     }
 
-    public int getTrain() {
-        return train;
+    public TwoWayIterator<Entry<Integer, Time>> getTrains() {
+        return trainTimes.iterator();
     }
 
-    @Override
-    public Time getTime() {
-        return time;
+    public void addTrain(int train, Time time) {
+        this.trainTimes.insert(train, time);
     }
 
-    @Override
-    public String toString() {
-        return train + " " + time;
-    }
-
-    public void setTrain(int train) {
-        this.train = train;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
+    public void removeTrain(int train) {
+        this.trainTimes.remove(train);
     }
 }

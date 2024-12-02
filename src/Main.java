@@ -155,7 +155,7 @@ public class Main {
             ("Serialization file saved.");
         } catch (IOException e) {
             System.out.println
-            ("ERROR");
+            ("ERROR" + e.getMessage());
         }
     }
 
@@ -273,9 +273,9 @@ public class Main {
     private static void consultStation(Scanner in, Network network) {
         try {
             String stationName = in.nextLine().trim();
-            Iterator<Entry<String, Line>> it = network.getStationLines(stationName);
+            Iterator<Entry<String, String>> it = network.getStationLines(stationName);
             while(it.hasNext()) {
-                System.out.println(it.next().getValue().getName());
+                System.out.println(it.next().getValue());
             }
         } catch (NoSuchStationException e) {
             System.out.println(STATION_NULL);
@@ -398,8 +398,20 @@ public class Main {
      *
      */
     private static void consultTrains(Scanner in, Network network) {
-        // TODO implement in second phase
-        throw new UnsupportedOperationException("Unimplemented method 'consultTrains'");
+        try {
+            String stationName = in.nextLine().trim();
+            Iterator<Entry<Time, TrainTime>> it = network.getStationRegistrySchedules(stationName);
+            while(it.hasNext()) {
+                TrainTime trainTime = it.next().getValue();
+                Iterator<Entry<Integer, Time>> itTrain = trainTime.getTrains();
+                while(itTrain.hasNext()) {
+                    System.out.println("Comboio " + itTrain.next().getValue());
+                }
+
+            }
+        } catch (NoSuchStationException e) {
+            System.out.println(STATION_NULL);
+        }
     }
 
     /**

@@ -25,19 +25,7 @@ public interface Station extends Serializable {
 
     public void removeStop(String lineName, Time time, boolean isInverted);
 
-    // TODO
-    public void addLine(Line line);
-
-    // TODO
-    public void removeLine(Line line);
-
-    // TODO
-    public Iterator<Entry<String, Line>> getLines();
-
-    // TODO
-    public boolean hasLines();
-
     public boolean testName(String other);
 
-    public Stack<Train> findBestScheduleTrains(String lineName, Time time, boolean isInverted);
+    public Stack<Train> findBestScheduleTrains(Time time, boolean isInverted);
 }

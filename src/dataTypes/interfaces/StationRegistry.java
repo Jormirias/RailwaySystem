@@ -36,19 +36,19 @@ public interface StationRegistry extends Serializable {
      * Add a line name to the StationRegistry (if it doesn't already exist)
      * @param lineName - name of the line to be added
      */
-    public void addLine(Line lineName);
+    public void addLine(String lineName);
 
     /**
      * Remove a line name from the StationRegistry
      * This should only be called if no lines hold this Station name
      * @param lineName - name of the line to be removed
      */
-    public void removeLine(Line lineName);
+    public void removeLine(String lineName);
 
     /**
      * Returns an iterator of all the lines where this Station is included, ordered lexicographically
      */
-    public Iterator<Entry<String, Line>> getLines();
+    public Iterator<Entry<String, String>> getLines();
 
     // TODO
     public boolean hasLines();
@@ -58,5 +58,6 @@ public interface StationRegistry extends Serializable {
     /**
      * Returns an iterator of all the Train times of train passing this Station, ordered by Time of departure
      */
-    public TwoWayIterator<Entry<Time, TrainTime>> trainTimesIterator();
+    public TwoWayIterator<Entry<Time, TrainTime>> getTrainTimes();
+
 }

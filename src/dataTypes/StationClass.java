@@ -5,7 +5,6 @@
 
 package dataTypes;
 import dataStructures.*;
-import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
 /**
@@ -17,73 +16,56 @@ public class StationClass implements Station {
      * Serial Version UID of the Class
      */
     static final long serialVersionUID = 0L;
-    private final String name;
-    
-    // Class to help with organizing Stops per Line in this Station.
-    class LineWithStops {
-        private final Line line;
-        private OrderedDictionary<Time, Train> stopsNormal;
-        private OrderedDictionary<Time, Train> stopsReverse;
+    private final String StationName;
 
-        public LineWithStops(Line line) {
-            this.line = line;
-            stopsNormal = new AVLTree<>();
-            stopsReverse = new AVLTree<>();
-        }
+    private OrderedDictionary<Time, Train> stopsNormal;
+    private OrderedDictionary<Time, Train> stopsReverse;
 
-        public Line getLine() {
-            return line;
-        }
-
-        public boolean hasStops(boolean isInverted) {
-            if(isInverted) {
-                return !stopsReverse.isEmpty();
-            } else {
-                return !stopsNormal.isEmpty();
-            }
-        }
-
-        public void addStop(Time time, Train train, boolean isInverted) {
-            if(isInverted) {
-                stopsReverse.insert(time, train);
-            } else {
-                stopsNormal.insert(time, train);
-            }
-        }
-
-        public void removeStop(Time time, boolean isInverted) {
-            if(isInverted) {
-                stopsReverse.remove(time);
-            } else {
-                stopsNormal.remove(time);
-            }
-        }
-
-        public Iterator<Entry<Time, Train>> getStops(boolean isInverted) {
-            if(isInverted) {
-                return stopsReverse.iterator();
-            } else {
-                return stopsNormal.iterator();
-            }
-        }
-    
-    }
-
-    private Dictionary<String, LineWithStops> lines;
-    
     public StationClass(String name) {
-        this.name = name;
-        this.lines = new SepChainHashTable<>();
+        this.StationName = name;
+        this.stopsNormal = new AVLTree<>();
+        this.stopsReverse = new AVLTree<>();
     }
 
     public String getName() {
-        return name;
+        return StationName;
+    }
+
+    public boolean hasStops(boolean isInverted) {
+        if(isInverted) {
+            return !stopsReverse.isEmpty();
+        } else {
+            return !stopsNormal.isEmpty();
+        }
+    }
+
+    public void addStop(Time time, Train train, boolean isInverted) {
+        if(isInverted) {
+            stopsReverse.insert(time, train);
+        } else {
+            stopsNormal.insert(time, train);
+        }
+    }
+
+    public void removeStop(Time time, boolean isInverted) {
+        if(isInverted) {
+            stopsReverse.remove(time);
+        } else {
+            stopsNormal.remove(time);
+        }
+    }
+
+    public Iterator<Entry<Time, Train>> getStops(boolean isInverted) {
+        if(isInverted) {
+            return stopsReverse.iterator();
+        } else {
+            return stopsNormal.iterator();
+        }
     }
 
     public boolean isStopValid(String lineName, Time departureTime, Time arrivalTime, boolean isInverted) {
-        LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
-        if(lineWithStops.hasStops(isInverted)) {
-            Iterator<Entry<Time, Train>> it = lineWithStops.getStops(isInverted);
+        if(hasStops(isInverted)) {
+            Iterator<Entry<Time, Train>> it = getStops(isInverted);
             
             Train previousTrain = null;
             Train nextTrain = null;
@@ -115,14 +97,12 @@ public class StationClass implements Station {
 
     @Override
     public void addStop(String lineName, Time time, Train train, boolean isInverted) {
-        LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
-        lineWithStops.addStop(time, train, isInverted);
+        addStop(time, train, isInverted);
     }
 
     @Override
     public void removeStop(String lineName, Time time, boolean isInverted) {
-        LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
-        lineWithStops.removeStop(time, isInverted);
+        removeStop(time, isInverted);
     }
 
     @Override
@@ -132,49 +112,23 @@ public class StationClass implements Station {
         }
 
         StationClass otherStation = (StationClass) other;
-        return this.name.equalsIgnoreCase(otherStation.getName());
+        return this.StationName.equalsIgnoreCase(otherStation.getName());
     }
 
     public boolean testName(String other) {
-        return this.name.equalsIgnoreCase(other.trim());
+        return this.StationName.equalsIgnoreCase(other.trim());
     }
 
     @Override
     public String toString() {
-        return name;
+        return StationName;
     }
 
-    public Iterator<Entry<Time,Train>> getTrains(String lineName) {
-        LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
-        return new TrainIterator(lineWithStops.getStops(false), lineWithStops.getStops(true)); // TODO: random booleans are code smell.
-    }
-
-    @Override
-    public void addLine(Line line) {
-        lines.insert(line.getName().toUpperCase(), new LineWithStops(line));
-    }
-
-    @Override
-    public void removeLine(Line line) {
-        lines.remove(line.getName().toUpperCase());
-    }
-
-    @Override
-    public boolean hasLines() {
-        return !lines.isEmpty();
-    }
-
-    @Override
-    public Iterator<Entry<String, Line>> getLines() {
-        return lines.iterator();
-    }
-
-    public Stack<Train> findBestScheduleTrains(String lineName, Time time, boolean isInverted) {
-        LineWithStops lineWithStops = lines.find(lineName.toUpperCase());
+    public Stack<Train> findBestScheduleTrains(Time time, boolean isInverted) {
         Stack<Train> trainsInOrder = new StackInList<>();
 
-        if(lineWithStops.hasStops(isInverted)) {
-            Iterator<Entry<Time, Train>> stopsIt = lineWithStops.getStops(isInverted);
+        if(hasStops(isInverted)) {
+            Iterator<Entry<Time, Train>> stopsIt = getStops(isInverted);
             while(stopsIt.hasNext()) {
                 Entry<Time, Train> stop = stopsIt.next();
                 Time stopTime = stop.getKey();

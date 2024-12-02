@@ -5,18 +5,18 @@
 
 package dataTypes.interfaces;
 
+import dataStructures.Entry;
+import dataStructures.Iterator;
+import dataStructures.OrderedDoubleList;
+
 import java.io.Serializable;
 
 public interface TrainTime extends Serializable{
-    /**
-     * Get the Train reference
-     * @return the train id
-     */
-    public int getTrain();
 
-    /**
-     * Get the Time at which the train passes by
-     * @return the Time reference of the train
-     */
-    public Time getTime();
+
+    public Iterator<Entry<Integer, Time>> getTrains();
+
+    public void addTrain(int train, Time time);
+
+    public void removeTrain(int train);
 }

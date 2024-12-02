@@ -82,7 +82,7 @@ public class LineClass implements Line {
      *      in the insertion and removal but makes Consult actions more efficient in Temporal Complexity, like  command MH)
      *
      */
-    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
+    public ListInArray<Stop> insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
 
         String[] firstStopString = stationAndTimesString.getFirst();
         
@@ -132,6 +132,8 @@ public class LineClass implements Line {
         else if(firstStop.getStation().getName().equals(stations.getLast().getName())) {
             schedulesInverted.insert(firstStop.getTime(), schedule);
         }
+
+        return stops;
     }
 
     /**
@@ -231,7 +233,7 @@ public class LineClass implements Line {
         }
 
         Time targetTime = new TimeClass(timeAsString);
-        Stack<Train> trainsInOrder = lastStation.findBestScheduleTrains(this.name, targetTime, isInverted);
+        Stack<Train> trainsInOrder = lastStation.findBestScheduleTrains(targetTime, isInverted);
         while(!trainsInOrder.isEmpty()) {
             Train arrivalTrain = trainsInOrder.pop();
             if (arrivalTrain.stopsAt(firstStation)) {

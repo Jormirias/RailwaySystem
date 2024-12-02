@@ -28,7 +28,7 @@ public class StationRegistryClass implements StationRegistry {
      * and the TrainTimes should be ordered by Departure time.
      *
      */
-    private OrderedDoubleList<String, Line> lines;
+    private OrderedDoubleList<String, String> lines;
 
     private OrderedDoubleList<Time, TrainTime> trainTimes;
 
@@ -62,14 +62,12 @@ public class StationRegistryClass implements StationRegistry {
     }
 
     @Override
-    public void addLine(Line line) {
-        lines.insert(line.getName().toUpperCase(), line);
+    public void addLine(String line) {
+        lines.insert(line.toUpperCase(), line);
     }
 
     @Override
-    public void removeLine(Line line) {
-        lines.remove(line.getName().toUpperCase());
-    }
+    public void removeLine(String line) { lines.remove(line.toUpperCase()); }
 
     @Override
     public boolean hasLines() {
@@ -77,20 +75,30 @@ public class StationRegistryClass implements StationRegistry {
     }
 
     @Override
-    public Iterator<Entry<String, Line>> getLines() {
+    public Iterator<Entry<String, String>> getLines() {
         return lines.iterator();
     }
 
     public void addTrainTime(Time departureTime, int train, Time time) {
-        trainTimes.insert(departureTime, new TrainTimeClass(train, time) {
-        }) ;
+
+        TrainTime sortTime = trainTimes.find(departureTime);
+        if (sortTime != null) {
+            sortTime.addTrain(train, time);
+        }
+
+        else {
+            trainTimes.insert(departureTime, new TrainTimeClass(train, time) );
+        }
     }
 
     public void removeTrainTime(int train) {
-        TwoWayIterator<Entry<Time, TrainTime>> trainTimesIt = trainTimesIterator();
+       /* TwoWayIterator<Entry<Time, TrainTime>> trainTimesIt = trainTimesIterator();
         while(trainTimesIt.hasNext()) {
             Entry<Time, TrainTime> trainTime = trainTimesIt.next();
+            TrainTime sortTime = trainTime.getValue();
 
+            Iterator<Entry<Integer, Time>> sortTimeIt = sortTime.getTrains();
+            while(trainTimesIt.hasNext()) {}
             //If there is a registry of a train passing in this station,
             if (trainTime.getValue().getTrain() == train) {
                 //Remove that entry, and stop iterating
@@ -98,10 +106,10 @@ public class StationRegistryClass implements StationRegistry {
                 break;
             }
 
-        }
+        }*/
     }
 
-    public TwoWayIterator<Entry<Time, TrainTime>> trainTimesIterator() {
+    public TwoWayIterator<Entry<Time, TrainTime>> getTrainTimes() {
         return trainTimes.iterator();
     }
 
