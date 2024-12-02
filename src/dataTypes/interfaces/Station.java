@@ -5,10 +5,9 @@
 
 package dataTypes.interfaces;
 
-import dataStructures.Entry;
-import dataStructures.Iterator;
-import dataStructures.TwoWayIterator;
-import dataTypes.TimeClass;
+import dataStructures.*;
+import dataTypes.*;
+import dataTypes.interfaces.*;
 
 import java.io.Serializable;
 
@@ -19,20 +18,12 @@ public interface Station extends Serializable {
      */
     public String getName();
 
-    /**
-     * Add a stop to the Station.
-     * @param time - the time at which it stops.
-     * @param train - the number of the train.
-     * @param isInverted - indicates if this stop belongs to an inverted schedule
-     */
-    public void addStop(Time time, int train, boolean isInverted);
 
-    /**
-     * Remove the stop from the Station.
-     * @param time - the time at which it stops.
-     * @param isInverted - indicates if this stop belongs to an inverted schedule
-     */
-    public void removeStop(Time time, boolean isInverted);
+    public boolean isStopValid(String lineName, Time departureTime, Time arrivalTime, boolean isInverted);
+
+    public void addStop(String lineName, Time time, Train train, boolean isInverted);
+
+    public void removeStop(String lineName, Time time, boolean isInverted);
 
     // TODO
     public void addLine(Line line);
@@ -48,5 +39,5 @@ public interface Station extends Serializable {
 
     public boolean testName(String other);
 
-    public TwoWayIterator<Entry<Time, Integer>> stopsIterator(boolean isInverted);
+    public Stack<Train> findBestScheduleTrains(String lineName, Time time, boolean isInverted);
 }

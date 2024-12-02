@@ -65,9 +65,9 @@ public class Main {
      * PERSISTENT: if true, loads saved file; if false, will create a new network
      *
      */
-    private static final boolean CONSOLE_INPUT = true;
-    private static final boolean PERSISTENT = true;
-    private static final String TEST_FILE = "./tests/best_schedule_test.txt";
+    private static final boolean CONSOLE_INPUT = false;
+    private static final boolean PERSISTENT = false;
+    private static final String TEST_FILE = "./tests/test_phase_1.txt";
 
     /**
      * MAIN

@@ -84,8 +84,10 @@ public class LineClass implements Line {
      */
     public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
 
-        int train = Integer.parseInt(trainNumber);
         String[] firstStopString = stationAndTimesString.getFirst();
+        
+        Time departureTime =  new TimeClass(firstStopString[1]);
+        Train train = new TrainClass(Integer.parseInt(trainNumber), stations, departureTime);
 
         //Validity Check
         if(!scheduleCheck(stationAndTimesString, firstStopString)) {
@@ -113,7 +115,8 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    station.addStop(time, train, isInverted);
+                    station.addStop(this.name, time, train, isInverted);
+                    train.setAsStop(station);
                     stops.addLast(new StopClass(station, time));
                     break;
                 }
@@ -121,7 +124,7 @@ public class LineClass implements Line {
         }
 
         //Create Schedule and put it in corresponding OrderedDoubleList
-        Schedule schedule = new ScheduleClass(train, stops);
+        Schedule schedule = new ScheduleClass(train.getNumber(), stops);
         Stop firstStop = stops.getFirst();
         if(firstStop.getStation().getName().equals(stations.getFirst().getName())) {
             schedulesNormal.insert(firstStop.getTime(), schedule);
@@ -154,7 +157,6 @@ public class LineClass implements Line {
             isInverted = true;
         }
 
-
         if(schedule == null) {
             throw new NoSuchScheduleException();
         }
@@ -169,7 +171,7 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.equals(stop.getStation())) {
-                   station.removeStop(stop.getTime(), isInverted);
+                   station.removeStop(this.name, stop.getTime(), isInverted);
                    break;
                 }
             }
@@ -228,38 +230,16 @@ public class LineClass implements Line {
             }
         }
 
-        //iterate backwards until you find correct time; if not, throw
-        int trainByLastStation;
         Time targetTime = new TimeClass(timeAsString);
-        TwoWayIterator<Entry<Time, Integer>> stopsIt = lastStation.stopsIterator(isInverted);
-        stopsIt.fullForward();
-        int targetTrain = -1;
-        while(stopsIt.hasPrevious()) {
-            Entry<Time, Integer> stop = stopsIt.previous();
-            if (stop.getKey().compareTo(targetTime) <= 0) {
-                trainByLastStation = stop.getValue();
-                if(doesTrainPassDeparture(trainByLastStation, firstStation, isInverted)) {
-                    targetTrain =  trainByLastStation;
-                    break;
-                }
+        Stack<Train> trainsInOrder = lastStation.findBestScheduleTrains(this.name, targetTime, isInverted);
+        while(!trainsInOrder.isEmpty()) {
+            Train arrivalTrain = trainsInOrder.pop();
+            if (arrivalTrain.stopsAt(firstStation)) {
+                return findSchedule(arrivalTrain.getNumber(), isInverted);
             }
         }
 
-        Schedule bestSchedule = null;
-        if(targetTrain != -1) {
-            bestSchedule = findSchedule(targetTrain, isInverted);
-        } else {
-            throw new ImpossibleRouteException();
-        }
-
-        return bestSchedule; // should never happen
-
-        //1 ITERADOR DA COLLECTION DE STATIONS
-        //procurar collection de stations, encontrar departureStationName IF NOT, RETURN NullPointerException
-        //procurar collection de stations, para a frente (set Normal), e para trás (set Inverted) IF NOT, RETURN IllegalArgumentException
-
-        //1 ITERADOR DAS STOPS EM STATION
-        //procurar na arrivalStationName pela Stop mais próxima da timeAsString - Ver se esse train number passa na departureStationName (conforme seja Normal ou Inverted)
+        throw new ImpossibleRouteException();
     }
 
     @Override
@@ -287,24 +267,28 @@ public class LineClass implements Line {
      */
     private boolean scheduleCheck (ListInArray<String[]> stationAndTimesString, String[] firstStopString) {
 
+        
         boolean inverted;
         boolean invertFlag = false;
-
+        
         //Verificar se a Station da primeira Stop corresponde a uma das 2 estações terminais, e a qual
         if(firstStopString[0].equalsIgnoreCase(stations.getFirst().getName())) {
             inverted=false;
         } else if (firstStopString[0].equalsIgnoreCase(stations.getLast().getName())) {
             inverted = true;
         } else
-            return false;
-
+        return false;
+        
         if(inverted) {
             stationAndTimesString.invert();
             invertFlag = true;
         }
+        
+        Time departureTime =  new TimeClass(firstStopString[1]);
+
         TwoWayIterator<String[]> stationAndTimesIt = stationAndTimesString.iterator();
         Iterator<Station> stationIt = stations.iterator();
-        TimeClass lastTime = new TimeClass(0, 0);
+        Time lastTime = new TimeClass(0, 0);
         if(inverted) {
             stationAndTimesIt.rewind();
             lastTime = new TimeClass(23, 59);
@@ -313,7 +297,7 @@ public class LineClass implements Line {
         while (stationAndTimesIt.hasNext() && stationIt.hasNext()) {
             String[] stationAndTimeString = stationAndTimesIt.next();
             String stationName = stationAndTimeString[0];
-            TimeClass time = new TimeClass(stationAndTimeString[1]);
+            Time time = new TimeClass(stationAndTimeString[1]);
 
             //se a sequencia de horários não for estritamente crescente, return false
 
@@ -328,7 +312,11 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    break;
+                    if(station.isStopValid(this.name, departureTime, time, inverted)) {
+                        break;
+                    } else {
+                        return false;
+                    }
                 }
             }
 
@@ -340,19 +328,6 @@ public class LineClass implements Line {
 
         //se a sequencia de estaçoes não segue as da linha, return false
         return !stationAndTimesIt.hasNext();
-    }
-
-    private boolean doesTrainPassDeparture (int targetTrain, Station originStation, boolean isInverted) {
-        TwoWayIterator<Entry<Time, Integer>> stopsIt = originStation.stopsIterator(isInverted);
-
-        while (stopsIt.hasNext()) {
-            Entry<Time, Integer> next = stopsIt.next();
-            int trainNumber = next.getValue();
-            if (trainNumber == targetTrain) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private Schedule findSchedule (int trainNumber, boolean isInverted) {
