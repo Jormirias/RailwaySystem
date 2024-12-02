@@ -42,7 +42,8 @@ public class NetworkClass implements Network {
             ListInArray<Station> lineStations = getStations(stationNames);
             Line line = new LineClass(lineName, lineStations);
             lines.insert(lineNameUpper, line);
-            addLineToStations(line, lineStations);
+
+            addLineToStationRegistry(line, lineStations);
         }
     }
 
@@ -141,7 +142,7 @@ public class NetworkClass implements Network {
     }
 
     // TODO
-    private void addLineToStations(Line line, ListInArray<Station> lineStations) {
+    private void addLineToStationRegistry(Line line, ListInArray<Station> lineStations) {
         Iterator<Station> it = lineStations.iterator();
         while(it.hasNext()) {
             Station station = it.next();
