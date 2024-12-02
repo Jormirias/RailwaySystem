@@ -23,12 +23,12 @@ public class NetworkClass implements Network {
     // Why? Strings are used as unique identifiers for the both elements,
     // and hash maps allow an expected case O(1 + occupancy) for insertion, removal and search.
     private final Dictionary<String, Line> lines;
-    private final Dictionary<String, Station> stations;
+    private final Dictionary<String, StationRegistry> stationRegistries;
 
     public NetworkClass()
     {
         lines = new SepChainHashTable<>(500);
-        stations = new SepChainHashTable<>(1000);
+        stationRegistries = new SepChainHashTable<>(1000);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class NetworkClass implements Network {
 
     @Override
     public Iterator<Entry<String,Line>> getStationLines(String stationName) throws NoSuchStationException {
-        Station station = stations.find(stationName.toUpperCase());
+        Station station = stationRegistries.find(stationName.toUpperCase());
         if (station == null) {
             throw new NoSuchStationException();
         }
@@ -129,10 +129,10 @@ public class NetworkClass implements Network {
         while(it.hasNext()) {
             String stationName = it.next();
             String stationNameUpper = stationName.toUpperCase();
-            Station station = stations.find(stationNameUpper);
+            Station station = stationRegistries.find(stationNameUpper);
             if(station == null) {
                 station = new StationClass(stationName);
-                stations.insert(stationNameUpper, station);
+                stationRegistries.insert(stationNameUpper, station);
             }
             lineStations.addLast(station);
         }
@@ -156,7 +156,7 @@ public class NetworkClass implements Network {
             Station station = it.next();
             station.removeLine(line);
             if(!station.hasLines()) {
-                stations.remove(station.getName().toUpperCase());
+                stationRegistries.remove(station.getName().toUpperCase());
             }
         }
     }

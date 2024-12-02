@@ -66,8 +66,8 @@ public class Main {
      *
      */
     private static final boolean CONSOLE_INPUT = false;
-    private static final boolean PERSISTENT = false;
-    private static final String TEST_FILE = "./tests/test_phase_1.txt";
+    private static final boolean PERSISTENT = true;
+    private static final String TEST_FILE = "./tests/best_schedule_test.txt";
 
     /**
      * MAIN
@@ -151,11 +151,11 @@ public class Main {
             file.writeObject(network);
             file.flush();
             file.close();
-            //System.out.println
-            //("Serialization file saved.");
+            System.out.println
+            ("Serialization file saved.");
         } catch (IOException e) {
-            //System.out.println
-            //(e);
+            System.out.println
+            ("ERROR");
         }
     }
 
@@ -169,11 +169,11 @@ public class Main {
 
             NetworkClass network = (NetworkClass) file.readObject();
             file.close();
-            //System.out.println("Serialization file loaded.");
+            System.out.println("Serialization file loaded.");
             return network;
         } catch (IOException e) {
-            //System.out.println
-            //("Non existing serialization file: Creating new Object.");
+            System.out.println
+            ("Non existing serialization file: Creating new Object.");
             return new NetworkClass();
         } catch (ClassNotFoundException e) {
             //System.out.println
@@ -259,7 +259,17 @@ public class Main {
         }
     }
 
-    // TODO
+    /**
+     * Lida com o comando CE + station_name
+     * Se o nome da estação existe, a coleção de Linhas onde está presente a estação é apresentada ALFABETICAMENTE no output
+     * Se o nome da estação não existir, é apresentada uma mensagem de erro
+     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma 
+     * Melhor caso: 
+     * Pior caso:
+     * Caso esperado:
+     * GERAÇÃO DE OUTPUT: 
+     *
+     */
     private static void consultStation(Scanner in, Network network) {
         try {
             String stationName = in.nextLine().trim();
