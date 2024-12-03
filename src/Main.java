@@ -67,7 +67,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = false;
     private static final boolean PERSISTENT = true;
-    private static final String TEST_FILE = "./tests/best_schedule_test.txt";
+    private static final String TEST_FILE = "./tests/test01-in.txt";
 
     /**
      * MAIN
@@ -151,11 +151,11 @@ public class Main {
             file.writeObject(network);
             file.flush();
             file.close();
-            System.out.println
-            ("Serialization file saved.");
+            //System.out.println
+            //("Serialization file saved.");
         } catch (IOException e) {
-            System.out.println
-            ("ERROR" + e.getMessage());
+            //System.out.println
+            //("ERROR" + e.getMessage());
         }
     }
 
@@ -169,11 +169,11 @@ public class Main {
 
             NetworkClass network = (NetworkClass) file.readObject();
             file.close();
-            System.out.println("Serialization file loaded.");
-            return network;
+            //System.out.println("Serialization file loaded.");
+            //return network;
         } catch (IOException e) {
-            System.out.println
-            ("Non existing serialization file: Creating new Object.");
+            //System.out.println
+            //("Non existing serialization file: Creating new Object.");
             return new NetworkClass();
         } catch (ClassNotFoundException e) {
             //System.out.println
@@ -400,14 +400,12 @@ public class Main {
     private static void consultTrains(Scanner in, Network network) {
         try {
             String stationName = in.nextLine().trim();
-            Iterator<Entry<Time, TrainTime>> it = network.getStationRegistrySchedules(stationName);
+            Iterator<Entry<TrainTime, Time>> it = network.getStationRegistrySchedules(stationName);
             while(it.hasNext()) {
-                TrainTime trainTime = it.next().getValue();
-                Iterator<Entry<Integer, Time>> itTrain = trainTime.getTrains();
-                while(itTrain.hasNext()) {
-                    System.out.println("Comboio " + itTrain.next().getValue());
-                }
-
+                Entry<TrainTime, Time> entry = it.next();
+                Time stationTime = entry.getValue();
+                Integer train = entry.getKey().getTrain();
+                System.out.println("Comboio " + train + " " + stationTime);
             }
         } catch (NoSuchStationException e) {
             System.out.println(STATION_NULL);

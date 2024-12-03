@@ -84,7 +84,7 @@ public class NetworkClass implements Network {
         }
         else {
             ListInArray<Stop> stops = line.insertSchedule(trainNumber, stationAndTimes);
-            insertStationRegistrySchedules(lineName, trainNumber, stops);
+            insertStationRegistrySchedules(trainNumber, stops);
         }
     }
 
@@ -95,8 +95,8 @@ public class NetworkClass implements Network {
             throw new NoSuchLineException();
         }
         else {
-            line.removeSchedule(departureStationName, timeAsString);
-            //TODO removeStationRegistrySchedules();
+            Schedule removedSchedule = line.removeSchedule(departureStationName, timeAsString);
+            removeStationRegistrySchedules(removedSchedule);
         }
     }
 
@@ -172,7 +172,7 @@ public class NetworkClass implements Network {
      * while iterating over the input stations given by the command
      *
      */
-    private void insertStationRegistrySchedules(String lineName, String trainNumber, ListInArray<Stop> stationAndTimes) {
+    private void insertStationRegistrySchedules(String trainNumber, ListInArray<Stop> stationAndTimes) {
         Iterator<Stop> it = stationAndTimes.iterator();
         Stop currStop = it.next();
         Time departureTime = currStop.getTime();
@@ -190,11 +190,20 @@ public class NetworkClass implements Network {
         }
     }
 
-    private void removeStationRegistrySchedules(int trainNumber) {
+    private void removeStationRegistrySchedules(Schedule targetSchedule) {
+        TwoWayIterator<Stop> it = targetSchedule.getStops();
+        Stop currStop = it.next();
+        TrainTime keyTrainTime = new TrainTimeClass(currStop.getTime(), targetSchedule.getTrainNumber());
+        while(it.hasNext()) {
+            String stationNameUpper = currStop.getStation().getName().toUpperCase();
+            StationRegistry stationReg = stationRegistries.find(stationNameUpper);
+            stationReg.removeTrainTime(keyTrainTime);
+        }
+
 
     }
 
-    public TwoWayIterator<Entry<Time, TrainTime>> getStationRegistrySchedules(String stationName) throws NoSuchStationException {
+    public Iterator<Entry<TrainTime, Time>> getStationRegistrySchedules(String stationName) throws NoSuchStationException {
         StationRegistry stationReg = stationRegistries.find(stationName.toUpperCase());
         if (stationReg == null){
             throw new NoSuchStationException();

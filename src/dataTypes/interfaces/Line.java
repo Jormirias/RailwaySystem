@@ -40,7 +40,7 @@ public interface Line extends Serializable {
      * @param timeAsString - the Time of that departure as a String.
      * @throws NoSuchScheduleException if the Schedule does not exist.
      */
-    public void removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException;
+    public Schedule removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException;
 
     /**
      * Gets all of the Schedules of a Line.

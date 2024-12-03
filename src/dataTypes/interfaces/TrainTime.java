@@ -8,15 +8,14 @@ package dataTypes.interfaces;
 import dataStructures.Entry;
 import dataStructures.Iterator;
 import dataStructures.OrderedDoubleList;
+import dataStructures.TwoWayIterator;
 
 import java.io.Serializable;
 
-public interface TrainTime extends Serializable{
+public interface TrainTime extends Comparable<TrainTime>, Serializable{
 
 
-    public Iterator<Entry<Integer, Time>> getTrains();
+    Time getTime();
 
-    public void addTrain(int train, Time time);
-
-    public void removeTrain(int train);
+    Integer getTrain();
 }

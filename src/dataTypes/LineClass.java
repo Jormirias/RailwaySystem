@@ -144,7 +144,7 @@ public class LineClass implements Line {
      * THEN, each station
      *
      */
-    public void removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException {
+    public Schedule removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException {
         Schedule schedule = null;
         Time time = new TimeClass(timeAsString);
         boolean isInverted = false;
@@ -166,8 +166,9 @@ public class LineClass implements Line {
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, removes the train number from this line Station
         TwoWayIterator<Stop> stopsIt = schedule.getStops();
+        Stop stop = stopsIt.next();
+        Time departureTime = stop.getTime();
         while(stopsIt.hasNext()) {
-            Stop stop = stopsIt.next();
 
             Iterator<Station> stationIt = stations.iterator();
             while (stationIt.hasNext()) {
@@ -177,7 +178,9 @@ public class LineClass implements Line {
                    break;
                 }
             }
+            stop = stopsIt.next();
         }
+        return schedule;
     }
 
     public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NoSuchDepartureStationException {

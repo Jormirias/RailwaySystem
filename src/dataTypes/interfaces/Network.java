@@ -8,7 +8,6 @@ package dataTypes.interfaces;
 import java.io.Serializable;
 
 import dataStructures.*;
-import dataTypes.*;
 import dataTypes.exceptions.*;
 
 public interface Network extends Serializable {
@@ -69,5 +68,5 @@ public interface Network extends Serializable {
 
     public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString);
 
-    public TwoWayIterator<Entry<Time, TrainTime>> getStationRegistrySchedules(String stationName) throws NoSuchStationException;
+    public Iterator<Entry<TrainTime, Time>> getStationRegistrySchedules(String stationName) throws NoSuchStationException;
 }

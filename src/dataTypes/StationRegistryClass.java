@@ -5,10 +5,7 @@
 
 package dataTypes;
 
-import dataStructures.Entry;
-import dataStructures.Iterator;
-import dataStructures.OrderedDoubleList;
-import dataStructures.TwoWayIterator;
+import dataStructures.*;
 import dataTypes.interfaces.*;
 
 /**
@@ -30,12 +27,12 @@ public class StationRegistryClass implements StationRegistry {
      */
     private OrderedDoubleList<String, String> lines;
 
-    private OrderedDoubleList<Time, TrainTime> trainTimes;
+    private OrderedDictionary<TrainTime, Time> trainTimes;
 
     public StationRegistryClass(String name) {
         this.name = name;
         this.lines = new OrderedDoubleList<>();
-        this.trainTimes = new OrderedDoubleList<>();
+        this.trainTimes = new AVLTree<>();
     }
 
     public String getName() {
@@ -81,35 +78,15 @@ public class StationRegistryClass implements StationRegistry {
 
     public void addTrainTime(Time departureTime, int train, Time time) {
 
-        TrainTime sortTime = trainTimes.find(departureTime);
-        if (sortTime != null) {
-            sortTime.addTrain(train, time);
-        }
+        trainTimes.insert(new TrainTimeClass(departureTime, train), time );
 
-        else {
-            trainTimes.insert(departureTime, new TrainTimeClass(train, time) );
-        }
     }
 
-    public void removeTrainTime(int train) {
-       /* TwoWayIterator<Entry<Time, TrainTime>> trainTimesIt = trainTimesIterator();
-        while(trainTimesIt.hasNext()) {
-            Entry<Time, TrainTime> trainTime = trainTimesIt.next();
-            TrainTime sortTime = trainTime.getValue();
-
-            Iterator<Entry<Integer, Time>> sortTimeIt = sortTime.getTrains();
-            while(trainTimesIt.hasNext()) {}
-            //If there is a registry of a train passing in this station,
-            if (trainTime.getValue().getTrain() == train) {
-                //Remove that entry, and stop iterating
-                trainTimes.remove(trainTime.getKey());
-                break;
-            }
-
-        }*/
+    public void removeTrainTime(TrainTime train) {
+        trainTimes.remove(train);
     }
 
-    public TwoWayIterator<Entry<Time, TrainTime>> getTrainTimes() {
+    public Iterator<Entry<TrainTime, Time>> getTrainTimes() {
         return trainTimes.iterator();
     }
 

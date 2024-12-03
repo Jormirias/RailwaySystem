@@ -12,22 +12,41 @@ public class TrainTimeClass implements TrainTime {
      */
     static final long serialVersionUID = 0L;
 
-    private OrderedDoubleList<Integer, Time> trainTimes;
+    private Time time;
+    private Integer train;
+    private EntryClass<Time, Integer> trainTimes;
 
-    public TrainTimeClass(int train, Time time) {
-        trainTimes = new OrderedDoubleList<>();
-        addTrain(train, time);
+    public TrainTimeClass(Time time, int train) {
+        this.time = time;
+        this.train = train;
     }
 
-    public TwoWayIterator<Entry<Integer, Time>> getTrains() {
-        return trainTimes.iterator();
+    public Time getTime() {
+        return time;
+    }
+    public void setTime(Time time) {
+        this.time = time;
+    }
+    public Integer getTrain() {
+        return train;
+    }
+    public void setTrain(Integer train) {
+        this.train = train;
     }
 
-    public void addTrain(int train, Time time) {
-        this.trainTimes.insert(train, time);
-    }
 
-    public void removeTrain(int train) {
-        this.trainTimes.remove(train);
+    public int compareTo(TrainTime other) {
+        if(this.time.compareTo(other.getTime()) != 0) {
+            return this.time.compareTo(other.getTime());
+
+        } else {
+            if(this.train < other.getTrain()) {
+                return -1;
+            }
+            else if(this.train > other.getTrain()) {
+                return 1;
+            }
+        }
+        return 0;
     }
 }
