@@ -170,7 +170,7 @@ public class Main {
             NetworkClass network = (NetworkClass) file.readObject();
             file.close();
             //System.out.println("Serialization file loaded.");
-            //return network;
+            return network;
         } catch (IOException e) {
             //System.out.println
             //("Non existing serialization file: Creating new Object.");
