@@ -32,25 +32,21 @@ public class AVLTree<K extends Comparable<K>, V>
      * the rebalance is completed with O(log n) running time
      */
     void rebalance(AVLNode<Entry<K, V>> zPos) {
-        if (zPos.isInternal())
-            zPos.setHeight();
         while (zPos != null) { // traverse up the tree towards the root
-            zPos = (AVLNode<Entry<K, V>>) zPos.getParent();
-            if (zPos == null) // reached the root, stop.
-                break;
-
             zPos.setHeight();
             if (!zPos.isBalanced()) {
                 // perform a trinode restructuring at zPos's tallest grandchild
                 // If yPos (zPos.tallerChild()) denote the child of zPos with greater height.
                 // Finally, let xPos be the child of yPos with greater height
                 AVLNode<Entry<K, V>> xPos = zPos.tallerChild().tallerChild();
-
+                
                 zPos = (AVLNode<Entry<K, V>>) restructure(xPos); // tri-node restructure (from parent class)
                 ((AVLNode<Entry<K, V>>) zPos.getLeft()).setHeight(); // recompute heights
                 ((AVLNode<Entry<K, V>>) zPos.getRight()).setHeight();
                 zPos.setHeight();
             }
+            
+            zPos = (AVLNode<Entry<K, V>>) zPos.getParent();
         }
     }
 
@@ -87,15 +83,36 @@ public class AVLTree<K extends Comparable<K>, V>
         return valueToReturn;
     }
 
+    // Mostly copy-paste BST remove, but taking into consideration the need for rebalancing
+    // is at the actually deleted node.
     @Override
     public V remove(K key) {
-        V valueToReturn = super.remove(key); // will decrement size if key exists.
-        if(!isEmpty() && valueToReturn != null) {
-            AVLNode<Entry<K, V>> node = (AVLNode<Entry<K, V>>) findNode(key);
-            node.setHeight();
-            rebalance(node);
+        AVLNode<Entry<K, V>> node = (AVLNode<Entry<K, V>>) this.findNode(key);
+        if (node == null || node.getElement().getKey().compareTo(key) != 0)
+            return null;
+        else {
+            V oldValue = node.getElement().getValue();
+            AVLNode<Entry<K, V>> rebalancingNode;
+
+            if (node.getLeft() == null) {
+                rebalancingNode = (AVLNode<Entry<K, V>>) node.getParent();
+                this.linkSubtreeRemove(node.getRight(), node.getParent(), node);
+            }
+            else if (node.getRight() == null) {
+                rebalancingNode = (AVLNode<Entry<K, V>>) node.getParent();
+                this.linkSubtreeRemove(node.getLeft(), node.getParent(), node);
+            }
+            else {
+                // This is going to be a leaf
+                AVLNode<Entry<K, V>> minNode = (AVLNode<Entry<K, V>>) this.minNode(node.getRight());
+                rebalancingNode = (AVLNode<Entry<K, V>>) minNode.getParent();
+                node.setElement(minNode.getElement());
+                this.linkSubtreeRemove(minNode.getRight(), minNode.getParent(), minNode);
+            }
+            rebalance(rebalancingNode);
+            currentSize--;
+            return oldValue;
         }
-        return valueToReturn;
     }
 
 }
