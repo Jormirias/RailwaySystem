@@ -27,7 +27,7 @@ public class StationRegistryClass implements StationRegistry {
      */
     private OrderedDoubleList<String, String> lines;
 
-    private OrderedDictionary<TrainTime, Time> trainTimes;
+    private AVLTree<TrainTime, Time> trainTimes;
 
     public StationRegistryClass(String name) {
         this.name = name;
@@ -87,7 +87,16 @@ public class StationRegistryClass implements StationRegistry {
     }
 
     public Iterator<Entry<TrainTime, Time>> getTrainTimes() {
-        return trainTimes.iterator();
+        if(hasTrainTimes()) {
+            return trainTimes.iterator();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public boolean hasTrainTimes() {
+        return !trainTimes.isEmpty();
     }
 
 }

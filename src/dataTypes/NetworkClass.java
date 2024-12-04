@@ -96,6 +96,7 @@ public class NetworkClass implements Network {
         }
         else {
             Schedule removedSchedule = line.removeSchedule(departureStationName, timeAsString);
+
             removeStationRegistrySchedules(removedSchedule);
         }
     }
@@ -164,6 +165,27 @@ public class NetworkClass implements Network {
             if(!stationReg.hasLines()) {
                 stationRegistries.remove(stationNameUpper);
             }
+            else {
+                TrainTime keyTrainTime;
+
+                if(station.hasStops(false)) {
+                    Iterator<Entry<Time, Train>> itStops = station.getStops(false);
+                    while (itStops.hasNext()) {
+                        Entry<Time, Train> currStop = itStops.next();
+                        keyTrainTime = new TrainTimeClass(currStop.getKey(), currStop.getValue().getNumber());
+                        stationReg.removeTrainTime(keyTrainTime);
+                    }
+                }
+
+                if(station.hasStops(true)) {
+                    Iterator<Entry<Time, Train>> itStopsReversed = station.getStops(true);
+                    while (itStopsReversed.hasNext()) {
+                        Entry<Time, Train> currStop = itStopsReversed.next();
+                        keyTrainTime = new TrainTimeClass(currStop.getKey(), currStop.getValue().getNumber());
+                        stationReg.removeTrainTime(keyTrainTime);
+                    }
+                }
+            }
         }
     }
 
@@ -174,30 +196,31 @@ public class NetworkClass implements Network {
      */
     private void insertStationRegistrySchedules(String trainNumber, ListInArray<Stop> stationAndTimes) {
         Iterator<Stop> it = stationAndTimes.iterator();
-        Stop currStop = it.next();
-        Time departureTime = currStop.getTime();
+        Time departureTime = stationAndTimes.getFirst().getTime();
         while(it.hasNext()) {
-
+            Stop currStop = it.next();
 
             String stationNameUpper = currStop.getStation().getName().toUpperCase();
             StationRegistry stationReg = stationRegistries.find(stationNameUpper);
 
             int trainNumberInt = Integer.parseInt(trainNumber);
             //For each added station in the schedule.. add an entry to stationreg
-            stationReg.addTrainTime(departureTime, trainNumberInt, currStop.getTime());
+            stationReg.addTrainTime(currStop.getTime(), trainNumberInt, currStop.getTime());
 
-            currStop = it.next();
         }
     }
 
     private void removeStationRegistrySchedules(Schedule targetSchedule) {
         TwoWayIterator<Stop> it = targetSchedule.getStops();
-        Stop currStop = it.next();
-        TrainTime keyTrainTime = new TrainTimeClass(currStop.getTime(), targetSchedule.getTrainNumber());
+        TrainTime keyTrainTime = null;
         while(it.hasNext()) {
+            Stop currStop = it.next();
+
             String stationNameUpper = currStop.getStation().getName().toUpperCase();
             StationRegistry stationReg = stationRegistries.find(stationNameUpper);
+            keyTrainTime = new TrainTimeClass(currStop.getTime(), targetSchedule.getTrainNumber());
             stationReg.removeTrainTime(keyTrainTime);
+
         }
 
 
@@ -208,7 +231,10 @@ public class NetworkClass implements Network {
         if (stationReg == null){
             throw new NoSuchStationException();
         }
-        else
+        else if(stationReg.hasTrainTimes()) {
             return stationReg.getTrainTimes();
+        }
+        else
+            return null;
     }
 }

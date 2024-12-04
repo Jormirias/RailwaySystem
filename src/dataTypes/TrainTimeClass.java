@@ -14,7 +14,6 @@ public class TrainTimeClass implements TrainTime {
 
     private Time time;
     private Integer train;
-    private EntryClass<Time, Integer> trainTimes;
 
     public TrainTimeClass(Time time, int train) {
         this.time = time;

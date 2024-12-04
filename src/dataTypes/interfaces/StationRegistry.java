@@ -59,4 +59,6 @@ public interface StationRegistry extends Serializable {
      */
     public Iterator<Entry<TrainTime, Time>> getTrainTimes();
 
+    public boolean hasTrainTimes();
+
 }

@@ -18,8 +18,8 @@ public class StationClass implements Station {
     static final long serialVersionUID = 0L;
     private final String StationName;
 
-    private OrderedDictionary<Time, Train> stopsNormal;
-    private OrderedDictionary<Time, Train> stopsReverse;
+    private AVLTree<Time, Train> stopsNormal;
+    private AVLTree<Time, Train> stopsReverse;
 
     public StationClass(String name) {
         this.StationName = name;
@@ -63,7 +63,7 @@ public class StationClass implements Station {
         }
     }
 
-    public boolean isStopValid(String lineName, Time departureTime, Time arrivalTime, boolean isInverted) {
+    public boolean isStopValid(Time departureTime, Time arrivalTime, boolean isInverted) {
         if(hasStops(isInverted)) {
             Iterator<Entry<Time, Train>> it = getStops(isInverted);
             
@@ -96,16 +96,6 @@ public class StationClass implements Station {
     }
 
     @Override
-    public void addStop(String lineName, Time time, Train train, boolean isInverted) {
-        addStop(time, train, isInverted);
-    }
-
-    @Override
-    public void removeStop(String lineName, Time time, boolean isInverted) {
-        removeStop(time, isInverted);
-    }
-
-    @Override
     public boolean equals(Object other) {
         if(!other.getClass().equals(this.getClass())) {
             return false;
@@ -126,7 +116,6 @@ public class StationClass implements Station {
 
     public Stack<Train> findBestScheduleTrains(Time time, boolean isInverted) {
         Stack<Train> trainsInOrder = new StackInList<>();
-
         if(hasStops(isInverted)) {
             Iterator<Entry<Time, Train>> stopsIt = getStops(isInverted);
             while(stopsIt.hasNext()) {

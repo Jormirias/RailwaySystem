@@ -115,7 +115,7 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    station.addStop(this.name, time, train, isInverted);
+                    station.addStop(time, train, isInverted);
                     train.setAsStop(station);
                     stops.addLast(new StopClass(station, time));
                     break;
@@ -166,19 +166,18 @@ public class LineClass implements Line {
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, removes the train number from this line Station
         TwoWayIterator<Stop> stopsIt = schedule.getStops();
-        Stop stop = stopsIt.next();
-        Time departureTime = stop.getTime();
-        while(stopsIt.hasNext()) {
 
+        while(stopsIt.hasNext()) {
+            Stop stop = stopsIt.next();
+            //System.out.println("DEBUG LINE STATIONS " + stop.getStation().getName());
             Iterator<Station> stationIt = stations.iterator();
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.equals(stop.getStation())) {
-                   station.removeStop(this.name, stop.getTime(), isInverted);
+                   station.removeStop(stop.getTime(), isInverted);
                    break;
                 }
             }
-            stop = stopsIt.next();
         }
         return schedule;
     }
@@ -234,7 +233,6 @@ public class LineClass implements Line {
                 throw new NoSuchDepartureStationException();
             }
         }
-
         Time targetTime = new TimeClass(timeAsString);
         Stack<Train> trainsInOrder = lastStation.findBestScheduleTrains(targetTime, isInverted);
         while(!trainsInOrder.isEmpty()) {
@@ -317,7 +315,7 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    if(station.isStopValid(this.name, departureTime, time, inverted)) {
+                    if(station.isStopValid(departureTime, time, inverted)) {
                         break;
                     } else {
                         return false;

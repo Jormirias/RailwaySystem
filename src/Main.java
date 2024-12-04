@@ -65,9 +65,9 @@ public class Main {
      * PERSISTENT: if true, loads saved file; if false, will create a new network
      *
      */
-    private static final boolean CONSOLE_INPUT = false;
-    private static final boolean PERSISTENT = true;
-    private static final String TEST_FILE = "./tests/test01-in.txt";
+    private static final boolean CONSOLE_INPUT = true;
+    private static final boolean PERSISTENT = false;
+    private static final String TEST_FILE = "./tests/test15-in.txt";
 
     /**
      * MAIN
@@ -75,7 +75,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         Network network;
-        if(PERSISTENT) {
+        if(PERSISTENT || !PERSISTENT) {
             network = load();
         } else {
             network = new NetworkClass();
@@ -401,11 +401,13 @@ public class Main {
         try {
             String stationName = in.nextLine().trim();
             Iterator<Entry<TrainTime, Time>> it = network.getStationRegistrySchedules(stationName);
-            while(it.hasNext()) {
-                Entry<TrainTime, Time> entry = it.next();
-                Time stationTime = entry.getValue();
-                Integer train = entry.getKey().getTrain();
-                System.out.println("Comboio " + train + " " + stationTime);
+            if(it != null) {
+                while (it.hasNext()) {
+                    Entry<TrainTime, Time> entry = it.next();
+                    Time stationTime = entry.getValue();
+                    Integer train = entry.getKey().getTrain();
+                    System.out.println("Comboio " + train + " " + stationTime);
+                }
             }
         } catch (NoSuchStationException e) {
             System.out.println(STATION_NULL);

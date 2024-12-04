@@ -19,13 +19,17 @@ public interface Station extends Serializable {
     public String getName();
 
 
-    public boolean isStopValid(String lineName, Time departureTime, Time arrivalTime, boolean isInverted);
+    public boolean isStopValid(Time departureTime, Time arrivalTime, boolean isInverted);
 
-    public void addStop(String lineName, Time time, Train train, boolean isInverted);
+    public void addStop(Time time, Train train, boolean isInverted);
 
-    public void removeStop(String lineName, Time time, boolean isInverted);
+    public void removeStop(Time time, boolean isInverted);
 
     public boolean testName(String other);
+
+    public Iterator<Entry<Time, Train>> getStops(boolean isInverted);
+
+    public boolean hasStops(boolean isInverted);
 
     public Stack<Train> findBestScheduleTrains(Time time, boolean isInverted);
 }
