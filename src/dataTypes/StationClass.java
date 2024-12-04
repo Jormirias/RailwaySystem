@@ -18,8 +18,8 @@ public class StationClass implements Station {
     static final long serialVersionUID = 0L;
     private final String StationName;
 
-    private AVLTree<Time, Train> stopsNormal;
-    private AVLTree<Time, Train> stopsReverse;
+    private OrderedDictionary<Time, Train> stopsNormal;
+    private OrderedDictionary<Time, Train> stopsReverse;
 
     public StationClass(String name) {
         this.StationName = name;
