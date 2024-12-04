@@ -1,5 +1,10 @@
 package dataStructures;
 
+import dataTypes.TimeClass;
+import dataTypes.interfaces.Time;
+import dataTypes.interfaces.Train;
+import dataTypes.interfaces.TrainTime;
+
 /**
  * AVL tree implementation
  *
@@ -51,6 +56,7 @@ public class AVLTree<K extends Comparable<K>, V>
 
     @Override
     public V insert(K key, V value) {
+
         V valueToReturn = null;
         if (isEmpty()) {
             root = new AVLNode<Entry<K, V>>(new EntryClass<K, V>(key, value));
@@ -92,25 +98,4 @@ public class AVLTree<K extends Comparable<K>, V>
         return valueToReturn;
     }
 
-
-
-    public static void main(String[] args) {
-        AVLTree<Integer, Integer> tree = new AVLTree<>();
-        tree.insert(50, 0);
-        tree.insert(25, 0);
-        tree.insert(75, 0);
-        tree.insert(15, 0);
-        tree.insert(35, 0);
-        tree.insert(60, 0);
-        tree.insert(120, 0);
-        tree.insert(10, 0);
-        tree.insert(68, 0);
-        tree.insert(90, 0);
-        tree.insert(125, 0);
-        tree.insert(83, 0);
-        tree.insert(100, 0);
-
-        tree.remove(120);
-        tree.remove(10);
-    }
 }

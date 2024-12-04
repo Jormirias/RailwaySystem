@@ -1,0 +1,929 @@
+Rh line name 25
+sTaTiOn 96 00:08
+Ch line name 25
+sTaTiOn 96
+Rh line name 25
+sTaTiOn 96 00:08
+Ch line name 25
+sTaTiOn 96
+Rh line name 25
+sTaTiOn 100 00:08
+Ch line name 25
+sTaTiOn 100
+Rh line name 25
+sTaTiOn 100 00:08
+Ch line name 25
+sTaTiOn 100
+Rh line name 26
+sTaTiOn 100 00:08
+Ch line name 26
+sTaTiOn 100
+Rh line name 26
+sTaTiOn 100 00:08
+Ch line name 26
+sTaTiOn 100
+Rh line name 26
+sTaTiOn 104 00:08
+Ch line name 26
+sTaTiOn 104
+Rh line name 26
+sTaTiOn 104 00:08
+Ch line name 26
+sTaTiOn 104
+Rh line name 27
+sTaTiOn 104 00:08
+Ch line name 27
+sTaTiOn 104
+Rh line name 27
+sTaTiOn 104 00:08
+Ch line name 27
+sTaTiOn 104
+Rh line name 27
+sTaTiOn 108 00:08
+Ch line name 27
+sTaTiOn 108
+Rh line name 27
+sTaTiOn 108 00:08
+Ch line name 27
+sTaTiOn 108
+Rh line name 28
+sTaTiOn 108 00:08
+Ch line name 28
+sTaTiOn 108
+Rh line name 28
+sTaTiOn 108 00:08
+Ch line name 28
+sTaTiOn 108
+Rh line name 28
+sTaTiOn 112 00:08
+Ch line name 28
+sTaTiOn 112
+Rh line name 28
+sTaTiOn 112 00:08
+Ch line name 28
+sTaTiOn 112
+Rh line name 29
+sTaTiOn 112 00:08
+Ch line name 29
+sTaTiOn 112
+Rh line name 29
+sTaTiOn 112 00:08
+Ch line name 29
+sTaTiOn 112
+Rh line name 29
+sTaTiOn 116 00:08
+Ch line name 29
+sTaTiOn 116
+Rh line name 29
+sTaTiOn 116 00:08
+Ch line name 29
+sTaTiOn 116
+Rh line name 30
+sTaTiOn 116 00:08
+Ch line name 30
+sTaTiOn 116
+Rh line name 30
+sTaTiOn 116 00:08
+Ch line name 30
+sTaTiOn 116
+Rh line name 30
+sTaTiOn 120 00:08
+Ch line name 30
+sTaTiOn 120
+Rh line name 30
+sTaTiOn 120 00:08
+Ch line name 30
+sTaTiOn 120
+Rh line name 31
+sTaTiOn 120 00:08
+Ch line name 31
+sTaTiOn 120
+Rh line name 31
+sTaTiOn 120 00:08
+Ch line name 31
+sTaTiOn 120
+Rh line name 31
+sTaTiOn 124 00:08
+Ch line name 31
+sTaTiOn 124
+Rh line name 31
+sTaTiOn 124 00:08
+Ch line name 31
+sTaTiOn 124
+Rh line name 32
+sTaTiOn 124 00:08
+Ch line name 32
+sTaTiOn 124
+Rh line name 32
+sTaTiOn 124 00:08
+Ch line name 32
+sTaTiOn 124
+Rh line name 32
+sTaTiOn 128 00:08
+Ch line name 32
+sTaTiOn 128
+Rh line name 32
+sTaTiOn 128 00:08
+Ch line name 32
+sTaTiOn 128
+Rh line name 33
+sTaTiOn 128 00:08
+Ch line name 33
+sTaTiOn 128
+Rh line name 33
+sTaTiOn 128 00:08
+Ch line name 33
+sTaTiOn 128
+Rh line name 33
+sTaTiOn 132 00:08
+Ch line name 33
+sTaTiOn 132
+Rh line name 33
+sTaTiOn 132 00:08
+Ch line name 33
+sTaTiOn 132
+Rh line name 34
+sTaTiOn 132 00:08
+Ch line name 34
+sTaTiOn 132
+Rh line name 34
+sTaTiOn 132 00:08
+Ch line name 34
+sTaTiOn 132
+Rh line name 34
+sTaTiOn 136 00:08
+Ch line name 34
+sTaTiOn 136
+Rh line name 34
+sTaTiOn 136 00:08
+Ch line name 34
+sTaTiOn 136
+Rh line name 35
+sTaTiOn 136 00:08
+Ch line name 35
+sTaTiOn 136
+Rh line name 35
+sTaTiOn 136 00:08
+Ch line name 35
+sTaTiOn 136
+Rh line name 35
+sTaTiOn 140 00:08
+Ch line name 35
+sTaTiOn 140
+Rh line name 35
+sTaTiOn 140 00:08
+Ch line name 35
+sTaTiOn 140
+Rh line name 36
+sTaTiOn 140 00:08
+Ch line name 36
+sTaTiOn 140
+Rh line name 36
+sTaTiOn 140 00:08
+Ch line name 36
+sTaTiOn 140
+Rh line name 36
+sTaTiOn 144 00:08
+Ch line name 36
+sTaTiOn 144
+Rh line name 36
+sTaTiOn 144 00:08
+Ch line name 36
+sTaTiOn 144
+Rh line name 37
+sTaTiOn 144 00:08
+Ch line name 37
+sTaTiOn 144
+Rh line name 37
+sTaTiOn 144 00:08
+Ch line name 37
+sTaTiOn 144
+Rh line name 37
+sTaTiOn 148 00:08
+Ch line name 37
+sTaTiOn 148
+Rh line name 37
+sTaTiOn 148 00:08
+Ch line name 37
+sTaTiOn 148
+Rh line name 38
+sTaTiOn 148 00:08
+Ch line name 38
+sTaTiOn 148
+Rh line name 38
+sTaTiOn 148 00:08
+Ch line name 38
+sTaTiOn 148
+Rh line name 38
+sTaTiOn 152 00:08
+Ch line name 38
+sTaTiOn 152
+Rh line name 38
+sTaTiOn 152 00:08
+Ch line name 38
+sTaTiOn 152
+Rh line name 39
+sTaTiOn 152 00:08
+Ch line name 39
+sTaTiOn 152
+Rh line name 39
+sTaTiOn 152 00:08
+Ch line name 39
+sTaTiOn 152
+Rh line name 39
+sTaTiOn 156 00:08
+Ch line name 39
+sTaTiOn 156
+Rh line name 39
+sTaTiOn 156 00:08
+Ch line name 39
+sTaTiOn 156
+Rh line name 40
+sTaTiOn 156 00:08
+Ch line name 40
+sTaTiOn 156
+Rh line name 40
+sTaTiOn 156 00:08
+Ch line name 40
+sTaTiOn 156
+Rh line name 40
+sTaTiOn 160 00:08
+Ch line name 40
+sTaTiOn 160
+Rh line name 40
+sTaTiOn 160 00:08
+Ch line name 40
+sTaTiOn 160
+Rh line name 41
+sTaTiOn 160 00:08
+Ch line name 41
+sTaTiOn 160
+Rh line name 41
+sTaTiOn 160 00:08
+Ch line name 41
+sTaTiOn 160
+Rh line name 41
+sTaTiOn 164 00:08
+Ch line name 41
+sTaTiOn 164
+Rh line name 41
+sTaTiOn 164 00:08
+Ch line name 41
+sTaTiOn 164
+Rh line name 42
+sTaTiOn 164 00:08
+Ch line name 42
+sTaTiOn 164
+Rh line name 42
+sTaTiOn 164 00:08
+Ch line name 42
+sTaTiOn 164
+Rh line name 42
+sTaTiOn 168 00:08
+Ch line name 42
+sTaTiOn 168
+Rh line name 42
+sTaTiOn 168 00:08
+Ch line name 42
+sTaTiOn 168
+Rh line name 43
+sTaTiOn 168 00:08
+Ch line name 43
+sTaTiOn 168
+Rh line name 43
+sTaTiOn 168 00:08
+Ch line name 43
+sTaTiOn 168
+Rh line name 43
+sTaTiOn 172 00:08
+Ch line name 43
+sTaTiOn 172
+Rh line name 43
+sTaTiOn 172 00:08
+Ch line name 43
+sTaTiOn 172
+Rh line name 44
+sTaTiOn 172 00:08
+Ch line name 44
+sTaTiOn 172
+Rh line name 44
+sTaTiOn 172 00:08
+Ch line name 44
+sTaTiOn 172
+Rh line name 44
+sTaTiOn 176 00:08
+Ch line name 44
+sTaTiOn 176
+Rh line name 44
+sTaTiOn 176 00:08
+Ch line name 44
+sTaTiOn 176
+Rh line name 45
+sTaTiOn 176 00:08
+Ch line name 45
+sTaTiOn 176
+Rh line name 45
+sTaTiOn 176 00:08
+Ch line name 45
+sTaTiOn 176
+Rh line name 45
+sTaTiOn 180 00:08
+Ch line name 45
+sTaTiOn 180
+Rh line name 45
+sTaTiOn 180 00:08
+Ch line name 45
+sTaTiOn 180
+Rh line name 46
+sTaTiOn 180 00:08
+Ch line name 46
+sTaTiOn 180
+Rh line name 46
+sTaTiOn 180 00:08
+Ch line name 46
+sTaTiOn 180
+Rh line name 46
+sTaTiOn 184 00:08
+Ch line name 46
+sTaTiOn 184
+Rh line name 46
+sTaTiOn 184 00:08
+Ch line name 46
+sTaTiOn 184
+Rh line name 47
+sTaTiOn 184 00:08
+Ch line name 47
+sTaTiOn 184
+Rh line name 47
+sTaTiOn 184 00:08
+Ch line name 47
+sTaTiOn 184
+Rh line name 47
+sTaTiOn 188 00:08
+Ch line name 47
+sTaTiOn 188
+Rh line name 47
+sTaTiOn 188 00:08
+Ch line name 47
+sTaTiOn 188
+Rh line name 48
+sTaTiOn 188 00:08
+Ch line name 48
+sTaTiOn 188
+Rh line name 48
+sTaTiOn 188 00:08
+Ch line name 48
+sTaTiOn 188
+Rh line name 48
+sTaTiOn 192 00:08
+Ch line name 48
+sTaTiOn 192
+Rh line name 48
+sTaTiOn 192 00:08
+Ch line name 48
+sTaTiOn 192
+Rh line name 49
+sTaTiOn 192 00:08
+Ch line name 49
+sTaTiOn 192
+Rh line name 49
+sTaTiOn 192 00:08
+Ch line name 49
+sTaTiOn 192
+Rh line name 49
+sTaTiOn 196 00:08
+Ch line name 49
+sTaTiOn 196
+Rh line name 49
+sTaTiOn 196 00:08
+Ch line name 49
+sTaTiOn 196
+Rh xpto
+foo 12:12
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:07
+Rh line name 1
+sTaTiOn 4 00:07
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:09
+Rh line name 1
+sTaTiOn 4 00:09
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:11
+Rh line name 1
+sTaTiOn 4 00:11
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:13
+Rh line name 1
+sTaTiOn 4 00:13
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:15
+Rh line name 1
+sTaTiOn 4 00:15
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:17
+Rh line name 1
+sTaTiOn 4 00:17
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:19
+Rh line name 1
+sTaTiOn 4 00:19
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:21
+Rh line name 1
+sTaTiOn 4 00:21
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:23
+Rh line name 1
+sTaTiOn 4 00:23
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:25
+Rh line name 1
+sTaTiOn 4 00:25
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:27
+Rh line name 1
+sTaTiOn 4 00:27
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:29
+Rh line name 1
+sTaTiOn 4 00:29
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:31
+Rh line name 1
+sTaTiOn 4 00:31
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:33
+Rh line name 1
+sTaTiOn 4 00:33
+Rh line name 1
+sTaTiOn 4 00:00
+Rh line name 1
+sTaTiOn 0 00:00
+Rh line name 1
+sTaTiOn 0 00:35
+Rh line name 1
+sTaTiOn 4 00:35
+Rh line name 1
+sTaTiOn 4 00:00
+Ch line name 1
+sTaTiOn 0
+Ch line name 1
+sTaTiOn 4
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:07
+Rh line name 2
+sTaTiOn 8 00:07
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:09
+Rh line name 2
+sTaTiOn 8 00:09
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:11
+Rh line name 2
+sTaTiOn 8 00:11
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:13
+Rh line name 2
+sTaTiOn 8 00:13
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:15
+Rh line name 2
+sTaTiOn 8 00:15
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:17
+Rh line name 2
+sTaTiOn 8 00:17
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:19
+Rh line name 2
+sTaTiOn 8 00:19
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:21
+Rh line name 2
+sTaTiOn 8 00:21
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:23
+Rh line name 2
+sTaTiOn 8 00:23
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:25
+Rh line name 2
+sTaTiOn 8 00:25
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:27
+Rh line name 2
+sTaTiOn 8 00:27
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:29
+Rh line name 2
+sTaTiOn 8 00:29
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:31
+Rh line name 2
+sTaTiOn 8 00:31
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:33
+Rh line name 2
+sTaTiOn 8 00:33
+Rh line name 2
+sTaTiOn 8 00:00
+Rh line name 2
+sTaTiOn 4 00:00
+Rh line name 2
+sTaTiOn 4 00:35
+Rh line name 2
+sTaTiOn 8 00:35
+Rh line name 2
+sTaTiOn 8 00:00
+Ch line name 2
+sTaTiOn 4
+Ch line name 2
+sTaTiOn 8
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:07
+Rh line name 3
+sTaTiOn 12 00:07
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:09
+Rh line name 3
+sTaTiOn 12 00:09
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:11
+Rh line name 3
+sTaTiOn 12 00:11
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:13
+Rh line name 3
+sTaTiOn 12 00:13
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:15
+Rh line name 3
+sTaTiOn 12 00:15
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:17
+Rh line name 3
+sTaTiOn 12 00:17
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:19
+Rh line name 3
+sTaTiOn 12 00:19
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:21
+Rh line name 3
+sTaTiOn 12 00:21
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:23
+Rh line name 3
+sTaTiOn 12 00:23
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:25
+Rh line name 3
+sTaTiOn 12 00:25
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:27
+Rh line name 3
+sTaTiOn 12 00:27
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:29
+Rh line name 3
+sTaTiOn 12 00:29
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:31
+Rh line name 3
+sTaTiOn 12 00:31
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:33
+Rh line name 3
+sTaTiOn 12 00:33
+Rh line name 3
+sTaTiOn 12 00:00
+Rh line name 3
+sTaTiOn 8 00:00
+Rh line name 3
+sTaTiOn 8 00:35
+Rh line name 3
+sTaTiOn 12 00:35
+Rh line name 3
+sTaTiOn 12 00:00
+Ch line name 3
+sTaTiOn 8
+Ch line name 3
+sTaTiOn 12
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:07
+Rh line name 4
+sTaTiOn 16 00:07
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:09
+Rh line name 4
+sTaTiOn 16 00:09
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:11
+Rh line name 4
+sTaTiOn 16 00:11
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:13
+Rh line name 4
+sTaTiOn 16 00:13
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:15
+Rh line name 4
+sTaTiOn 16 00:15
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:17
+Rh line name 4
+sTaTiOn 16 00:17
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:19
+Rh line name 4
+sTaTiOn 16 00:19
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:21
+Rh line name 4
+sTaTiOn 16 00:21
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:23
+Rh line name 4
+sTaTiOn 16 00:23
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:25
+Rh line name 4
+sTaTiOn 16 00:25
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:27
+Rh line name 4
+sTaTiOn 16 00:27
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:29
+Rh line name 4
+sTaTiOn 16 00:29
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:31
+Rh line name 4
+sTaTiOn 16 00:31
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:33
+Rh line name 4
+sTaTiOn 16 00:33
+Rh line name 4
+sTaTiOn 16 00:00
+Rh line name 4
+sTaTiOn 12 00:00
+Rh line name 4
+sTaTiOn 12 00:35
+Rh line name 4
+sTaTiOn 16 00:35
+Rh line name 4
+sTaTiOn 16 00:00
+Ch line name 4
+sTaTiOn 12
+Ch line name 4
+sTaTiOn 16
+Rh line name 5
+sTaTiOn 16 00:00
+Rh line name 5
+sTaTiOn 16 00:07
+Rh line name 5
+sTaTiOn 20 00:07
+Rh line name 5
+sTaTiOn 20 00:00
+Rh line name 5
+sTaTiOn 16 00:00
+Rh line name 5
+sTaTiOn 16 00:09
+Rh line name 5
+sTaTiOn 20 00:09
+Rh line name 5
+sTaTiOn 20 00:00
+Rh line name 5
+sTaTiOn 16 00:00
+Rh line name 5
+sTaTiOn 16 00:11
+Rh line name 5
+sTaTiOn 20 00:11
+Rh line name 5
+sTaTiOn 20 00:00
+Rh line name 5
+sTaTiOn 16 00:00
+Rh line name 5
+sTaTiOn 16 00:13
+Ch line name 5
+sTaTiOn 16 00:13
+tA

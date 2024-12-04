@@ -1,6 +1,8 @@
 package dataTypes.interfaces;
 
-public interface Train {
+import java.io.Serializable;
+
+public interface Train extends Serializable {
     public int getNumber();
 
     public boolean departsBefore(Time time);

@@ -8,7 +8,6 @@ package dataTypes.interfaces;
 import java.io.Serializable;
 
 import dataStructures.*;
-import dataTypes.*;
 import dataTypes.exceptions.*;
 
 public interface Network extends Serializable {
@@ -35,7 +34,7 @@ public interface Network extends Serializable {
     public Iterator<Station> getLineStations(String lineName) throws NoSuchLineException;
 
     // TODO
-    public Iterator<Entry<String,Line>> getStationLines(String stationName) throws NoSuchStationException;
+    public Iterator<Entry<String,String>> getStationLines(String stationName) throws NoSuchStationException;
 
     /**
      * Insert a new Schedule in a Line
@@ -68,4 +67,6 @@ public interface Network extends Serializable {
     public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchLineException, NoSuchDepartureStationException;
 
     public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString);
+
+    public Iterator<Entry<TrainTime, Time>> getStationRegistrySchedules(String stationName) throws NoSuchStationException;
 }

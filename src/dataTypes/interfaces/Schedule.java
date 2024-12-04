@@ -23,4 +23,6 @@ public interface Schedule extends Serializable{
     public TwoWayIterator<Stop> getStops();
 
     public Station getOriginStation();
+
+    public Time getDepartureTime();
 }

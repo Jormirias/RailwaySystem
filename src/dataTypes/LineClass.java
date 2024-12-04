@@ -82,7 +82,7 @@ public class LineClass implements Line {
      *      in the insertion and removal but makes Consult actions more efficient in Temporal Complexity, like  command MH)
      *
      */
-    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
+    public ListInArray<Stop> insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
 
         String[] firstStopString = stationAndTimesString.getFirst();
         
@@ -115,7 +115,7 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    station.addStop(this.name, time, train, isInverted);
+                    station.addStop(time, train, isInverted);
                     train.setAsStop(station);
                     stops.addLast(new StopClass(station, time));
                     break;
@@ -132,6 +132,8 @@ public class LineClass implements Line {
         else if(firstStop.getStation().getName().equals(stations.getLast().getName())) {
             schedulesInverted.insert(firstStop.getTime(), schedule);
         }
+
+        return stops;
     }
 
     /**
@@ -142,7 +144,7 @@ public class LineClass implements Line {
      * THEN, each station
      *
      */
-    public void removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException {
+    public Schedule removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException {
         Schedule schedule = null;
         Time time = new TimeClass(timeAsString);
         boolean isInverted = false;
@@ -164,18 +166,20 @@ public class LineClass implements Line {
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, removes the train number from this line Station
         TwoWayIterator<Stop> stopsIt = schedule.getStops();
+
         while(stopsIt.hasNext()) {
             Stop stop = stopsIt.next();
-
+            //System.out.println("DEBUG LINE STATIONS " + stop.getStation().getName());
             Iterator<Station> stationIt = stations.iterator();
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.equals(stop.getStation())) {
-                   station.removeStop(this.name, stop.getTime(), isInverted);
+                   station.removeStop(stop.getTime(), isInverted);
                    break;
                 }
             }
         }
+        return schedule;
     }
 
     public Iterator<Entry<Time, Schedule>> getSchedules(String departureStationName) throws NoSuchDepartureStationException {
@@ -229,9 +233,8 @@ public class LineClass implements Line {
                 throw new NoSuchDepartureStationException();
             }
         }
-
         Time targetTime = new TimeClass(timeAsString);
-        Stack<Train> trainsInOrder = lastStation.findBestScheduleTrains(this.name, targetTime, isInverted);
+        Stack<Train> trainsInOrder = lastStation.findBestScheduleTrains(targetTime, isInverted);
         while(!trainsInOrder.isEmpty()) {
             Train arrivalTrain = trainsInOrder.pop();
             if (arrivalTrain.stopsAt(firstStation)) {
@@ -312,7 +315,7 @@ public class LineClass implements Line {
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
                 if (station.getName().equals(stationName)) {
-                    if(station.isStopValid(this.name, departureTime, time, inverted)) {
+                    if(station.isStopValid(departureTime, time, inverted)) {
                         break;
                     } else {
                         return false;

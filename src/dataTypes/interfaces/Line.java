@@ -32,7 +32,7 @@ public interface Line extends Serializable {
      * @param stationAndTimesString - Parsed Strings that map a station (first element) to a time (second element)
      * @throws InvalidScheduleException if the Stations are not in order or the Time is not strictly increasing.
      */
-    public void insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException;
+    public ListInArray<Stop> insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException;
 
     /**
      * Remove a Schedule from the Line.
@@ -40,7 +40,7 @@ public interface Line extends Serializable {
      * @param timeAsString - the Time of that departure as a String.
      * @throws NoSuchScheduleException if the Schedule does not exist.
      */
-    public void removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException;
+    public Schedule removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException;
 
     /**
      * Gets all of the Schedules of a Line.

@@ -8,6 +8,11 @@ package dataStructures;
  *
  */
 public class EntryClass<K, V> implements Entry<K, V>{
+
+	/**
+	 * Serial Version UID of the Class
+	 */
+	static final long serialVersionUID = 0L;
 	protected K key;
 	protected V value;
 	

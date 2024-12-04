@@ -65,9 +65,9 @@ public class Main {
      * PERSISTENT: if true, loads saved file; if false, will create a new network
      *
      */
-    private static final boolean CONSOLE_INPUT = false;
+    private static final boolean CONSOLE_INPUT = true;
     private static final boolean PERSISTENT = false;
-    private static final String TEST_FILE = "./tests/test_phase_1.txt";
+    private static final String TEST_FILE = "./tests/test15-in.txt";
 
     /**
      * MAIN
@@ -75,7 +75,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         Network network;
-        if(PERSISTENT) {
+        if(PERSISTENT || !PERSISTENT) {
             network = load();
         } else {
             network = new NetworkClass();
@@ -155,7 +155,7 @@ public class Main {
             //("Serialization file saved.");
         } catch (IOException e) {
             //System.out.println
-            //(e);
+            //("ERROR" + e.getMessage());
         }
     }
 
@@ -259,13 +259,23 @@ public class Main {
         }
     }
 
-    // TODO
+    /**
+     * Lida com o comando CE + station_name
+     * Se o nome da estação existe, a coleção de Linhas onde está presente a estação é apresentada ALFABETICAMENTE no output
+     * Se o nome da estação não existir, é apresentada uma mensagem de erro
+     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma 
+     * Melhor caso: 
+     * Pior caso:
+     * Caso esperado:
+     * GERAÇÃO DE OUTPUT: 
+     *
+     */
     private static void consultStation(Scanner in, Network network) {
         try {
             String stationName = in.nextLine().trim();
-            Iterator<Entry<String, Line>> it = network.getStationLines(stationName);
+            Iterator<Entry<String, String>> it = network.getStationLines(stationName);
             while(it.hasNext()) {
-                System.out.println(it.next().getValue().getName());
+                System.out.println(it.next().getValue());
             }
         } catch (NoSuchStationException e) {
             System.out.println(STATION_NULL);
@@ -388,8 +398,20 @@ public class Main {
      *
      */
     private static void consultTrains(Scanner in, Network network) {
-        // TODO implement in second phase
-        throw new UnsupportedOperationException("Unimplemented method 'consultTrains'");
+        try {
+            String stationName = in.nextLine().trim();
+            Iterator<Entry<TrainTime, Time>> it = network.getStationRegistrySchedules(stationName);
+            if(it != null) {
+                while (it.hasNext()) {
+                    Entry<TrainTime, Time> entry = it.next();
+                    Time stationTime = entry.getValue();
+                    Integer train = entry.getKey().getTrain();
+                    System.out.println("Comboio " + train + " " + stationTime);
+                }
+            }
+        } catch (NoSuchStationException e) {
+            System.out.println(STATION_NULL);
+        }
     }
 
     /**

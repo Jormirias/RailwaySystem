@@ -31,19 +31,4 @@ public class BSTPreorderIterator<K,V> implements Iterator<Entry<K,V>> {
 		if (this.root!= null) st.push(this.root);
 	}
 
-public static void main(String[] args){
-	
-
-	BinarySearchTree<Integer,Integer> bst=new BinarySearchTree<>();
-	bst.insert(12, 12);
-	bst.insert(3, 3);
-	bst.insert(21,21);
-	bst.insert(1, 1);
-	bst.insert(4, 4);
-	bst.insert(18, 18);
-	Iterator<Entry<Integer,Integer>> it = new BSTPreorderIterator<>(bst.root);
-	while (it.hasNext()) {
-		System.out.println(it.next().getKey());
-	}
-}
 }

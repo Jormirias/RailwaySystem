@@ -4,6 +4,11 @@ import dataStructures.*;
 import dataTypes.interfaces.*;
 
 public class TrainClass implements Train {
+
+    /**
+     * Serial Version UID of the Class
+     */
+    static final long serialVersionUID = 0L;
     private final int number;
     private final Dictionary<String, Boolean> stops; // for best schedule
     private final Time departureTime; // for schedule insertion

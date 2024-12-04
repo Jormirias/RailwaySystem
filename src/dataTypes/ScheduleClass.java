@@ -48,4 +48,8 @@ public class ScheduleClass implements Schedule {
     public Station getOriginStation() {
         return stops.getFirst().getStation();
     }
+
+    public Time getDepartureTime() {
+        return stops.getFirst().getTime();
+    }
 }
