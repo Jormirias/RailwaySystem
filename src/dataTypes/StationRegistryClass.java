@@ -27,7 +27,7 @@ public class StationRegistryClass implements StationRegistry {
      */
     private OrderedDoubleList<String, String> lines;
 
-    private AVLTree<TrainTime, Time> trainTimes;
+    private OrderedDictionary<TrainTime, Time> trainTimes;
 
     public StationRegistryClass(String name) {
         this.name = name;

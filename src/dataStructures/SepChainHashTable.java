@@ -36,7 +36,7 @@ public class SepChainHashTable<K extends Comparable<K>, V>
         // Compiler gives a warning.
         table = (Dictionary<K,V>[]) new Dictionary[arraySize];
         for ( int i = 0; i < arraySize; i++ )
-            table[i] = new OrderedDoubleList<K,V>();
+            table[i] = new OrderedDoubleList<>();
         maxSize = capacity;
         currentSize = 0;
     }                                      
@@ -120,7 +120,7 @@ public class SepChainHashTable<K extends Comparable<K>, V>
         int arraySize = HashTable.nextPrime((int) (1.1 * (maxSize * 2)));
         this.table = (Dictionary<K,V>[]) new Dictionary[arraySize];
         for ( int i = 0; i < arraySize; i++ )
-            table[i] = new OrderedDoubleList<K,V>();
+            table[i] = new OrderedDoubleList<>();
         this.maxSize = arraySize;
         this.currentSize = 0;
         
