@@ -79,7 +79,7 @@ public class LineClass implements Line {
         
         //First iterates over all the schedule stops. For each stop, seeks a Station in this line.
         //Then, inserts the train number and time to its collections.
-        ListInArray<Stop> stops = new ListInArray<>();
+        ListInArray<Stop> stops = new ListInArray<>(stationAndTimesString.size());
         TwoWayIterator<String[]> stationAndTimesStringIt = stationAndTimesString.iterator();
 
         while(stationAndTimesStringIt.hasNext()) {

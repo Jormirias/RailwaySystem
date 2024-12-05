@@ -178,13 +178,12 @@ public class BinarySearchTree<K extends Comparable<K>, V>
      *                   grandchild
      */
     void linkSubtreeRemove(BSTNode<Entry<K, V>> grandchild, BSTNode<Entry<K, V>> parent, BSTNode<Entry<K, V>> middle) {
+        if (grandchild != null)
+            grandchild.setParent(parent);
         if (parent == null)
             // Change the root of the tree.
             root = grandchild;
         else {
-            if (grandchild != null)
-                grandchild.setParent(parent);
-
             // Find where to replace middle with grandchild as new child of parent
             if (middle == parent.left)
                 parent.setLeft(grandchild);

@@ -22,7 +22,7 @@ public class StationRegistryClass implements StationRegistry {
     /**
      * The lines which pass through the stations associated to this StationRegistry, ordered alphanumerically.
      */
-    private OrderedDoubleList<String, String> lines;
+    private OrderedDictionary<String, String> lines;
 
     /**
      * All of the trains which pass through the stations associated to this StationRegistry.
@@ -32,7 +32,7 @@ public class StationRegistryClass implements StationRegistry {
 
     public StationRegistryClass(String name) {
         this.name = name;
-        this.lines = new OrderedDoubleList<>();
+        this.lines = new AVLTree<>();
         this.trainTimes = new AVLTree<>();
     }
 
