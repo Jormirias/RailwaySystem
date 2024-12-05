@@ -57,7 +57,7 @@ public class Main {
     /**
      * Serialização
      */
-    private static final String DATA_FILE = "storednetwork.dat";
+    private static final String DATA_FILE = "storednetworkdat.dat";
 
     /**
      * Testing purposes!
@@ -67,7 +67,7 @@ public class Main {
      */
     private static final boolean CONSOLE_INPUT = true;
     private static final boolean PERSISTENT = true;
-    private static final String TEST_FILE = "./tests/test01-in.txt";
+    private static final String TEST_FILE = "./tests/test15-in.txt";
 
     /**
      * MAIN

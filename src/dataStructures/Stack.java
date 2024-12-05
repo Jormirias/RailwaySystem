@@ -3,7 +3,6 @@
  */
 package dataStructures;
 
-import java.io.Serializable;
 
 /**
  * Stack Abstract Data Type 
