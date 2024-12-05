@@ -10,11 +10,6 @@ package dataStructures;
 class DoubleListIterator<E> implements TwoWayIterator<E>
 {
 
-	/**
-	 * Serial Version UID of the Class
-	 */
-    static final long serialVersionUID = 0L;
-
 
     /** 
      * Node with the first element in the iteration.
@@ -104,6 +99,4 @@ class DoubleListIterator<E> implements TwoWayIterator<E>
         prevToReturn = prevToReturn.getPrevious();
         return element;
     }
-
-
 }

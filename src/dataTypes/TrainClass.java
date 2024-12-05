@@ -3,12 +3,12 @@ package dataTypes;
 import dataStructures.*;
 import dataTypes.interfaces.*;
 
+import java.io.Serial;
+
 public class TrainClass implements Train {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 6621631726176179672L;
     private final int number;
     private final Dictionary<String, Boolean> stops; // for best schedule
     private final Time departureTime; // for schedule insertion

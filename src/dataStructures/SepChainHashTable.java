@@ -1,4 +1,6 @@
-package dataStructures;  
+package dataStructures;
+
+import java.io.Serial;
 
 /**
  * Separate Chaining Hash table implementation
@@ -10,13 +12,11 @@ package dataStructures;
 
 public class SepChainHashTable<K extends Comparable<K>, V> 
     extends HashTable<K,V> 
-{ 
-	/**
-	 * Serial Version UID of the Class.
-	 */
-    static final long serialVersionUID = 0L;
+{
 
-	/**
+    @Serial
+    private static final long serialVersionUID = 5130212524280511709L;
+    /**
 	 * The array of dictionaries.
 	 */
     protected Dictionary<K,V>[] table;

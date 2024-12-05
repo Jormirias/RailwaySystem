@@ -28,6 +28,7 @@ replay_pid*
 
 # IntelliJ files
 .idea
+production
 
 # Data files
 .dat

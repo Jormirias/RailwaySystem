@@ -1,15 +1,15 @@
 package dataStructures;
 
+import java.io.Serial;
+
 public class ListInArray<E> implements List<E> {
 
     /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
-    /**
      *  Default capacity of the stack.
      */
-    public static final int DEFAULT_CAPACITY = 1000;
+    public static final int DEFAULT_CAPACITY = 500;
+    @Serial
+    private static final long serialVersionUID = 8952024203586087976L;
     /**
      * Array which will hold the elements of the List.
      */

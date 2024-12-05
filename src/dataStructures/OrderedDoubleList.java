@@ -1,13 +1,12 @@
 package dataStructures;
 
 
+import java.io.Serial;
+
 public class OrderedDoubleList<K extends Comparable<K>, V> implements OrderedDictionary<K,V> {
 
-
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 4084215491870215619L;
     /**
      *  Node at the head of the list.
      */

@@ -5,6 +5,8 @@ import dataTypes.interfaces.Time;
 import dataTypes.interfaces.Train;
 import dataTypes.interfaces.TrainTime;
 
+import java.io.Serial;
+
 /**
  * AVL tree implementation
  *
@@ -16,6 +18,9 @@ import dataTypes.interfaces.TrainTime;
  */
 public class AVLTree<K extends Comparable<K>, V>
         extends AdvancedBSTree<K, V> implements OrderedDictionary<K, V> {
+
+    @Serial
+    private static final long serialVersionUID = 4911151549064567588L;
 
     AVLTree(AVLNode<Entry<K, V>> node) {
         root = node;
@@ -114,5 +119,4 @@ public class AVLTree<K extends Comparable<K>, V>
             return oldValue;
         }
     }
-
 }

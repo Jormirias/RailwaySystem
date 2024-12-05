@@ -1,5 +1,7 @@
 package dataStructures;
 
+import java.io.Serial;
+
 /**
  * AVL node version of the BSTNode
  * 
@@ -10,6 +12,8 @@ package dataStructures;
  */
 class AVLNode<E> extends BSTNode<E> {
 
+    @Serial
+    private static final long serialVersionUID = -8240479189628877290L;
     /**
      * Height of the node
      */

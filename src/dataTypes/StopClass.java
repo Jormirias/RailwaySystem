@@ -2,12 +2,12 @@ package dataTypes;
 import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
+import java.io.Serial;
+
 public class StopClass implements Stop {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 8511184505874733381L;
     private Station station;
     private Time time;
 

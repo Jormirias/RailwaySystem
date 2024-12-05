@@ -3,16 +3,17 @@
  */
 package dataStructures;
 
+import java.io.Serial;
+
 /**
  * @author AED
  *
  */
 public class EntryClass<K, V> implements Entry<K, V>{
 
-	/**
-	 * Serial Version UID of the Class
-	 */
-	static final long serialVersionUID = 0L;
+
+	@Serial
+	private static final long serialVersionUID = 5527641447887287619L;
 	protected K key;
 	protected V value;
 	

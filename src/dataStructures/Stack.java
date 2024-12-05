@@ -13,7 +13,7 @@ import java.io.Serializable;
  * @param <E> Generic Element
  * 
  */
-public interface Stack<E> extends Serializable
+public interface Stack<E>
 {
 
     /**

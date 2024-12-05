@@ -6,5 +6,5 @@
 package dataTypes.exceptions;
 
 public class InvalidScheduleException extends RuntimeException {
-    static final long serialVersionUID = 0L;
+
 }

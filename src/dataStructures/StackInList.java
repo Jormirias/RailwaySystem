@@ -3,18 +3,13 @@ package dataStructures;
 public class StackInList<E> implements Stack<E>
 {
 
-    static final long serialVersionUID = 0L;
-
-
     // Memory of the stack: a list.
     protected List<E> list;                     
-
 
     public StackInList( )
     {     
         list = new DoubleList<E>();
     }
-
 
     // Returns true iff the stack contains no elements.
     public boolean isEmpty( )

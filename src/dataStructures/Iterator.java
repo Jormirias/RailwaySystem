@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @param <E> Generic Element
  * 
  */
-public interface Iterator<E> extends Serializable
+public interface Iterator<E>
 {
 
     /** 

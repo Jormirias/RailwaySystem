@@ -1,5 +1,7 @@
 package dataStructures;
 
+import java.io.Serial;
+
 /**
  * BinarySearchTree implementation
  * 
@@ -10,6 +12,8 @@ package dataStructures;
  */
 public class BinarySearchTree<K extends Comparable<K>, V>
         implements OrderedDictionary<K, V> {
+    @Serial
+    private static final long serialVersionUID = 7872887060401801620L;
     /**
      * The root of the tree.
      * 

@@ -5,13 +5,13 @@ import dataTypes.interfaces.Time;
 import dataTypes.interfaces.*;
 import dataStructures.*;
 
+import java.io.Serial;
+
 public class TrainTimeClass implements TrainTime {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
 
+    @Serial
+    private static final long serialVersionUID = 3264377324290972491L;
     private Time time;
     private Integer train;
 

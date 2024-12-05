@@ -9,15 +9,16 @@ import dataStructures.*;
 import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
+import java.io.Serial;
+
 /**
  * Class which implements a Rail Line
  */
 public class LineClass implements Line {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
+
+    @Serial
+    private static final long serialVersionUID = 8810177429357124920L;
     /**
      * String Line name
      * Unique identifier for a Line
@@ -42,7 +43,6 @@ public class LineClass implements Line {
     // Ordered by departure time.
     private final OrderedDoubleList<Time, Schedule> schedulesNormal;
     private final OrderedDoubleList<Time, Schedule> schedulesInverted;
-
 
     /**
      * Line Constructor
