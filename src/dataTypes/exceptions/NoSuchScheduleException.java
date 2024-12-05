@@ -6,5 +6,5 @@
 package dataTypes.exceptions;
 
 public class NoSuchScheduleException extends RuntimeException {
-    static final long serialVersionUID = 0L;
+
 }

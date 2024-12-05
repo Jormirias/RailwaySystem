@@ -1,5 +1,7 @@
 package dataStructures;
 
+import java.io.Serial;
+
 /**
  * Advanced BSTree Data Type implementation
  * 
@@ -9,6 +11,9 @@ package dataStructures;
  * @param <V> Generic type Value
  */
 public abstract class AdvancedBSTree<K extends Comparable<K>, V> extends BinarySearchTree<K, V> {
+    @Serial
+    private static final long serialVersionUID = 5001095121018298598L;
+
     /**
      * Performs a single left rotation rooted at Y node.
      * Node X was a right child of Y before the rotation,

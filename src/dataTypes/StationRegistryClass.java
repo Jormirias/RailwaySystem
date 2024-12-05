@@ -8,15 +8,15 @@ package dataTypes;
 import dataStructures.*;
 import dataTypes.interfaces.*;
 
+import java.io.Serial;
+
 /**
  * Class which implements a Train Station
  */
 public class StationRegistryClass implements StationRegistry {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 6160880975967045803L;
     private final String name;
 
     /**

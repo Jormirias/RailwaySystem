@@ -9,16 +9,16 @@ import dataStructures.*;
 import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
 
+import java.io.Serial;
+
 /**
  * Class which implements a Rail Network
  */
 public class NetworkClass implements Network {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
 
+    @Serial
+    private static final long serialVersionUID = -8049057733459193441L;
     // Dictionary, with Separate Chaining Hash Table implementation.
     // Why? Strings are used as unique identifiers for the both elements,
     // and hash maps allow an expected case O(1 + occupancy) for insertion, removal and search.

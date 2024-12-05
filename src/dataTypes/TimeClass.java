@@ -2,16 +2,16 @@ package dataTypes;
 
 import dataTypes.interfaces.*;
 
+import java.io.Serial;
+
 public class TimeClass implements Time {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
     public static final int MIN_HOURS = 0;
     public static final int MAX_HOURS = 23;
     public static final int MIN_MINUTES = 0;
     public static final int MAX_MINUTES = 59;
+    @Serial
+    private static final long serialVersionUID = -1051531344653689437L;
 
     private int hours = 0;
     private int minutes = 0;

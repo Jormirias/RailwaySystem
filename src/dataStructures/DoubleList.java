@@ -1,5 +1,7 @@
 package dataStructures;
 
+import java.io.Serial;
+
 /**
  * Doubly linked list Implementation 
  * @author AED  Team
@@ -8,13 +10,11 @@ package dataStructures;
  * 
  */
 public class DoubleList<E> implements List<E>
-{   
+{
 
-	/**
-	 * Serial Version UID of the Class
-	 */
-    static final long serialVersionUID = 0L;
 
+    @Serial
+    private static final long serialVersionUID = -3069435494433113521L;
     /**
      *  Node at the head of the list.
      */

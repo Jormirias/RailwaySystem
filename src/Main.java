@@ -57,7 +57,7 @@ public class Main {
     /**
      * Serialização
      */
-    private static final String DATA_FILE = "storednetwork.dat";
+    private static final String DATA_FILE = "storednetworkdat.dat";
 
     /**
      * Testing purposes!

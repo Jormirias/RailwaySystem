@@ -7,15 +7,15 @@ package dataTypes;
 import dataStructures.*;
 import dataTypes.interfaces.*;
 
+import java.io.Serial;
+
 /**
  * Class which implements a Train Station
  */
 public class StationClass implements Station {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 2425715342222161264L;
     private final String StationName;
 
     private OrderedDictionary<Time, Train> stopsNormal;

@@ -3,7 +3,6 @@
  */
 package dataStructures;
 
-import java.io.Serializable;
 
 /**
  * Stack Abstract Data Type 
@@ -13,7 +12,7 @@ import java.io.Serializable;
  * @param <E> Generic Element
  * 
  */
-public interface Stack<E> extends Serializable
+public interface Stack<E>
 {
 
     /**

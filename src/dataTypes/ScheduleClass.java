@@ -8,15 +8,15 @@ package dataTypes;
 import dataStructures.*;
 import dataTypes.interfaces.*;
 
+import java.io.Serial;
+
 /**
  * Class which implements a Train Schedule
  */
 public class ScheduleClass implements Schedule {
 
-    /**
-     * Serial Version UID of the Class
-     */
-    static final long serialVersionUID = 0L;
+    @Serial
+    private static final long serialVersionUID = 1338431840628436262L;
     int trainNumber;
     /**
      * Stop Collection
