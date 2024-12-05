@@ -147,7 +147,7 @@ public class NetworkClass implements Network {
      */
     private Line addLineToStationRegistry(String lineName, ListInArray<String> newStations) {
 
-        ListInArray<Station> lineStations = new ListInArray<>();
+        ListInArray<Station> lineStations = new ListInArray<>(newStations.size());
 
         Iterator<String> it = newStations.iterator();
         while(it.hasNext()) {
