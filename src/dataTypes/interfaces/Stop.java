@@ -19,4 +19,5 @@ public interface Stop extends Serializable{
      * @return the Time of this Stop.
      */
     public Time getTime();
+
 }

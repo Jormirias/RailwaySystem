@@ -27,20 +27,17 @@ public class LineClass implements Line {
     private final String name;
 
     /**
-     * Station Collection
-     * STRUCT_CHOICE: We chose to have this be a ListInArray for spatial concerns; it's meant to be an immutable collection, so an array will suffice for its purposes.
-     * Some consultation operations will need to iterate over it, but for those purposes it's indifferent for it to be a LinkedList or a ListInArray
+     * All the Stations of this Line, by order of insertion.
      *
      */
     private final ListInArray<Station> stations;
 
     /**
-     * Schedule Collections
-     * STRUCT_CHOICE: We chose to have these be OrderedDoubleLists (in the future, Hash maps by Time), ordered by departure time, since the RH command will need to iterate over them and it's convenient to have them ordered.
-     * 2 different collections since the schedule may contain the Stations by order or by reversed order
+     * All the Schedules of this Line, by order of departure time.
+     * One collection for the normal route (from first station), 
+     * another for the inverted route (from last station.)
      *
      */
-    // Ordered by departure time.
     private final OrderedDictionary<Time, Schedule> schedulesNormal;
     private final OrderedDictionary<Time, Schedule> schedulesInverted;
 
@@ -57,31 +54,14 @@ public class LineClass implements Line {
         schedulesInverted = new AVLTree<>();
     }
 
-    /**
-     * Returns the name of the Line
-     * @return the String holding the name of this Line.
-     *
-     */
     public String getName() {
         return this.name;
     }
-    /**
-     * Returns the Station collection of the Line
-     * @return the Collection of Stations in this Line
-     *
-     */
+
     public Iterator<Station> getStations() {
         return stations.iterator();
     }
 
-    /**
-     * Insert a new Schedule into the Line
-     * It first checks the schedule validity using the method scheduleCheck, sending an error upstream if it's invalid
-     * If it's confirmed as valid, adds it to the corresponding schedule collection depending on its initial station
-     *      AND also adds it to the Collections inside each os the Stations in its Stops (doing this here sacrifices efficiency
-     *      in the insertion and removal but makes Consult actions more efficient in Temporal Complexity, like  command MH)
-     *
-     */
     public ListInArray<Stop> insertSchedule(String trainNumber, ListInArray<String[]> stationAndTimesString) throws InvalidScheduleException {
 
         String[] firstStopString = stationAndTimesString.getFirst();
@@ -123,7 +103,7 @@ public class LineClass implements Line {
             }
         }
 
-        //Create Schedule and put it in corresponding OrderedDoubleList
+        //Create Schedule and put it in corresponding collection.
         Schedule schedule = new ScheduleClass(train.getNumber(), stops);
         Stop firstStop = stops.getFirst();
         if(firstStop.getStation().getName().equals(stations.getFirst().getName())) {
@@ -136,21 +116,11 @@ public class LineClass implements Line {
         return stops;
     }
 
-    /**
-     * Remove a Schedule from the Line
-     * It first checks if the Station name is one of the 2 terminals of the line. If not, it throws an error, represented in the output as an empty string.
-     * Then it iterates the collection for the given departure time. If it doesn't exist, it throws an error.
-     * If it exists, the corresponding schedule is removed from the collection.
-     * THEN, each station
-     *
-     */
     public Schedule removeSchedule(String departureStationName, String timeAsString) throws  NoSuchScheduleException {
         Schedule schedule = null;
         Time time = new TimeClass(timeAsString);
         boolean isInverted = false;
 
-        //Compares the input station to both collections' first element's station. If they match, procedes to iterate the collection
-        // for a given Time key, and if it is found, it's removed. Otherwise, errors in the .remove() will results in output error messages.
         if(departureStationName.equalsIgnoreCase(stations.getFirst().getName())) {
             schedule = schedulesNormal.remove(time);
         }
@@ -169,7 +139,6 @@ public class LineClass implements Line {
 
         while(stopsIt.hasNext()) {
             Stop stop = stopsIt.next();
-            //System.out.println("DEBUG LINE STATIONS " + stop.getStation().getName());
             Iterator<Station> stationIt = stations.iterator();
             while (stationIt.hasNext()) {
                 Station station = stationIt.next();
@@ -196,7 +165,7 @@ public class LineClass implements Line {
     public Schedule bestSchedule(String departureStationName, String arrivalStationName, String timeAsString)
             throws NoSuchDepartureStationException, ImpossibleRouteException {
 
-        //search for the arrival station, already searching for teh first station, also
+        // Search for the arrival station, already searching for the first station.
         TwoWayIterator<Station> stationIt = stations.iterator();
         Station firstStation = null;
         Station lastStation = null;
@@ -216,7 +185,7 @@ public class LineClass implements Line {
             throw new ImpossibleRouteException();
         }
 
-        //then, search for the departure station and establish which List (normal or inverted) to use
+        // Then, search for the departure station and establish which schedules (normal or inverted) to use
 
         if (firstStation == null) {
             isInverted = true;
@@ -238,7 +207,11 @@ public class LineClass implements Line {
         while(!trainsInOrder.isEmpty()) {
             Train arrivalTrain = trainsInOrder.pop();
             if (arrivalTrain.stopsAt(firstStation)) {
-                return findSchedule(arrivalTrain.getDepartureTime(), isInverted);
+                if (isInverted) {
+                    return schedulesInverted.find(arrivalTrain.getDepartureTime());
+                } else {
+                    return schedulesNormal.find(arrivalTrain.getDepartureTime());
+                }
             }
         }
 
@@ -261,12 +234,9 @@ public class LineClass implements Line {
 
 
     /**
-     * Helper method to check a Schedule validity
-     * @return It first checks the first stop validity, sending a false upstream if it isn't one of the line's terminal
-     *         Secondly, it checks if the order of Times in Stops is strictly ascending, sending a false if it's not
-     *         Lastly, it checks the order consistency comparing to the Stations collection. If it isn't consistent, sends a false upstream
-     *         If are checks are passed, it returns TRUE
-     *
+     * Helper method to check a Schedule validity.
+     * @return true if valid, false if not
+     * Validity means respecting the criteria described in insertSchedule's documentation.
      */
     private boolean scheduleCheck (ListInArray<String[]> stationAndTimesString, String[] firstStopString) {
 
@@ -331,14 +301,6 @@ public class LineClass implements Line {
 
         //se a sequencia de estaçoes não segue as da linha, return false
         return !stationAndTimesIt.hasNext();
-    }
-
-    private Schedule findSchedule (Time departureTime, boolean isInverted) {
-        if (isInverted) {
-            return schedulesInverted.find(departureTime);
-        } else {
-            return schedulesNormal.find(departureTime);
-        }
     }
 
 }

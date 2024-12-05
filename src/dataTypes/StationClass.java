@@ -16,21 +16,35 @@ public class StationClass implements Station {
 
     @Serial
     private static final long serialVersionUID = 2425715342222161264L;
+    
+    /**
+     * The name and the stops of this Station.
+     */
     private final String StationName;
 
+    /**
+     * The stops are ordered by the Time at which they are performed.
+     * Normal and reverse are relative to the line this station is associated to.
+     */
     private OrderedDictionary<Time, Train> stopsNormal;
     private OrderedDictionary<Time, Train> stopsReverse;
 
+    /**
+     * Constructor.
+     * @param name - the name of the Station.
+     */
     public StationClass(String name) {
         this.StationName = name;
         this.stopsNormal = new AVLTree<>();
         this.stopsReverse = new AVLTree<>();
     }
 
+    @Override
     public String getName() {
         return StationName;
     }
 
+    @Override
     public boolean hasStops(boolean isInverted) {
         if(isInverted) {
             return !stopsReverse.isEmpty();
@@ -39,6 +53,7 @@ public class StationClass implements Station {
         }
     }
 
+    @Override
     public void addStop(Time time, Train train, boolean isInverted) {
         if(isInverted) {
             stopsReverse.insert(time, train);
@@ -47,6 +62,7 @@ public class StationClass implements Station {
         }
     }
 
+    @Override
     public void removeStop(Time time, boolean isInverted) {
         if(isInverted) {
             stopsReverse.remove(time);
@@ -55,6 +71,7 @@ public class StationClass implements Station {
         }
     }
 
+    @Override
     public Iterator<Entry<Time, Train>> getStops(boolean isInverted) {
         if(isInverted) {
             return stopsReverse.iterator();
@@ -63,6 +80,7 @@ public class StationClass implements Station {
         }
     }
 
+    @Override
     public boolean isStopValid(Time departureTime, Time arrivalTime, boolean isInverted) {
         if(hasStops(isInverted)) {
             Iterator<Entry<Time, Train>> it = getStops(isInverted);
@@ -105,6 +123,7 @@ public class StationClass implements Station {
         return this.StationName.equalsIgnoreCase(otherStation.getName());
     }
 
+    @Override
     public boolean testName(String other) {
         return this.StationName.equalsIgnoreCase(other.trim());
     }
@@ -114,6 +133,7 @@ public class StationClass implements Station {
         return StationName;
     }
 
+    @Override
     public Stack<Train> findBestScheduleTrains(Time time, boolean isInverted) {
         Stack<Train> trainsInOrder = new StackInList<>();
         if(hasStops(isInverted)) {

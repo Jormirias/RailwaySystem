@@ -14,8 +14,13 @@ import java.io.Serializable;
 
 public interface TrainTime extends Comparable<TrainTime>, Serializable{
 
-
+    /**
+     * @return the Time at which the train stops.
+     */
     Time getTime();
 
+    /**
+     * @return the number of the train.
+     */
     Integer getTrain();
 }

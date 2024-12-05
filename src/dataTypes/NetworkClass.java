@@ -19,9 +19,10 @@ public class NetworkClass implements Network {
 
     @Serial
     private static final long serialVersionUID = -8049057733459193441L;
-    // Dictionary, with Separate Chaining Hash Table implementation.
-    // Why? Strings are used as unique identifiers for the both elements,
-    // and hash maps allow an expected case O(1 + occupancy) for insertion, removal and search.
+
+    /**
+     * The Lines and StationRegistries which compose this Network.
+     */
     private final Dictionary<String, Line> lines;
     private final Dictionary<String, StationRegistry> stationRegistries;
 
@@ -113,6 +114,19 @@ public class NetworkClass implements Network {
     }
 
     @Override
+    public Iterator<Entry<TrainTime, Time>> getStationRegistrySchedules(String stationName) throws NoSuchStationException {
+        StationRegistry stationReg = stationRegistries.find(stationName.toUpperCase());
+        if (stationReg == null){
+            throw new NoSuchStationException();
+        }
+        else if(stationReg.hasTrainTimes()) {
+            return stationReg.getTrainTimes();
+        }
+        else
+            return null;
+    }
+
+    @Override
     public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString)
             throws NoSuchLineException, NoSuchDepartureStationException, ImpossibleRouteException {
         Line line = lines.find(lineName.toUpperCase());
@@ -124,10 +138,13 @@ public class NetworkClass implements Network {
         }
     }
 
-
-    // Checks if input stations already exist in Registry; If they do, adds the Line registry. If they don't,
-    // creates a new StationRegistry entry and adds a Line registry
-    // Then, returns the List of Stations to be used in Line
+    /**
+     * Checks if input stations already exist in Registry. If they do, adds the Line registry. If they don't,
+     * creates a new StationRegistry entry and adds a Line registry
+     * @param lineName - the name of the Line
+     * @param newStations - the name of the Stations of the Line.
+     * @return Line that was created
+     */
     private Line addLineToStationRegistry(String lineName, ListInArray<String> newStations) {
 
         ListInArray<Station> lineStations = new ListInArray<>();
@@ -152,8 +169,11 @@ public class NetworkClass implements Network {
         return new LineClass(lineName, lineStations);
     }
 
-    // Removes Line registry from each Station Registry in the removed Line;
-    // If the Station does not have any Line anymore, the Station Registry is removed
+    /**
+     * Removes Line registry from each Station Registry in the removed Line.
+     * If the Station does not have any Line anymore, the Station Registry is removed
+     * @param line - the Line to be removed.
+     */
     private void removeLineFromStationRegistry(Line line) {
         Iterator<Station> it = line.getStations();
         while(it.hasNext()) {
@@ -190,13 +210,12 @@ public class NetworkClass implements Network {
     }
 
     /**
-     * Inserts Schedule data into each corresponding StationRegistry,
-     * while iterating over the input stations given by the command
-     *
+     * Inserts Schedule data into each corresponding StationRegistry
+     * @param trainNumber - the number of the train to be inserted, as a String
+     * @param stationAndTimes - the Stops which the train performs.
      */
     private void insertStationRegistrySchedules(String trainNumber, ListInArray<Stop> stationAndTimes) {
         Iterator<Stop> it = stationAndTimes.iterator();
-        Time departureTime = stationAndTimes.getFirst().getTime();
         while(it.hasNext()) {
             Stop currStop = it.next();
 
@@ -210,6 +229,10 @@ public class NetworkClass implements Network {
         }
     }
 
+    /**
+     * Remove a Schedule from a StationRegistry.
+     * @param targetSchedule - Schedule to be removed.
+     */
     private void removeStationRegistrySchedules(Schedule targetSchedule) {
         TwoWayIterator<Stop> it = targetSchedule.getStops();
         TrainTime keyTrainTime = null;
@@ -224,17 +247,5 @@ public class NetworkClass implements Network {
         }
 
 
-    }
-
-    public Iterator<Entry<TrainTime, Time>> getStationRegistrySchedules(String stationName) throws NoSuchStationException {
-        StationRegistry stationReg = stationRegistries.find(stationName.toUpperCase());
-        if (stationReg == null){
-            throw new NoSuchStationException();
-        }
-        else if(stationReg.hasTrainTimes()) {
-            return stationReg.getTrainTimes();
-        }
-        else
-            return null;
     }
 }

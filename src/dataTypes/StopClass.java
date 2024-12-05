@@ -1,3 +1,8 @@
+/**
+* @author Jorge Dias (72360) jmr.dias@alumni.fct.unl.pt
+* @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
+*/
+
 package dataTypes;
 import dataTypes.exceptions.*;
 import dataTypes.interfaces.*;
@@ -16,6 +21,7 @@ public class StopClass implements Stop {
         this.time = time;
     }
 
+    @Override
     public Station getStation() {
         return station;
     }
@@ -30,11 +36,4 @@ public class StopClass implements Stop {
         return station + " " + time;
     }
 
-    public void setStation(Station station) {
-        this.station = station;
-    }
-
-    public void setTime(Time time) {
-        this.time = time;
-    }
 }
