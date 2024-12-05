@@ -40,8 +40,8 @@ public class LineClass implements Line {
      *
      */
     // Ordered by departure time.
-    private final OrderedDoubleList<Time, Schedule> schedulesNormal;
-    private final OrderedDoubleList<Time, Schedule> schedulesInverted;
+    private final OrderedDictionary<Time, Schedule> schedulesNormal;
+    private final OrderedDictionary<Time, Schedule> schedulesInverted;
 
 
     /**
@@ -53,8 +53,8 @@ public class LineClass implements Line {
         name = lineName;
         stations = newStations;
 
-        schedulesNormal = new OrderedDoubleList<>();
-        schedulesInverted = new OrderedDoubleList<>();
+        schedulesNormal = new AVLTree<>();
+        schedulesInverted = new AVLTree<>();
     }
 
     /**
@@ -238,7 +238,7 @@ public class LineClass implements Line {
         while(!trainsInOrder.isEmpty()) {
             Train arrivalTrain = trainsInOrder.pop();
             if (arrivalTrain.stopsAt(firstStation)) {
-                return findSchedule(arrivalTrain.getNumber(), isInverted);
+                return findSchedule(arrivalTrain.getDepartureTime(), isInverted);
             }
         }
 
@@ -333,21 +333,12 @@ public class LineClass implements Line {
         return !stationAndTimesIt.hasNext();
     }
 
-    private Schedule findSchedule (int trainNumber, boolean isInverted) {
-        TwoWayIterator<Entry<Time, Schedule>> schedulesIt;
+    private Schedule findSchedule (Time departureTime, boolean isInverted) {
         if (isInverted) {
-            schedulesIt = schedulesInverted.iterator();
+            return schedulesInverted.find(departureTime);
         } else {
-            schedulesIt = schedulesNormal.iterator();
+            return schedulesNormal.find(departureTime);
         }
-
-        while (schedulesIt.hasNext()) {
-            Entry<Time, Schedule> next = schedulesIt.next();
-            if (next.getValue().getTrainNumber() == (trainNumber)) {
-                return next.getValue();
-            }
-        }
-        return null;
     }
 
 }

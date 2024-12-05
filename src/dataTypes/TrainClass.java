@@ -28,6 +28,10 @@ public class TrainClass implements Train {
         return number;
     }
 
+    public Time getDepartureTime() {
+        return departureTime;
+    }
+
     public boolean departsBefore(Time time) {
         return departureTime.compareTo(time) < 0;
     }

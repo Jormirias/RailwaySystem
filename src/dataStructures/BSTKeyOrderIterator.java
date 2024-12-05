@@ -40,6 +40,8 @@ class BSTKeyOrderIterator<K,V> implements Iterator<Entry<K,V>> {
 
     public void rewind( ){
 		p = new StackInList<BSTNode<Entry<K,V>>>();
-    	pushPathToMinimum(root);
+		if(root != null) {
+    		pushPathToMinimum(root);
+		}
     }
 }
