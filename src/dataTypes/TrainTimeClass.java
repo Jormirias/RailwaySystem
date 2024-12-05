@@ -1,3 +1,8 @@
+/**
+* @author Jorge Dias (72360) jmr.dias@alumni.fct.unl.pt
+* @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
+*/
+
 package dataTypes;
 
 import dataStructures.OrderedDictionary;
@@ -12,28 +17,35 @@ public class TrainTimeClass implements TrainTime {
 
     @Serial
     private static final long serialVersionUID = 3264377324290972491L;
+
+    /**
+     * Time at which the train performs the stop at the station.
+     * The number of the train.
+     */
     private Time time;
     private Integer train;
 
+    /**
+     * Constructor
+     * @param time - Time of the stop.
+     * @param train - number of the train.
+     */
     public TrainTimeClass(Time time, int train) {
         this.time = time;
         this.train = train;
     }
 
+    @Override
     public Time getTime() {
         return time;
     }
-    public void setTime(Time time) {
-        this.time = time;
-    }
+
+    @Override
     public Integer getTrain() {
         return train;
     }
-    public void setTrain(Integer train) {
-        this.train = train;
-    }
 
-
+    @Override
     public int compareTo(TrainTime other) {
         if(this.time.compareTo(other.getTime()) != 0) {
             return this.time.compareTo(other.getTime());

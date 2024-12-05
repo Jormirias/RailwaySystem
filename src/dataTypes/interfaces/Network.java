@@ -12,47 +12,63 @@ import dataTypes.exceptions.*;
 
 public interface Network extends Serializable {
 
-    // TODO
+    /**
+     * Creates and inserts a Line and it's Stations into the Network.
+     * @param lineName - the name of the Line to be created.
+     * @param stationNames - the names of the Stations that belong to the Line.
+     * @throws LineAlreadyExistsException if a Line with the same name already exists.
+     */
     public void insertLine(String lineName, ListInArray<String> stationNames) throws LineAlreadyExistsException;
 
     /**
-     * Remove Line from Network
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, and if it does, it removes it.
-     * If it doesn't exist, it throws an error upstream
-     * This method doesn't use the findLineWithName method to prevent iterating twice over the same collection. Instead, it automatically removes the line while iterating.
-     *
+     * Removes a Line from the Network.
+     * @param lineName - the name of the Line to be removed.
+     * @throws NoSuchLineException if there isn't a Line with the given name.
      */
     public void removeLine(String lineName) throws NoSuchLineException;
 
     /**
-     * Consult Line Stations
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
-     * If it doesn't exist, it throws an error upstream
-     * @return If the Line exists, the method returns a collection of its Stations
-     *
+     * For a given Line, get it's Stations.
+     * @param lineName - the name of the Line
+     * @return an Iterator to the Stations of the Line
+     * @throws NoSuchLineException if there isn't a Line with the given name.
      */
     public Iterator<Station> getLineStations(String lineName) throws NoSuchLineException;
 
-    // TODO
+    /**
+     * For a given Station, get it's Lines.
+     * @param stationName - the name of the Station
+     * @return an Iterator to the Lines of the Station
+     * @throws NoSuchStationException if there isn't a Station with the given name.
+     */
     public Iterator<Entry<String,String>> getStationLines(String stationName) throws NoSuchStationException;
 
+
     /**
-     * Insert a new Schedule in a Line
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
-     * If it doesn't exist, it throws an error upstream
-     * @param trainNumber indicates the train number associated with the new Schedule
-     * @param stationAndTimes is the collections of stops to be associated with the new Schedule
-     *
+     * Create and insert a Schedule for a given Line.
+     * @param lineName - the name of the Line 
+     * @param trainNumber - the number of the Train which will operate the Schedule
+     * @param stationAndTimes - the route followed by the Train, described by a collection of Strings 
+     * in the format "<station_name> <hours>:<minutes>".
+     * @throws NoSuchLineException if there isn't a Line with the given name.
+     * @throws InvalidScheduleException if:
+     * the first station is not one of the terminal stations,
+     * the stations are not in order,
+     * the times are not strictly increasing and
+     * in case of an overtake.
+     * An overtake means that the current train will pass through a station either:
+     * Before another train that has departed from the terminal station after the current train;
+     * After another train that has departed from the terminal station before the current train.
      */
     public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchLineException, InvalidScheduleException;
 
     /**
-     * Remove a new from a Line
-     * @param lineName receives the line name. The method iterates over the collection of lines to find out if it exists, using the findLineWithName method
-     * If it doesn't exist, it throws an error upstream
-     * @param departureStationName indicates the name of the first station of the Schedule
-     * @param timeAsString is the time corresponding to the first time of the schedule
-     *
+     * Removes a Schedule from the given Line.
+     * @param lineName - the name of the Line.
+     * @param departureStationName - the first station in the Schedule.
+     * @param timeAsString - the departure time from the station, as a String.
+     * @throws NoSuchLineException if there isn't a Line with the given name.
+     * @throws NoSuchScheduleException if there isn't a Schedule which starts a the departure station at the given time.
      */
     public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchLineException, NoSuchScheduleException;
 
@@ -61,12 +77,31 @@ public interface Network extends Serializable {
      * @param lineName - the name of the desired Line.
      * @param departureStationName - the name of the desired departure Station.
      * @return Iterator to the all the Schedules, organized by Time, as an Entry.
-     * @throws NoSuchLineException
-     * @throws NoSuchDepartureStationException
+     * @throws NoSuchLineException if there isn't a Line with the given name.
+     * @throws NoSuchDepartureStationException if there isn't a terminal Station with the given name.
      */
     public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchLineException, NoSuchDepartureStationException;
 
-    public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString);
-
+    /**
+     * Gets all the trains which stop at a given station, by order of arrival.
+     * @param stationName - the name of the Station
+     * @return an iterator to the trains.
+     * @throws NoSuchStationException if there isn't a Station with the given name.
+     */
     public Iterator<Entry<TrainTime, Time>> getStationRegistrySchedules(String stationName) throws NoSuchStationException;
+    
+    /**
+     * Finds the Schedule whose train passes through a given departure station and arrival station.
+     * The train must arrive at the arrival station either at or before the specified time.
+     * @param lineName - the name of the Line
+     * @param departureStationName - the name of the Station of departure.
+     * @param arrivalStationName - the name of the Station of arrival.
+     * @param timeAsString - the desired arrival time in a String format.
+     * @return the Schedule which fulfills the criteria.
+     * @throws NoSuchLineException if there isn't a Line with the given name.
+     * @throws NoSuchDepartureStationException if there isn't a terminal Station with the given name.
+     * @throws ImpossibleRouteException if no Schedule is found which fulfills the criteria.
+     */
+    public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString) throws NoSuchLineException, NoSuchDepartureStationException, ImpossibleRouteException;
+
 }

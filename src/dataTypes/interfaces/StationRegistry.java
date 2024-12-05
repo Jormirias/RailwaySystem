@@ -45,20 +45,32 @@ public interface StationRegistry extends Serializable {
     public void removeLine(String lineName);
 
     /**
-     * Returns an iterator of all the lines where this Station is included, ordered lexicographically
+     * @return an iterator of all the lines where this Station is included, ordered lexicographically
      */
     public Iterator<Entry<String, String>> getLines();
 
-    // TODO
+    /**
+     * Checks if the station associated to this StationRegistry have any lines.
+     * @return true if the station has lines, false if not.
+     */
     public boolean hasLines();
 
+    /**
+     * Compares this Line's name with a given string.
+     * @param other - the String for comparsion
+     * @return true if they are equal, false if they are not.
+     */
     public boolean testName(String other);
 
     /**
-     * Returns an iterator of all the Train times of train passing this Station, ordered by Time of departure
+     * @return an iterator of all the Train times of train passing this Station, ordered by Time of departure
      */
     public Iterator<Entry<TrainTime, Time>> getTrainTimes();
 
+    /**
+     * Checks if there are any trains running schedule through the stations associated with this StationRegistry
+     * @return 
+     */
     public boolean hasTrainTimes();
 
 }

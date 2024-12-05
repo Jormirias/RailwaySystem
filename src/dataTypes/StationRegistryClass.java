@@ -20,13 +20,14 @@ public class StationRegistryClass implements StationRegistry {
     private final String name;
 
     /**
-     * Collections of lines and times for the station registry to have as reference
-     * STRUCT_CHOICE: We chose to have these be OrderedDoubleList, since Lines should be ordered alphabetically
-     * and the TrainTimes should be ordered by Departure time.
-     *
+     * The lines which pass through the stations associated to this StationRegistry, ordered alphanumerically.
      */
     private OrderedDoubleList<String, String> lines;
 
+    /**
+     * All of the trains which pass through the stations associated to this StationRegistry.
+     * Ordered by time at which they happen.
+     */
     private OrderedDictionary<TrainTime, Time> trainTimes;
 
     public StationRegistryClass(String name) {
@@ -35,6 +36,7 @@ public class StationRegistryClass implements StationRegistry {
         this.trainTimes = new AVLTree<>();
     }
 
+    @Override
     public String getName() {
         return name;
     }
@@ -76,16 +78,19 @@ public class StationRegistryClass implements StationRegistry {
         return lines.iterator();
     }
 
+    @Override
     public void addTrainTime(Time departureTime, int train, Time time) {
 
         trainTimes.insert(new TrainTimeClass(departureTime, train), time );
 
     }
 
+    @Override
     public void removeTrainTime(TrainTime train) {
         trainTimes.remove(train);
     }
 
+    @Override
     public Iterator<Entry<TrainTime, Time>> getTrainTimes() {
         if(hasTrainTimes()) {
             return trainTimes.iterator();
@@ -95,6 +100,7 @@ public class StationRegistryClass implements StationRegistry {
         }
     }
 
+    @Override
     public boolean hasTrainTimes() {
         return !trainTimes.isEmpty();
     }

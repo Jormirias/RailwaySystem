@@ -22,7 +22,15 @@ public interface Schedule extends Serializable{
      */
     public TwoWayIterator<Stop> getStops();
 
+    /**
+     * Get the station from which this Schedule's train departs.
+     * @return the departure Station
+     */
     public Station getOriginStation();
 
+    /**
+     * Get the time of departure for the Schedule's train.
+     * @return the Time of departure.
+     */
     public Time getDepartureTime();
 }

@@ -1,3 +1,8 @@
+/**
+* @author Jorge Dias (72360) jmr.dias@alumni.fct.unl.pt
+* @author Tomás Silva (69720) tpd.silva@campus.fct.unl.pt
+*/
+
 package dataTypes;
 
 import dataTypes.interfaces.*;
@@ -13,9 +18,17 @@ public class TimeClass implements Time {
     @Serial
     private static final long serialVersionUID = -1051531344653689437L;
 
+    /**
+     * Hours and minutes that compose this time.
+     */
     private int hours = 0;
     private int minutes = 0;
 
+    /**
+     * Constructor
+     * @param hours - hours associated to this Time.
+     * @param minutes - minutes associated to this Time.
+     */
     public TimeClass(int hours, int minutes) {
         if((MIN_HOURS <= hours) && (hours <= MAX_HOURS)) {
             this.hours = hours;
@@ -26,6 +39,10 @@ public class TimeClass implements Time {
         }
     }
 
+    /**
+     * Constructor
+     * @param timeAsString - the Time given in a String formated as "<hours>:<minutes>"
+     */
     public TimeClass(String timeAsString) {
         String[] splitString = timeAsString.split(":");
         int hours = Integer.parseInt(splitString[0]);
@@ -40,15 +57,16 @@ public class TimeClass implements Time {
         }
     }
 
+    @Override
     public int getHours() {
         return this.hours;
     }
 
+    @Override
     public int getMinutes() {
         return this.minutes;
     }
 
-    //returns
     @Override
     public int compareTo(Time other) {
         if(this.hours < other.getHours()) {

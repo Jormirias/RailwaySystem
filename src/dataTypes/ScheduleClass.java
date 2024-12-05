@@ -19,10 +19,7 @@ public class ScheduleClass implements Schedule {
     private static final long serialVersionUID = 1338431840628436262L;
     int trainNumber;
     /**
-     * Stop Collection
-     * STRUCT_CHOICE: We chose to have these in a ListInArray, ordered by station, since they're a static entity and shouldn't be changed.
-     * Some consultation operations will need to iterate over it, but for those purposes it's indifferent for it to be a LinkedList or a ListInArray. Array takes precedence for spatial complexity considerations.
-     *
+     * All of the Stops that the train running this Schedule performs.
      */
     private final ListInArray<Stop> stops;
 
