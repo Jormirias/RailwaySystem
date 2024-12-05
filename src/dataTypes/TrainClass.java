@@ -31,7 +31,7 @@ public class TrainClass implements Train {
         this.number = number;
         this.departureTime = departureTime;
 
-        this.stops = new SepChainHashTable<>(50);
+        this.stops = new SepChainHashTable<>(stations.size());
         Iterator<Station> it = stations.iterator();
         while(it.hasNext()) {
             stops.insert(it.next().getName(), false);
