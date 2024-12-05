@@ -12,11 +12,11 @@ public interface Time extends Comparable<Time>, Serializable{
      * Get the hours of this Time.
      * @return the hours of this Time.
      */
-    public int getHours();
+    int getHours();
 
     /**
      * Get the minutes of this Time.
      * @return the minutes of this Time.
      */
-    public int getMinutes();
+    int getMinutes();
 }

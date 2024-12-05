@@ -68,9 +68,9 @@ public abstract class HashTable<K,V> implements Dictionary<K,V>
      */
     protected static int nextPrime( int number )
     {
-        for ( int i = 0; i < PRIMES.length; i++ )
-            if ( PRIMES[i] >= number )
-                return PRIMES[i];
+        for (int prime : PRIMES)
+            if (prime >= number)
+                return prime;
         return 0;
     }
 

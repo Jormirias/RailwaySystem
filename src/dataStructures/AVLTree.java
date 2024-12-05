@@ -1,10 +1,5 @@
 package dataStructures;
 
-import dataTypes.TimeClass;
-import dataTypes.interfaces.Time;
-import dataTypes.interfaces.Train;
-import dataTypes.interfaces.TrainTime;
-
 import java.io.Serial;
 
 /**

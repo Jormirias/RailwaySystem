@@ -1,7 +1,5 @@
 package dataStructures;
 
-import java.io.Serializable;
-
 /**
  * Iterator Abstract Data Type 
  * Includes description of general methods for one way iterator.

@@ -388,10 +388,9 @@ public class Main {
             int trainNumber = bestSchedule.getTrainNumber();
             Iterator<Stop> stopsIt = bestSchedule.getStops();
             System.out.println(trainNumber);
-            System.out.println(stopsIt.next());
-            while(stopsIt.hasNext()) {
+            do {
                 System.out.println(stopsIt.next());
-            }
+            } while (stopsIt.hasNext());
 
         }
         catch (NoSuchLineException e) {

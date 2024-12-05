@@ -1,5 +1,6 @@
 package dataStructures;
 
+@SuppressWarnings("ALL")
 public class EmptyDictionaryException extends RuntimeException
 {
 

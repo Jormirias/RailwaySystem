@@ -14,23 +14,23 @@ public interface Schedule extends Serializable{
      * Get the number of the train that runs this Schedule.
      * @return the number of the train.
      */
-    public int getTrainNumber();
+    int getTrainNumber();
 
     /**
      * Get the Stops that compose the Schedule.
      * @return Iterator to each Stop.
      */
-    public TwoWayIterator<Stop> getStops();
+    TwoWayIterator<Stop> getStops();
 
     /**
      * Get the station from which this Schedule's train departs.
      * @return the departure Station
      */
-    public Station getOriginStation();
+    Station getOriginStation();
 
     /**
      * Get the time of departure for the Schedule's train.
      * @return the Time of departure.
      */
-    public Time getDepartureTime();
+    Time getDepartureTime();
 }

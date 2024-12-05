@@ -18,14 +18,14 @@ public interface Network extends Serializable {
      * @param stationNames - the names of the Stations that belong to the Line.
      * @throws LineAlreadyExistsException if a Line with the same name already exists.
      */
-    public void insertLine(String lineName, ListInArray<String> stationNames) throws LineAlreadyExistsException;
+    void insertLine(String lineName, ListInArray<String> stationNames) throws LineAlreadyExistsException;
 
     /**
      * Removes a Line from the Network.
      * @param lineName - the name of the Line to be removed.
      * @throws NoSuchLineException if there isn't a Line with the given name.
      */
-    public void removeLine(String lineName) throws NoSuchLineException;
+    void removeLine(String lineName) throws NoSuchLineException;
 
     /**
      * For a given Line, get it's Stations.
@@ -33,7 +33,7 @@ public interface Network extends Serializable {
      * @return an Iterator to the Stations of the Line
      * @throws NoSuchLineException if there isn't a Line with the given name.
      */
-    public Iterator<Station> getLineStations(String lineName) throws NoSuchLineException;
+    Iterator<Station> getLineStations(String lineName) throws NoSuchLineException;
 
     /**
      * For a given Station, get it's Lines.
@@ -41,7 +41,7 @@ public interface Network extends Serializable {
      * @return an Iterator to the Lines of the Station
      * @throws NoSuchStationException if there isn't a Station with the given name.
      */
-    public Iterator<Entry<String,String>> getStationLines(String stationName) throws NoSuchStationException;
+    Iterator<Entry<String,String>> getStationLines(String stationName) throws NoSuchStationException;
 
 
     /**
@@ -60,7 +60,7 @@ public interface Network extends Serializable {
      * Before another train that has departed from the terminal station after the current train;
      * After another train that has departed from the terminal station before the current train.
      */
-    public void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchLineException, InvalidScheduleException;
+    void insertSchedule(String lineName, String trainNumber, ListInArray<String[]> stationAndTimes) throws NoSuchLineException, InvalidScheduleException;
 
     /**
      * Removes a Schedule from the given Line.
@@ -70,7 +70,7 @@ public interface Network extends Serializable {
      * @throws NoSuchLineException if there isn't a Line with the given name.
      * @throws NoSuchScheduleException if there isn't a Schedule which starts a the departure station at the given time.
      */
-    public void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchLineException, NoSuchScheduleException;
+    void removeSchedule(String lineName, String departureStationName, String timeAsString) throws NoSuchLineException, NoSuchScheduleException;
 
     /**
      * Returns the schedules of a Line.
@@ -80,7 +80,7 @@ public interface Network extends Serializable {
      * @throws NoSuchLineException if there isn't a Line with the given name.
      * @throws NoSuchDepartureStationException if there isn't a terminal Station with the given name.
      */
-    public Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchLineException, NoSuchDepartureStationException;
+    Iterator<Entry<Time, Schedule>> getLineSchedules(String lineName, String departureStationName) throws NoSuchLineException, NoSuchDepartureStationException;
 
     /**
      * Gets all the trains which stop at a given station, by order of arrival.
@@ -88,7 +88,7 @@ public interface Network extends Serializable {
      * @return an iterator to the trains.
      * @throws NoSuchStationException if there isn't a Station with the given name.
      */
-    public Iterator<Entry<TrainTime, Time>> getStationRegistrySchedules(String stationName) throws NoSuchStationException;
+    Iterator<Entry<TrainTime, Time>> getStationRegistrySchedules(String stationName) throws NoSuchStationException;
     
     /**
      * Finds the Schedule whose train passes through a given departure station and arrival station.
@@ -102,6 +102,6 @@ public interface Network extends Serializable {
      * @throws NoSuchDepartureStationException if there isn't a terminal Station with the given name.
      * @throws ImpossibleRouteException if no Schedule is found which fulfills the criteria.
      */
-    public Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString) throws NoSuchLineException, NoSuchDepartureStationException, ImpossibleRouteException;
+    Schedule getBestSchedule(String lineName, String departureStationName, String arrivalStationName, String timeAsString) throws NoSuchLineException, NoSuchDepartureStationException, ImpossibleRouteException;
 
 }

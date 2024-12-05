@@ -12,12 +12,12 @@ public interface Stop extends Serializable{
      * Get the Station of this Stop.
      * @return the Station of this Stop.
      */
-    public Station getStation();
+    Station getStation();
 
     /**
      * Get the Time of this Stop.
      * @return the Time of this Stop.
      */
-    public Time getTime();
+    Time getTime();
 
 }

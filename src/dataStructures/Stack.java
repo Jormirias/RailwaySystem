@@ -19,7 +19,7 @@ public interface Stack<E>
      *  Returns true iff the stack contains no elements.
      * @return true iff the stack contains no elements, false otherwise
      */
-    public boolean isEmpty( );
+    boolean isEmpty();
 
     /**
      *  Returns the number of elements in the stack.

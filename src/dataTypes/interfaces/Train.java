@@ -11,37 +11,37 @@ public interface Train extends Serializable {
     /**
      * @return the number which identifies this Train
      */
-    public int getNumber();
+    int getNumber();
 
     /**
      * @return the Time at which this Train departs from the origin terminal station.
      */
-    public Time getDepartureTime();
+    Time getDepartureTime();
 
     /**
      * Checks if this Train departs before a given time.
      * @param time - the Time for reference
      * @return true if it does, false if it doesn't.
      */
-    public boolean departsBefore(Time time);
+    boolean departsBefore(Time time);
 
     /**
      * Checks if this Train departs before a given time.
      * @param time - the Time for reference
      * @return true if it does, false if it doesn't.
      */
-    public boolean departsAfter(Time time);
+    boolean departsAfter(Time time);
 
     /**
      * Sets one a given station as a stop of this Train
      * @param station - the Station at which this Train stops
      */
-    public void setAsStop(Station station);
+    void setAsStop(Station station);
     
     /**
      * Checks if this Train stops at a given station.
      * @param station - the Station for reference
      * @return true if this Train stops at the Station, false if it doesn't.
      */
-    public boolean stopsAt(Station station);
+    boolean stopsAt(Station station);
 }

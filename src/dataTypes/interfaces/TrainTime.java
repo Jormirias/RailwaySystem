@@ -5,11 +5,6 @@
 
 package dataTypes.interfaces;
 
-import dataStructures.Entry;
-import dataStructures.Iterator;
-import dataStructures.OrderedDoubleList;
-import dataStructures.TwoWayIterator;
-
 import java.io.Serializable;
 
 public interface TrainTime extends Comparable<TrainTime>, Serializable{

@@ -5,6 +5,7 @@
 
 package dataTypes.exceptions;
 
+@SuppressWarnings("ALL")
 public class NoSuchLineException extends RuntimeException {
 
 }

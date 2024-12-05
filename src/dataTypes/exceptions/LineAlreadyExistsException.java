@@ -5,6 +5,7 @@
 
 package dataTypes.exceptions;
 
+@SuppressWarnings("ALL")
 public class LineAlreadyExistsException extends RuntimeException {
 
 }

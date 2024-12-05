@@ -7,6 +7,7 @@ package dataStructures;
  * @author fernanda
  *
  */
+@SuppressWarnings("ALL")
 public class NoSuchElementException extends RuntimeException {
 	
 	/**

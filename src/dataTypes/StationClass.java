@@ -105,9 +105,7 @@ public class StationClass implements Station {
             if(previousTrain != null && previousTrain.departsAfter(departureTime)) {
                 return false;
             }
-            if(nextTrain != previousTrain && nextTrain.departsBefore(departureTime)) {
-                return false;
-            }
+            return nextTrain == previousTrain || !nextTrain.departsBefore(departureTime);
         }
 
         return true;
