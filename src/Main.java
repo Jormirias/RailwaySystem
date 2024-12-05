@@ -13,7 +13,7 @@ import dataStructures.*;
  * @version 1.0
  *
  * Class which holds the main function of the program.
- * Responsible for handling input/output as Strings
+ * Responsible for handling input/output.
  */
 public class Main {
 
@@ -75,7 +75,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         Network network;
-        if(PERSISTENT || !PERSISTENT) {
+        if(PERSISTENT) {
             network = load();
         } else {
             network = new NetworkClass();
@@ -142,7 +142,7 @@ public class Main {
     }
 
     /**
-     * Guardar o estado do sistema através de serialização
+     * Function to save the Network data.
      */
     private static void save(Network network) {
         try {
@@ -160,7 +160,9 @@ public class Main {
     }
 
     /**
-     * Carregar o estado do sistema através de serialização
+     * Function to load the Network data.
+     * @return the Network that was saved.
+     * If no saved data was available, create new Network.
      */
     private static Network load() {
         try {
@@ -182,17 +184,11 @@ public class Main {
         }
 
     }
-
+    
     /**
-     * Lida com o comando IL + line_name + station_names[]
-     * Se o nome da linha não existir, cria uma nova linha com esse nome e com as restantes estações inseridas com o comando (assume-se que são sempre inseridas pelo menos 2 estações)
-     * Caso o nome da linha seja repetido, imprime a mensagem de erro correspondente
-     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma iteração da DoubleList de Lines para procurar o lineName;
-     * Melhor caso: Complexidade temporal O(1), o primeiro elemento da DoubleList é a linha inserida e o output final é a mensagem de erro.
-     * Pior caso: Complexidade temporal O(n), a DoubleList é iterada sem encontrar a linha e então a linha é inserida na DoubleList.
-     * Caso esperado: Complexidade temporal O(n), a DoubleList será percorrida até metade em média, o que continua a ser O(n), como o pior caso.
-     * GERAÇÃO DE OUTPUT: Complexidade temporal O(1)
-     *
+     * Insertion of a line, given a name and a non-empty list of station names. The error situation
+     * occurs if a line with the same name already exists in the system. You may assume (i.e., without
+     * verification) that the names of stations of a line are all different amongst themselves
      */
     private static void insertLine(Scanner in, Network network) {
         try {
@@ -214,17 +210,9 @@ public class Main {
         }
     }
 
-
     /**
-     * Lida com o comando RL + line_name
-     * Se o nome da linha existe, a linha é removida do sistema
-     * Se o nome da linha não existir, é apresentada uma mensagem de erro
-     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma iteração da DoubleList de Lines para procurar o lineName;
-     * Melhor caso: Complexidade temporal O(1), o primeiro elemento da DoubleList é a linha inserida e a linha é removida.
-     * Pior caso: Complexidade temporal O(n), a DoubleList é iterada sem encontrar a linha e o output final é a mensagem de erro.
-     * Caso esperado: Complexidade temporal O(n), a DoubleList será percorrida até metade em média, o que continua a ser O(n), como o pior caso.
-     * GERAÇÃO DE OUTPUT: Complexidade temporal O(1)
-     *
+     * Removal of a line with the given name. All stations on the line that do not belong to another
+     * line will be deleted. The error situation applies when the line does not exist in the system.
      */
     private static void removeLine(Scanner in, Network network) {
         try {
@@ -237,15 +225,8 @@ public class Main {
     }
 
     /**
-     * Lida com o comando CL + line_name
-     * Se o nome da linha existe, a coleção de Stations da Linha é apresentada no output
-     * Se o nome da linha não existir, é apresentada uma mensagem de erro
-     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma iteração da DoubleList de Lines para procurar o lineName;
-     * Melhor caso: Complexidade temporal O(1), o primeiro elemento da DoubleList é a linha inserida e a linha é apresentada no outpu.
-     * Pior caso: Complexidade temporal O(n), a DoubleList é iterada sem encontrar a linha e o output final é a mensagem de erro.
-     * Caso esperado: Complexidade temporal O(n), a DoubleList será percorrida até metade em média, o que continua a ser O(n), como o pior caso.
-     * GERAÇÃO DE OUTPUT: Complexidade temporal O(n), sendo que é preciso iterar para apresentar no output todas as Stations
-     *
+     * Lists the stations on a given line, if the line exists. The stations must be listed in the order
+     * given when inserting the line.
      */
     private static void consultLine(Scanner in, Network network) {
         try {
@@ -260,15 +241,7 @@ public class Main {
     }
 
     /**
-     * Lida com o comando CE + station_name
-     * Se o nome da estação existe, a coleção de Linhas onde está presente a estação é apresentada ALFABETICAMENTE no output
-     * Se o nome da estação não existir, é apresentada uma mensagem de erro
-     * ANÁLISE TEMPORAL DO ALGORITMO: É preciso fazer uma 
-     * Melhor caso: 
-     * Pior caso:
-     * Caso esperado:
-     * GERAÇÃO DE OUTPUT: 
-     *
+     * Lists the lines of a given station, if it exists. The list is in lexicographic order.
      */
     private static void consultStation(Scanner in, Network network) {
         try {
@@ -283,23 +256,21 @@ public class Main {
     }
 
     /**
-     * Lida com o comando IH + line_name + train_number + schedules[]
-     * Se o nome da linha existe e o schedule é válido, cria um novo Schedule com o train number e com as restantes Stops inseridas com o comando (assume-se que train_number dado é sempre único e os Schedules do mesmo dia)
-     * Se o nome da linha não existir, é apresentada uma mensagem de erro. (Prioritário sobre Schedule inválido)
-     * Se o schedule for inválido é apresentada uma mensagem de erro. (Um horário é inválido se a 1ª estação não for uma das duas terminais; Se tiver estações fora da ordem da Linha; Se não tiver os Times ordenados estritamente crescentes)
-     * ANÁLISE TEMPORAL DO ALGORITMO:
-     * Melhor caso:
-     * Pior caso:
-     * Caso esperado:
-     * GERAÇÃO DE OUTPUT: Complexidade temporal O(1)
-     *
+     * When inserting a schedule, you may assume (i.e., without verification) that train numbers
+     *  are unique. You may also assume that a given schedule never overflows onto the next day
+     * (i.e., all schedules begin and end on the same day). To insert a schedule, the first station indi-
+     * cated (station-name-1) must be one of the two terminal stations of the line in question and so
+     * the direction of travel. You can therefore define schedules for either of the two directions of a
+     * line. A schedule always has at least two stations. Note that a schedule need not include a stop
+     * at every station of the line.
+     * A schedule is invalid when its times are not strictly increasing or when overtaking (or simultaneity) is intro-
+     * duced in relation to another existing schedule for that direction of the line. 
      */
     private static void insertSchedule(Scanner in, Network network) {
         try {
             String lineName = in.nextLine().trim();
             String trainNumber = in.nextLine();
 
-            //criar logo aqui uma coleção das stops a ser inseridas no Schedule, à medida que elas são lidas do input, poupa uma iteração mais tarde
             String stationAndTime = in.nextLine();
             ListInArray<String[]> stops = new ListInArray<>();
             while (!stationAndTime.isEmpty()) {
@@ -324,17 +295,7 @@ public class Main {
     }
 
     /**
-     * Lida com o comando RH + line_name + origin_terminal + time
-     * Se o nome da linha existe, a estação de origem existe e um Schedule com a hora de partida dada existe, remove esse Schedule
-     * Se o nome da linha não existir, é apresentada uma mensagem de erro. (Prioritário sobre Schedule inexistente)
-     * (notar que não existir estação dá erro em branco)
-     * Se o schedule não existir é apresentada uma outra mensagem de erro.
-     * ANÁLISE TEMPORAL DO ALGORITMO:
-     * Melhor caso:
-     * Pior caso:
-     * Caso esperado:
-     * GERAÇÃO DE OUTPUT: Complexidade temporal O(1)
-     *
+     * Removal of a schedule, if the line and schedule exist.
      */
     private static void removeSchedule(Scanner in, Network network) {
         try {
@@ -356,18 +317,10 @@ public class Main {
         }
     }
 
-
     /**
-     * Lida com o comando CH + line_name + origin_terminal
-     * Se o nome da linha existe e a estação de origem existe, o output será uma listagem de vários Schedules
-     * Se o nome da linha não existir, é apresentada uma mensagem de erro. (Prioritário sobre Station inexistente)
-     * Se a Station não existir ou não for terminal da linha, é apresentada uma outra mensagem de erro.
-     * ANÁLISE TEMPORAL DO ALGORITMO:
-     * Melhor caso:
-     * Pior caso:
-     * Caso esperado:
-     * GERAÇÃO DE OUTPUT:
-     *
+     * Lists all the schedules for a given line, if the line exists and the departure station is a terminal
+     * station (determining the direction of travel). direction). The list is sorted by departure
+     * time.
      */
     private static void consultSchedules(Scanner in, Network network) {
         try {
@@ -394,8 +347,9 @@ public class Main {
     }
 
     /**
-     * SEGUNDA FASE
-     *
+     * Lists all trains that pass by the given station in increasing order of departure time. The listed
+     * time is that at which the train passes by the given station. When two trains pass by
+     * the station at the same time, the one with the lowest number is listed first.
      */
     private static void consultTrains(Scanner in, Network network) {
         try {
@@ -415,26 +369,15 @@ public class Main {
     }
 
     /**
-     * Lida com o comando MH + line_name + first_terminal + first_terminal + arriving_time
-     * Se o nome da linha existe e pelo menos um Schedule existe com as Stations dadas, o output será uma listagem do melhor schedule para chegar o mais perto da hora esperada
-     * Se o nome da linha não existir, é apresentada uma mensagem de erro. (Prioritário 1)
-     * Se a Station de partida não existir, é apresentada uma outra mensagem de erro. (Prioritário 2)
-     * É ainda apresentado um terceiro erro SE: (Proritário 3)
-     *      Se a Station de chegada não existe, OU
-     *      Nenhum Schedule passa na duas Stations, OU
-     *      Nenhum Schedule chega à Station de chegada ANTES ou NA PRÓPRIA hora de chegada dada
-     * ANÁLISE TEMPORAL DO ALGORITMO:
-     * Melhor caso:
-     * Pior caso:
-     * Caso esperado:
-     * GERAÇÃO DE OUTPUT:
-     *
+     * Determines, if possible, the “best” route between two stations (departure and destination)
+     * on a given line. In this context, the best route is the one that, without changing trains, arrives
+     * at the destination station as close to the expected arrival time as possible (but never later). If a
+     * route is found, all stops from the route are printed (not just those between the departure
+     * and destination stations).
+     * Note that the departure and destination stations may be any two stations of the line. If the
+     * destination station does not exist in the line, the schedule is deemed impossible.
      */
     private static void bestSchedule(Scanner in, Network network) {
-        //ERRO1-Ver se linha existe
-        //ERRO2-Ver se Station de partida existe em Stations
-        //ERRO3-Ver se Station de chegada existe em Stations (Ver sentidO!) && se passa na Station de partida && se essa station tem Schedules com time <= à hora pedida ( esta 3ª condião vai gaurdando o Time mais próximo
-        //Se não há erros, apresentar o melhor Schedule guardado na ultima verificação
         try {
             String lineName = in.nextLine().trim();
             String departureStationName = in.nextLine();
