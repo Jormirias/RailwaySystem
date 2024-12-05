@@ -57,7 +57,7 @@ public class Main {
     /**
      * Serialização
      */
-    private static final String DATA_FILE = "storednetworkdat.dat";
+    private static final String DATA_FILE = "networkdatafiletestsave.dat";
 
     /**
      * Testing purposes!
@@ -147,7 +147,7 @@ public class Main {
     private static void save(Network network) {
         try {
             ObjectOutputStream file = new ObjectOutputStream(
-                    new FileOutputStream(DATA_FILE));
+                    new BufferedOutputStream(new FileOutputStream(DATA_FILE)));
             file.writeObject(network);
             file.flush();
             file.close();
@@ -165,7 +165,7 @@ public class Main {
     private static Network load() {
         try {
             ObjectInputStream file = new ObjectInputStream(
-                    new FileInputStream(DATA_FILE));
+                    new BufferedInputStream((new FileInputStream(DATA_FILE))));
 
             NetworkClass network = (NetworkClass) file.readObject();
             file.close();
